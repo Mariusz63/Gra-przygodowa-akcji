@@ -7,9 +7,8 @@ public class Camera_Movment : MonoBehaviour
 {
     public float mouseSensitivity = 200f;
     public Transform target;
-
     float xRotation = 0f;
-
+    public GameObject inventoryGUI;
     void Start()
     {
         Cursor.lockState = CursorLockMode.Locked;
@@ -17,6 +16,8 @@ public class Camera_Movment : MonoBehaviour
 
     void Update()
     {
+        if (!inventoryGUI.activeSelf){
+        Cursor.lockState = CursorLockMode.Locked;
         float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
         float mouseScroll = Input.GetAxis("Mouse ScrollWheel") * mouseSensitivity * Time.deltaTime;
@@ -31,5 +32,10 @@ public class Camera_Movment : MonoBehaviour
         
         transform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
         target.Rotate(Vector3.up * mouseX);
+        } else {
+            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.visible = true;
+        }
     }
+        
 }
