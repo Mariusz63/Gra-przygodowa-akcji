@@ -13,7 +13,7 @@ public class InventoryController
         Itemlist = new List<Item>();
         inventoryLevel = 0;
         
-        Additem(new Item {});
+        
 
         UnityEngine.Debug.Log(Itemlist.Count);
     }

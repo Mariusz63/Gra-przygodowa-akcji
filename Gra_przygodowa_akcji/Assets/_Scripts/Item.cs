@@ -16,5 +16,12 @@ public class Item
     public int amount;
     public bool stackable;
     public string itemName;
-    public ItemShape itemShape;
+
+    public Item(ItemType _itemType, int _amount, bool _stackable, string _itemname)
+    {
+        itemType = _itemType;
+        amount = _amount;
+        stackable = _stackable;
+        itemName = _itemname;
+    }
 }
