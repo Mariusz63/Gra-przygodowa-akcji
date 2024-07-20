@@ -7,14 +7,13 @@ public class Player_desc : MonoBehaviour
 {
     public GameObject inventoryGUI;
     private bool menuActive = false;
-    private InventoryController inventory;
-    [SerializeField]
-    private InventoryGUI uiInventory; 
+
+    /*
     void Start()
     {
         inventory = new InventoryController();
         uiInventory.SetupInventory(inventory);
-    }
+    }*/
 
     // Update is called once per frame
     void Update()
