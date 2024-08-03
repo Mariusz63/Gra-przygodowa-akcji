@@ -6,7 +6,7 @@ using UnityEngine;
 public class DungeonGenerator
 {
     RoomNode rootNode;
-    List<RoomNode> allSpaceNodes = new List<RoomNode> ();
+    List<RoomNode> allSpaceNodes = new List<RoomNode>();
     private int dungeonWidth;
     private int dungeonLength;
 
@@ -16,10 +16,19 @@ public class DungeonGenerator
         this.dungeonLength = dungeonHeight;
     }
 
-    public List<Node> CalculateRooms(int maxIterations, int roomWidthMin, int roomLenghtMin)
+    public List<Node> CalculateDungeon(int maxIterations, int roomWidthMin, int roomLenghtMin, float roomBottomCornerModifier, float roomTopCornerModifier, int offset, int corridorWidth)
     {
         BinarySpacePartitioner bsp = new BinarySpacePartitioner(dungeonWidth, dungeonLength);
         allSpaceNodes = bsp.PrepareNodesCollection(maxIterations, roomWidthMin, roomLenghtMin);
-        return new List<Node>( allSpaceNodes);
+        List<Node> roomSpaces = StructureHelper.TraverseGraphToExtractLowestLeafes(bsp.RootNode);
+
+        RoomGenerator roomGenerator = new RoomGenerator(maxIterations, roomLenghtMin, roomWidthMin);
+        List<RoomNode> roomList = roomGenerator.GenerateRoomsInGivenSpaces(roomSpaces, roomBottomCornerModifier, roomTopCornerModifier, offset);
+
+
+        CorridorsGenerator corridorGenerator = new CorridorsGenerator();
+        var corridorList = corridorGenerator.CreateCorridor(allSpaceNodes, corridorWidth);
+
+        return new List<Node>(roomList);
     }
 }

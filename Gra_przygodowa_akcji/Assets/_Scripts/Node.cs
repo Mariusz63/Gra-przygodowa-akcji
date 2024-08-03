@@ -14,7 +14,7 @@ public abstract class Node
     public Vector2Int TopRightAreaCorner { get; set; }
     public Vector2Int TopLeftAreaCorner { get; set; }
 
-    public Node Paretn {  get; set; }
+    public Node Paretn { get; set; }
 
     public int TreeLayerIndex { get; set; }
 
@@ -23,7 +23,7 @@ public abstract class Node
         childrenNodeList = new List<Node>();
         this.Paretn = parentNode;
 
-        if(parentNode != null) 
+        if (parentNode != null)
         {
             parentNode.AddChild(this);
         }

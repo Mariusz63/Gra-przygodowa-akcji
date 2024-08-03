@@ -9,10 +9,10 @@ public class BinarySpacePartitioner
 
     public BinarySpacePartitioner(int dungeonWidth, int dungeonLength)
     {
-        this.rootNode = new RoomNode(new Vector2Int(0,0), new Vector2Int(dungeonWidth, dungeonLength), null, 0);
+        this.rootNode = new RoomNode(new Vector2Int(0, 0), new Vector2Int(dungeonWidth, dungeonLength), null, 0);
     }
 
-    public RoomNode RootNode { get => rootNode;  }
+    public RoomNode RootNode { get => rootNode; }
 
     public List<RoomNode> PrepareNodesCollection(int maxIterations, int roomWidthMin, int roomLenghtMin)
     {
@@ -21,13 +21,13 @@ public class BinarySpacePartitioner
         graph.Enqueue(rootNode);
         listToReturn.Add(rootNode);
         int iterations = 0;
-        
-        while(iterations < maxIterations && graph.Count > 0) 
+
+        while (iterations < maxIterations && graph.Count > 0)
         {
             iterations++;
             RoomNode currentNode = graph.Dequeue(); //takes first node of the graph
 
-            if(currentNode.Width >= roomWidthMin*2 || currentNode.Lenght >= roomLenghtMin*2)
+            if (currentNode.Width >= roomWidthMin * 2 || currentNode.Lenght >= roomLenghtMin * 2)
             {
                 SplitTheSpace(currentNode, listToReturn, roomLenghtMin, roomWidthMin, graph);
             }
@@ -43,9 +43,9 @@ public class BinarySpacePartitioner
 
         RoomNode node1, node2;
 
-        if(line.Orientation == Orientation.Horizontal)
+        if (line.Orientation == Orientation.Horizontal)
         {
-            node1 = new RoomNode(currentNode.BottomLefAreaCorner, 
+            node1 = new RoomNode(currentNode.BottomLefAreaCorner,
                 new Vector2Int(currentNode.TopRightAreaCorner.x, line.Coordinates.y),
                 currentNode,
                 currentNode.TreeLayerIndex + 1);
@@ -88,8 +88,9 @@ public class BinarySpacePartitioner
 
         if (lengthStatus && widthStatus)
         {
-            orientation = (Orientation)(Random.Range(0,2));
-        }else if ( widthStatus)
+            orientation = (Orientation)(Random.Range(0, 2));
+        }
+        else if (widthStatus)
         {
             orientation = Orientation.Vertical;
         }
@@ -105,7 +106,7 @@ public class BinarySpacePartitioner
     {
         Vector2Int coordinates = Vector2Int.zero;
 
-        if(orientation == Orientation.Horizontal)
+        if (orientation == Orientation.Horizontal)
         {
             coordinates = new Vector2Int(0,
                 Random.Range(
@@ -114,7 +115,7 @@ public class BinarySpacePartitioner
         }
         else
         {
-            coordinates = new Vector2Int( 
+            coordinates = new Vector2Int(
                 Random.Range(
                 (bottomLefAreaCorner.x + roomWidthMin),
                 (topRightAreaCorner.x - roomWidthMin)), 0);
