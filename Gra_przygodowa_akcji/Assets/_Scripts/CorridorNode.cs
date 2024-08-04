@@ -8,16 +8,18 @@ public class CorridorNode : Node
     private Node structure1;
     private Node structure2;
     private int corridorWidth;
-    private int modifierDistanceFromWall = 1;
+    private int modifierDistanceFromWall = 1; // Distance modifier from wall
 
+    // Constructor to initialize the corridor node with two structures and the corridor width
     public CorridorNode(Node node1, Node node2, int corridorWidth) : base(null)
     {
         this.structure1 = node1;
         this.structure2 = node2;
         this.corridorWidth = corridorWidth;
-        GenerateCorridor();
+        GenerateCorridor(); // Generate the corridor between the structures
     }
 
+    // Generate the corridor based on the relative position of structure2 against structure1
     private void GenerateCorridor()
     {
         var relativePositionOfStructure2 = CheckPositionStructure2AgainstStructure1();
@@ -40,6 +42,7 @@ public class CorridorNode : Node
         }
     }
 
+    // Process the room if structures are in left-right relation
     private void ProcessRoomInRelationRightOrLeft(Node structure1, Node structure2)
     {
         Node leftStructure = null;
@@ -77,9 +80,11 @@ public class CorridorNode : Node
         {
             rightStructure = possibleNeighboursInRightStructureList[0];
         }
+
         int y = GetValidYForNeighourLeftRight(leftStructure.TopLeftAreaCorner, leftStructure.BottomRightAreaCorner,
             rightStructure.TopLeftAreaCorner,
             rightStructure.BottomLeftAreaCorner);
+
         while (y == -1 && sortedLeftStructure.Count > 1)
         {
             sortedLeftStructure = sortedLeftStructure.Where(
@@ -89,10 +94,12 @@ public class CorridorNode : Node
             rightStructure.TopLeftAreaCorner,
             rightStructure.BottomLeftAreaCorner);
         }
+
         BottomLeftAreaCorner = new Vector2Int(leftStructure.BottomRightAreaCorner.x, y);
         TopRightAreaCorner = new Vector2Int(rightStructure.TopLeftAreaCorner.x, y + this.corridorWidth);
     }
 
+    // Get a valid Y coordinate for the neighbor in left-right relation
     private int GetValidYForNeighourLeftRight(Vector2Int leftNodeUp, Vector2Int leftNodeDown, Vector2Int rightNodeUp, Vector2Int rightNodeDown)
     {
         if (rightNodeUp.y >= leftNodeUp.y && leftNodeDown.y >= rightNodeDown.y)
@@ -126,6 +133,7 @@ public class CorridorNode : Node
         return -1;
     }
 
+    // Process the room if structures are in up-down relation
     private void ProcessRoomInRelationUpOrDown(Node structure1, Node structure2)
     {
         Node bottomStructure = null;
@@ -154,6 +162,7 @@ public class CorridorNode : Node
                 child.BottomLeftAreaCorner,
                 child.BottomRightAreaCorner)
             != -1).OrderBy(child => child.BottomRightAreaCorner.y).ToList();
+
         if (possibleNeighboursInTopStructure.Count == 0)
         {
             topStructure = structure2;
@@ -162,11 +171,13 @@ public class CorridorNode : Node
         {
             topStructure = possibleNeighboursInTopStructure[0];
         }
+
         int x = GetValidXForNeighbourUpDown(
                 bottomStructure.TopLeftAreaCorner,
                 bottomStructure.TopRightAreaCorner,
                 topStructure.BottomLeftAreaCorner,
                 topStructure.BottomRightAreaCorner);
+
         while (x == -1 && sortedBottomStructure.Count > 1)
         {
             sortedBottomStructure = sortedBottomStructure.Where(child => child.TopLeftAreaCorner.x != topStructure.TopLeftAreaCorner.x).ToList();
@@ -177,10 +188,12 @@ public class CorridorNode : Node
                 topStructure.BottomLeftAreaCorner,
                 topStructure.BottomRightAreaCorner);
         }
+
         BottomLeftAreaCorner = new Vector2Int(x, bottomStructure.TopLeftAreaCorner.y);
         TopRightAreaCorner = new Vector2Int(x + this.corridorWidth, topStructure.BottomLeftAreaCorner.y);
     }
 
+    // Get a valid X coordinate for the neighbor in up-down relation
     private int GetValidXForNeighbourUpDown(Vector2Int bottomNodeLeft,
         Vector2Int bottomNodeRight, Vector2Int topNodeLeft, Vector2Int topNodeRight)
     {
@@ -217,6 +230,7 @@ public class CorridorNode : Node
         return -1;
     }
 
+    // Check the relative position of structure2 against structure1
     private RelativePosition CheckPositionStructure2AgainstStructure1()
     {
         Vector2 middlePointStructure1Temp = ((Vector2)structure1.TopRightAreaCorner + structure1.BottomLeftAreaCorner) / 2;
@@ -240,6 +254,7 @@ public class CorridorNode : Node
         }
     }
 
+    // Calculate the angle between two points
     private float CalculateAngle(Vector2 middlePointStructure1Temp, Vector2 middlePointStructure2Temp)
     {
         return Mathf.Atan2(middlePointStructure2Temp.y - middlePointStructure1Temp.y,
