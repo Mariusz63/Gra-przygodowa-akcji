@@ -1,14 +1,13 @@
 ﻿using UnityEngine;
-// storing informations about lines
 public class Line
 {
     Orientation orientation;
     Vector2Int coordinates;
 
-    public Line(Orientation orientaion, Vector2Int coordinations)
+    public Line(Orientation orientation, Vector2Int coordinates)
     {
-        this.Orientation = orientaion;
-        this.Coordinates = coordinations;
+        this.orientation = orientation;
+        this.coordinates = coordinates;
     }
 
     public Orientation Orientation { get => orientation; set => orientation = value; }

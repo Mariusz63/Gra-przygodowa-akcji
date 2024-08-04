@@ -4,22 +4,21 @@ using System.Linq;
 
 public class CorridorsGenerator
 {
-    public List<Node> CreateCorridor(List<RoomNode> allSpaceNodes, int corridorWidth)
+    public List<Node> CreateCorridor(List<RoomNode> allNodesCollection, int corridorWidth)
     {
-       List<Node> corridorLlist = new List<Node>();
-        Queue<RoomNode> structuresToCheck = new Queue<RoomNode>(allSpaceNodes.OrderByDescending(node => node.TreeLayerIndex).ToList());
-
-        while(structuresToCheck.Count > 0)
+        List<Node> corridorList = new List<Node>();
+        Queue<RoomNode> structuresToCheck = new Queue<RoomNode>(
+            allNodesCollection.OrderByDescending(node => node.TreeLayerIndex).ToList());
+        while (structuresToCheck.Count > 0)
         {
             var node = structuresToCheck.Dequeue();
-
-            if(node.ChildrenNodeList.Count == 0)
-            { continue; }
-
+            if (node.ChildrenNodeList.Count == 0)
+            {
+                continue;
+            }
             CorridorNode corridor = new CorridorNode(node.ChildrenNodeList[0], node.ChildrenNodeList[1], corridorWidth);
-            corridorLlist.Add(corridor);
+            corridorList.Add(corridor);
         }
-
-        return corridorLlist;
+        return corridorList;
     }
 }
