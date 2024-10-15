@@ -1,4 +1,0 @@
-repository "Gra_przygodowa_akcji@MrWojak@cloud"
-  path "/"
-    br "/main"
-    co "/main"
