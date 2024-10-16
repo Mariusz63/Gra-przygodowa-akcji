@@ -56,4 +56,10 @@ public class MenuManager : MonoBehaviour
             Cursor.visible = false;
         }
     }
+
+    public void TempSaveGame()
+    {
+        SaveManager.Instance.SaveGame();
+    }
+
 }
