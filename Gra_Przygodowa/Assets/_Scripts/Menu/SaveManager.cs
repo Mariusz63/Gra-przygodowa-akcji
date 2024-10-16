@@ -26,6 +26,57 @@ public class SaveManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    #region // ---- Loading ---- //
+
+    public AllGameData SelectLoadingType()
+    {
+        if (isSavingToJson)
+        {
+            AllGameData allGameData = LoadGameDataFromBinaryFile();
+            //AllGameData allGameData = LoadGameDataFromJsonFile(); <- to przywrocic gdy bedzie JSon
+            return allGameData;
+        }
+        else
+        {
+            AllGameData allGameData = LoadGameDataFromBinaryFile();
+            return allGameData;
+        }
+    }
+
+    public void LoadGame()
+    {
+        //Player data
+        SetPlayerData(SelectLoadingType().playerData);
+
+        //Environment data
+        //SetEnviromentData();
+    }
+
+    private void SetPlayerData(PlayerData playerData)
+    {
+        //Setting Player stats
+        PlayerState.Instance.currentHealth = playerData.playerStats[0];
+        PlayerState.Instance.currentCalories = playerData.playerStats[1];
+        PlayerState.Instance.currentHydration = playerData.playerStats[2];
+
+        //Setting Player Position
+        Vector3 loadedPosition;
+        loadedPosition.x = playerData.playerPositionAndRotation[0];
+        loadedPosition.y = playerData.playerPositionAndRotation[1];
+        loadedPosition.z = playerData.playerPositionAndRotation[2];
+
+        PlayerState.Instance.playerBody.transform.position = loadedPosition;
+
+        //Setting Player Rotation
+        Vector3 loadedRotation;
+        loadedRotation.x = playerData.playerPositionAndRotation[3];
+        loadedRotation.y = playerData.playerPositionAndRotation[4];
+        loadedRotation.z = playerData.playerPositionAndRotation[5];
+
+        PlayerState.Instance.playerBody.transform.rotation = Quaternion.Euler(loadedRotation);
+    }
+
+    #endregion
 
     #region // ---- General Section ---- //
 
@@ -33,7 +84,7 @@ public class SaveManager : MonoBehaviour
     {
         AllGameData data = new AllGameData();
         data.playerData = GetPlayerData();
-        SaveAllGameData(data);
+        SelectSavingType(data);
     }
 
     private PlayerData GetPlayerData()
@@ -52,10 +103,10 @@ public class SaveManager : MonoBehaviour
         playerPosAndRot[2] = PlayerState.Instance.playerBody.transform.rotation.y;
         playerPosAndRot[2] = PlayerState.Instance.playerBody.transform.rotation.z;
 
-        return new PlayerData(playerStats,playerPosAndRot);
+        return new PlayerData(playerStats, playerPosAndRot);
     }
 
-    public void SaveAllGameData(AllGameData gameData)
+    public void SelectSavingType(AllGameData gameData)
     {
         if (isSavingToJson)
         {
@@ -86,7 +137,7 @@ public class SaveManager : MonoBehaviour
 
     public AllGameData LoadGameDataFromBinaryFile()
     {
-        string path = Application.persistentDataPath+ "/save_game.bin";
+        string path = Application.persistentDataPath + "/save_game.bin";
 
         if (File.Exists(path))
         {
@@ -105,7 +156,6 @@ public class SaveManager : MonoBehaviour
     }
 
     #endregion
-
 
     #region // ----- Settings Section ---- //
 
