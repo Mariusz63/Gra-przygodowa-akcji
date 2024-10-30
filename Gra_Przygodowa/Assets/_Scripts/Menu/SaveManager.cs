@@ -2,15 +2,36 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.Rendering;
+using UnityEngine.SceneManagement;
 
 public class SaveManager : MonoBehaviour
 {
     public static SaveManager Instance;
 
     public bool isSavingToJson;
+
+    // Json Project Save Path
+    string jsonPathProject;
+
+    // Json External/Real Save Path
+    string jsonPathPersistant;
+
+    // Binary Save Path
+    string binaryPath;
+
+    string fileName = "SavedGame";
+
+    private void Start()
+    {
+        jsonPathProject = Application.dataPath + Path.AltDirectorySeparatorChar;
+        jsonPathPersistant = Application.persistentDataPath + Path.AltDirectorySeparatorChar;
+        binaryPath = Application.persistentDataPath + Path.AltDirectorySeparatorChar;
+    }
 
     private void Awake()
     {
@@ -28,25 +49,25 @@ public class SaveManager : MonoBehaviour
 
     #region // ---- Loading ---- //
 
-    public AllGameData SelectLoadingType()
+    public AllGameData SelectLoadingType(int slotNumber)
     {
         if (isSavingToJson)
         {
-            AllGameData allGameData = LoadGameDataFromBinaryFile();
+            AllGameData allGameData = LoadGameDataFromBinaryFile(slotNumber);
             //AllGameData allGameData = LoadGameDataFromJsonFile(); <- to przywrocic gdy bedzie JSon
             return allGameData;
         }
         else
         {
-            AllGameData allGameData = LoadGameDataFromBinaryFile();
+            AllGameData allGameData = LoadGameDataFromBinaryFile(slotNumber);
             return allGameData;
         }
     }
 
-    public void LoadGame()
+    public void LoadGame(int slotNumber)
     {
         //Player data
-        SetPlayerData(SelectLoadingType().playerData);
+        SetPlayerData(SelectLoadingType(slotNumber).playerData);
 
         //Environment data
         //SetEnviromentData();
@@ -76,15 +97,29 @@ public class SaveManager : MonoBehaviour
         PlayerState.Instance.playerBody.transform.rotation = Quaternion.Euler(loadedRotation);
     }
 
+    public void LoadSavedGame(int slotNumber)
+    {
+        SceneManager.LoadScene("MainBase");
+
+        StartCoroutine(DelayedLoading(slotNumber));
+    }
+
+    private IEnumerator DelayedLoading(int slotNumber)
+    {
+        // after 1s all scripts will be loaded
+        yield return new WaitForSeconds(1f);
+        LoadGame(slotNumber);
+    }
+
     #endregion
 
     #region // ---- General Section ---- //
 
-    public void SaveGame()
+    public void SaveGame(int slotNumber)
     {
         AllGameData data = new AllGameData();
         data.playerData = GetPlayerData();
-        SelectSavingType(data);
+        SelectSavingType(data, slotNumber);
     }
 
     private PlayerData GetPlayerData()
@@ -106,15 +141,15 @@ public class SaveManager : MonoBehaviour
         return new PlayerData(playerStats, playerPosAndRot);
     }
 
-    public void SelectSavingType(AllGameData gameData)
+    public void SelectSavingType(AllGameData gameData, int slotNumber)
     {
         if (isSavingToJson)
         {
-            //SaveGameDataToJsonFile(gameData);
+            SaveGameDataToJsonFile(gameData, slotNumber);
         }
         else
         {
-            SaveGameDataToBinaryFile(gameData);
+            SaveGameDataToBinaryFile(gameData, slotNumber);
         }
     }
 
@@ -122,30 +157,30 @@ public class SaveManager : MonoBehaviour
 
     #region // ---- To Binary Section ---- //
 
-    public void SaveGameDataToBinaryFile(AllGameData gameData)
+    public void SaveGameDataToBinaryFile(AllGameData gameData, int slotNumber)
     {
         BinaryFormatter formatter = new BinaryFormatter();
 
-        string path = Application.persistentDataPath + "/save_game.bin";
-        FileStream stream = new FileStream(path, FileMode.Create);
+        FileStream stream = new FileStream(binaryPath + fileName + slotNumber + ".bin", FileMode.Create);
 
         formatter.Serialize(stream, gameData);
         stream.Close();
 
-        print("Data saved to " + Application.persistentDataPath + "/save_game.bin");
+        print("Data saved to " + binaryPath);
     }
 
-    public AllGameData LoadGameDataFromBinaryFile()
+    public AllGameData LoadGameDataFromBinaryFile(int slotNumber)
     {
-        string path = Application.persistentDataPath + "/save_game.bin";
 
-        if (File.Exists(path))
+        if (File.Exists(binaryPath))
         {
             BinaryFormatter formatter = new BinaryFormatter();
-            FileStream stram = new FileStream(path, FileMode.Open);
+            FileStream stram = new FileStream(binaryPath + fileName + slotNumber + ".bin", FileMode.Open);
 
             AllGameData data = formatter.Deserialize(stram) as AllGameData;
             stram.Close();
+
+            print("Data loaded from " + binaryPath);
 
             return data;
         }
@@ -153,6 +188,39 @@ public class SaveManager : MonoBehaviour
         {
             return null;
         }
+    }
+
+    #endregion
+
+    #region // ---- To Json Section ---- //
+
+    public void SaveGameDataToJsonFile(AllGameData gameData, int slotNumber)
+    {
+        string json = JsonUtility.ToJson(gameData);
+
+        string encrypted = EncryptionDecryption(json);
+
+
+        // change to jsonPathPersistant
+        using (StreamWriter writer = new StreamWriter(jsonPathProject+fileName+slotNumber+".json"))
+        {
+            writer.Write(encrypted);
+            print("Saved Game to Json file at " + jsonPathProject + fileName + slotNumber + ".json");
+        };
+
+    }
+
+    public AllGameData LoadGameDataFromJsonFile(int slotNumber)
+    {
+        using (StreamReader reader = new StreamReader(jsonPathProject + fileName + slotNumber + ".json"))
+        {
+            string json = reader.ReadToEnd();
+
+            string decrypted = EncryptionDecryption(json);
+
+            AllGameData gameData = JsonUtility.FromJson<AllGameData>(decrypted);
+            return gameData;
+        };
     }
 
     #endregion
@@ -198,6 +266,72 @@ public class SaveManager : MonoBehaviour
     #region // ---- Key Binds ---- //
 
     #endregion
+
+    #endregion
+
+    #region || ------ Encryption ----- ||
+
+    public string EncryptionDecryption(string jsonString)
+    {
+        string keyword = "0987654321";
+
+        string result = "";
+
+        for (int i = 0; i < jsonString.Length; i++)
+        {
+            result += (char)(jsonString[i] ^ keyword[i % keyword.Length]);
+        }
+        return result;
+    }
+
+    #endregion
+
+    #region || ------ Utility ------- ||
+
+    public bool DoesFileExists(int slotNumber)
+    {
+        if (isSavingToJson)
+        {
+            //SaveGame1.json , SaveGame2.json ...
+            if (System.IO.File.Exists(jsonPathProject + fileName + slotNumber + ".json"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if (System.IO.File.Exists(binaryPath + fileName + slotNumber + ".bin"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+    public bool IsSlotEmpty(int slotNumber)
+    {
+        if (DoesFileExists(slotNumber))
+        {
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    public void DeselectButton()
+    {
+        GameObject myEventSystem = GameObject.Find("EventSystem");
+        myEventSystem.GetComponent<UnityEngine.EventSystems.EventSystem>().SetSelectedGameObject(null);
+    }
 
     #endregion
 }
