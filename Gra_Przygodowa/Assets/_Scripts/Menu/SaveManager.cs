@@ -26,6 +26,8 @@ public class SaveManager : MonoBehaviour
 
     string fileName = "SavedGame";
 
+    public bool isLoading;
+
     private void Start()
     {
         jsonPathProject = Application.dataPath + Path.AltDirectorySeparatorChar;
@@ -53,8 +55,7 @@ public class SaveManager : MonoBehaviour
     {
         if (isSavingToJson)
         {
-            AllGameData allGameData = LoadGameDataFromBinaryFile(slotNumber);
-            //AllGameData allGameData = LoadGameDataFromJsonFile(); <- to przywrocic gdy bedzie JSon
+            AllGameData allGameData = LoadGameDataFromJsonFile(slotNumber);
             return allGameData;
         }
         else
@@ -95,10 +96,20 @@ public class SaveManager : MonoBehaviour
         loadedRotation.z = playerData.playerPositionAndRotation[5];
 
         PlayerState.Instance.playerBody.transform.rotation = Quaternion.Euler(loadedRotation);
+
+        //Setting the inventory content
+        foreach(string item in playerData.inventoryContent)
+        {
+            //InventorySystem.Instance.AddToInventory(item);
+        }
+
+        isLoading = false;
     }
 
     public void LoadSavedGame(int slotNumber)
     {
+        isLoading = true;
+
         SceneManager.LoadScene("MainBase");
 
         StartCoroutine(DelayedLoading(slotNumber));
@@ -138,7 +149,29 @@ public class SaveManager : MonoBehaviour
         playerPosAndRot[2] = PlayerState.Instance.playerBody.transform.rotation.y;
         playerPosAndRot[2] = PlayerState.Instance.playerBody.transform.rotation.z;
 
-        return new PlayerData(playerStats, playerPosAndRot);
+        
+        //string[] inventoryContent = InventorySystem.Instance.itemList.ToArray();
+        string[] inventoryContent = new string[3];
+        string[] quickSlotContent = GetQuickSlotsContent();
+
+        return new PlayerData(playerStats, playerPosAndRot, inventoryContent, quickSlotContent);
+    }
+
+    private string[] GetQuickSlotsContent()
+    {
+        List<string> temp = new List<string>();
+
+        //foreach (GameObject slot in EquipSystem.Instance.quickSlotList)
+        //{
+        //    if(slot.transform.childCount != 0)
+        //    {
+        //        string name = slot.transform.GetChild(0).name;
+        //        string str2 = "Clone)";
+        //        string cleanName = name.Replace(str2, "");
+        //        temp.Add(cleanName);
+        //    }
+        //}
+        return temp.ToArray();
     }
 
     public void SelectSavingType(AllGameData gameData, int slotNumber)
@@ -166,7 +199,7 @@ public class SaveManager : MonoBehaviour
         formatter.Serialize(stream, gameData);
         stream.Close();
 
-        print("Data saved to " + binaryPath);
+        print("Data saved to " + binaryPath + fileName + slotNumber + ".bin");
     }
 
     public AllGameData LoadGameDataFromBinaryFile(int slotNumber)
@@ -180,7 +213,7 @@ public class SaveManager : MonoBehaviour
             AllGameData data = formatter.Deserialize(stram) as AllGameData;
             stram.Close();
 
-            print("Data loaded from " + binaryPath);
+            print("Data loaded from " + binaryPath + fileName + slotNumber + ".bin");
 
             return data;
         }
@@ -199,7 +232,6 @@ public class SaveManager : MonoBehaviour
         string json = JsonUtility.ToJson(gameData);
 
         string encrypted = EncryptionDecryption(json);
-
 
         // change to jsonPathPersistant
         using (StreamWriter writer = new StreamWriter(jsonPathProject+fileName+slotNumber+".json"))

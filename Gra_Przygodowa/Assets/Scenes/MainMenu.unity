@@ -1061,7 +1061,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5329a9214326e8a418817b1280fe399a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isSavingToJson: 1
+  isSavingToJson: 0
 --- !u!1 &416506048
 GameObject:
   m_ObjectHideFlags: 0
