@@ -12,7 +12,7 @@ public class EquipSystem : MonoBehaviour
     public GameObject quickSlotsPanel;
 
     public List<GameObject> quickSlotsList = new List<GameObject>();
-   // public List<string> itemList = new List<string>();
+    public List<string> itemList = new List<string>();
 
     public GameObject numbersHolder;
     public int selectedNumber = -1; // -1 -> nothing selected
@@ -34,7 +34,6 @@ public class EquipSystem : MonoBehaviour
             Instance = this;
         }
     }
-
 
     private void Start()
     {
@@ -87,12 +86,11 @@ public class EquipSystem : MonoBehaviour
         {
             SelectQuickSlot(8);
         }
-
     }
 
     void SelectQuickSlot(int number)
     {
-        if (checkIfSlotIsFull(number) == true)
+        if (CheckIfSlotIsFull(number) == true)
         {
             if (selectedNumber != number)
             {
@@ -161,7 +159,7 @@ public class EquipSystem : MonoBehaviour
         selectedItemModel.transform.SetParent(toolHolder.transform, false);
     }
 
-    bool checkIfSlotIsFull(int slotNUmber)
+    bool CheckIfSlotIsFull(int slotNUmber)
     {
         if (quickSlotsList[slotNUmber-1].transform.childCount > 0)
         {
@@ -194,8 +192,7 @@ public class EquipSystem : MonoBehaviour
 
     }
 
-
-    private GameObject FindNextEmptySlot()
+    public GameObject FindNextEmptySlot()
     {
         foreach (GameObject slot in quickSlotsList)
         {

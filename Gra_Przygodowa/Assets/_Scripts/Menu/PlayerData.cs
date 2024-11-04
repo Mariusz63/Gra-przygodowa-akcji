@@ -6,18 +6,15 @@ public class PlayerData
     public float[] playerStats;// [0] - Health, [1] - Calories, [2] - Hydration
 
     public float[] playerPositionAndRotation; // position x,y,z and rotation x,y,z
-
-    public string[] inventoryContent; // inventory items
    
     public string[] quickSlotContent; // inventory items
 
     //public float[] inventoryContent;
 
-    public PlayerData(float[] _playerStats, float[] _playerPosAndRot, string[] _inventoryContent, string[] _quickSlotContent)
+    public PlayerData(float[] _playerStats, float[] _playerPosAndRot, string[] _quickSlotContent)
     {
         this.playerStats = _playerStats;
         this.playerPositionAndRotation = _playerPosAndRot;
-        this.inventoryContent = _inventoryContent;
         this.quickSlotContent = _quickSlotContent;
     }
 

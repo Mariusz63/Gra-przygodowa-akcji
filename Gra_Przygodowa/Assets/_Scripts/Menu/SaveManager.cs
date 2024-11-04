@@ -28,6 +28,9 @@ public class SaveManager : MonoBehaviour
 
     public bool isLoading;
 
+    // Loading Screen
+    public Canvas loadingScreen;
+
     private void Start()
     {
         jsonPathProject = Application.dataPath + Path.AltDirectorySeparatorChar;
@@ -71,7 +74,28 @@ public class SaveManager : MonoBehaviour
         SetPlayerData(SelectLoadingType(slotNumber).playerData);
 
         //Environment data
-        //SetEnviromentData();
+        SetEnviromentData(SelectLoadingType(slotNumber).environmentData);
+
+        isLoading = false;
+
+        // After loading all data disable loading screen
+        DisableLoadingScreen();
+    }
+
+    private void SetEnviromentData(EnviromentData environmentData)
+    {
+        foreach (Transform itemType in EnviromentManager.Instance.allItems.transform)
+        {
+            foreach (Transform item in itemType.transform)
+            {
+                if (environmentData.pickedupItems.Contains(item.name))
+                {
+                    Destroy(item.gameObject);
+                }
+            }
+        }
+
+        InventorySystem.Instance.pickupItems = environmentData.pickedupItems;
     }
 
     private void SetPlayerData(PlayerData playerData)
@@ -97,17 +121,23 @@ public class SaveManager : MonoBehaviour
 
         PlayerState.Instance.playerBody.transform.rotation = Quaternion.Euler(loadedRotation);
 
-        //Setting the inventory content
-        foreach(string item in playerData.inventoryContent)
+        // Setting the quick slots content
+        foreach (string item in playerData.quickSlotContent)
         {
-            //InventorySystem.Instance.AddToInventory(item);
-        }
+            // Find next free quick slot
+            GameObject availableSlot = EquipSystem.Instance.FindNextEmptySlot();
 
-        isLoading = false;
+            var itemToAdd = Instantiate(Resources.Load<GameObject>(item));
+
+            itemToAdd.transform.SetParent(availableSlot.transform, false);
+        }
     }
 
+    // StartLoadedGame
     public void LoadSavedGame(int slotNumber)
     {
+        ActivateLoadingScreen();
+
         isLoading = true;
 
         SceneManager.LoadScene("MainBase");
@@ -130,7 +160,14 @@ public class SaveManager : MonoBehaviour
     {
         AllGameData data = new AllGameData();
         data.playerData = GetPlayerData();
+        data.environmentData = GetEnviromentData();
         SelectSavingType(data, slotNumber);
+    }
+
+    private EnviromentData GetEnviromentData()
+    {
+        List<string> itemPickedup = InventorySystem.Instance.pickupItems;
+        return new EnviromentData(itemPickedup);
     }
 
     private PlayerData GetPlayerData()
@@ -149,28 +186,27 @@ public class SaveManager : MonoBehaviour
         playerPosAndRot[2] = PlayerState.Instance.playerBody.transform.rotation.y;
         playerPosAndRot[2] = PlayerState.Instance.playerBody.transform.rotation.z;
 
-        
+
         //string[] inventoryContent = InventorySystem.Instance.itemList.ToArray();
-        string[] inventoryContent = new string[3];
         string[] quickSlotContent = GetQuickSlotsContent();
 
-        return new PlayerData(playerStats, playerPosAndRot, inventoryContent, quickSlotContent);
+        return new PlayerData(playerStats, playerPosAndRot, quickSlotContent);
     }
 
     private string[] GetQuickSlotsContent()
     {
         List<string> temp = new List<string>();
 
-        //foreach (GameObject slot in EquipSystem.Instance.quickSlotList)
-        //{
-        //    if(slot.transform.childCount != 0)
-        //    {
-        //        string name = slot.transform.GetChild(0).name;
-        //        string str2 = "Clone)";
-        //        string cleanName = name.Replace(str2, "");
-        //        temp.Add(cleanName);
-        //    }
-        //}
+        foreach (GameObject slot in EquipSystem.Instance.quickSlotsList)
+        {
+            if (slot.transform.childCount != 0)
+            {
+                string name = slot.transform.GetChild(0).name;
+                string str2 = "(Clone)";
+                string cleanName = name.Replace(str2, "");
+                temp.Add(cleanName);
+            }
+        }
         return temp.ToArray();
     }
 
@@ -234,7 +270,7 @@ public class SaveManager : MonoBehaviour
         string encrypted = EncryptionDecryption(json);
 
         // change to jsonPathPersistant
-        using (StreamWriter writer = new StreamWriter(jsonPathProject+fileName+slotNumber+".json"))
+        using (StreamWriter writer = new StreamWriter(jsonPathProject + fileName + slotNumber + ".json"))
         {
             writer.Write(encrypted);
             print("Saved Game to Json file at " + jsonPathProject + fileName + slotNumber + ".json");
@@ -366,4 +402,23 @@ public class SaveManager : MonoBehaviour
     }
 
     #endregion
+
+    #region || -------- Loading Section ------------- ||
+
+    public void ActivateLoadingScreen()
+    {
+        loadingScreen.gameObject.SetActive(true);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        // can add for example: animation, tips , music
+    }
+
+    public void DisableLoadingScreen()
+    {
+        loadingScreen.gameObject.SetActive(false);
+    }
+
+    #endregion
+
 }

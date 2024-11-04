@@ -27,6 +27,9 @@ public class InventorySystem : MonoBehaviour
     public Text pickupName;
     public Image pickupImage;
 
+    public List<string> pickupItems;
+
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
