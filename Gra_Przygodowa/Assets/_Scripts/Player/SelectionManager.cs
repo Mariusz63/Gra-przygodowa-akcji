@@ -17,7 +17,7 @@ public class SelectionManager : MonoBehaviour
 
     public bool handIsVisible; //if hand is visible we wont to swing the tools
 
-    public GameObject selectedTree;
+    //public GameObject selectedTree;
     public GameObject chopHolder;
 
     private void Start()
@@ -47,6 +47,30 @@ public class SelectionManager : MonoBehaviour
         {
             var selectionTransform = hit.transform;
             InteractableObject ourInteractable = selectionTransform.GetComponent<InteractableObject>();
+
+            NPC npc = selectionTransform.GetComponent<NPC>();
+
+            if(npc && npc.playerInRange)
+            {
+                interaction_text.text = "Talk";
+                interaction_Info_UI.SetActive(true);
+
+                if (Input.GetMouseButton(0) && npc.isTalkingWithPlayer == false)
+                {
+                    npc.StartConversation();
+                }
+
+                if(DialogSystem.Instance.dialogUIActive)
+                {
+                    interaction_Info_UI.SetActive(false);
+                    centerDotIcon.gameObject.SetActive(false);
+                }
+            }
+            else
+            {
+                interaction_text.text = "";
+                interaction_Info_UI.SetActive(false);
+            }
 
             //ChoppableTree choppableTree = selectionTransform.GetComponent<ChoppableTree>();
 
@@ -93,7 +117,7 @@ public class SelectionManager : MonoBehaviour
             else // if there is a hit, but without an Interactable Script
             {
                 onTarget = false;
-                interaction_Info_UI.SetActive(false);
+               // interaction_Info_UI.SetActive(false);
                 centerDotIcon.gameObject.SetActive(true);
                 handIcon.gameObject.SetActive(false);
 

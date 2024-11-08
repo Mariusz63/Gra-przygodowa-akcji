@@ -15,11 +15,22 @@ public class PlayerMovement : MonoBehaviour
     public KeyCode Jump = KeyCode.Space;
 
     Vector3 velocity;
-
     bool isGrounded;
+
+    private Vector3 lastPosition = new Vector3(0f,0f,0f);
+    public bool isMoving;
 
     // Update is called once per frame
     void Update()
+    {
+        if(DialogSystem.Instance.dialogUIActive == false)
+        {
+            Movement();
+        }
+        
+    }
+
+    public void Movement()
     {
         //checking if we hit the ground to reset our falling velocity, otherwise we will fall faster the next time
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
@@ -47,5 +58,17 @@ public class PlayerMovement : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
 
         controller.Move(velocity * Time.deltaTime);
+
+        if(lastPosition != gameObject.transform.position && isGrounded == true)
+        {
+            isMoving = true;
+            //SoundManager.Instance.PlaySound(SoundManager.Instance.grassWalkSound);
+        }
+        else
+        {
+            isMoving = false;
+            //SoundManager.Instance.grassWalkSound.Stop();
+        }
+        lastPosition = gameObject.transform.position;
     }
 }
