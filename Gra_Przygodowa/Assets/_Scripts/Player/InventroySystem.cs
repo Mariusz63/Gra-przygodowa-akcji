@@ -9,7 +9,6 @@ public class InventorySystem : MonoBehaviour
     public static InventorySystem Instance { get; set; }
 
     public GameObject inventoryScreenUI;
-
     public GameObject itemInfoUI;
 
     // Contain all slots
@@ -20,15 +19,14 @@ public class InventorySystem : MonoBehaviour
     private GameObject whatSlotToEquip;
 
     public bool isFull;
-    public bool isOpen;
+    // public bool isOpen;
 
-    // Pickup Popup;
+    // Pickup Popup alert;
     public GameObject pickupAlert;
     public Text pickupName;
     public Image pickupImage;
 
     public List<string> pickupItems;
-
 
     private void Awake()
     {
@@ -42,10 +40,9 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
-
     void Start()
     {
-        isOpen = false;
+        //isOpen = false;
 
         PopulateSlotList();
 
@@ -64,24 +61,24 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
-    void Update()
-    {
+    //void Update()
+    //{
 
-        if (Input.GetKeyDown(KeyCode.LeftControl) && !isOpen)
-        {
+    //    if (Input.GetKeyDown(KeyCode.LeftControl) && !isOpen)
+    //    {
 
-            Debug.Log("i is pressed");
-            inventoryScreenUI.SetActive(true);
-            Cursor.lockState = CursorLockMode.None;
-            Cursor.visible = true;
+    //        Debug.Log("i is pressed");
+    //        inventoryScreenUI.SetActive(true);
+    //        Cursor.lockState = CursorLockMode.None;
+    //        Cursor.visible = true;
 
-            SelectionManager.Instance.DisableSelection();
-            SelectionManager.Instance.GetComponent<SelectionManager>().enabled = false;
+    //        SelectionManager.Instance.DisableSelection();
+    //        SelectionManager.Instance.GetComponent<SelectionManager>().enabled = false;
 
-            isOpen = true;
+    //        isOpen = true;
 
-        }
-    }
+    //    }
+    //}
 
     public void AddToInventory(string itemName)
     {
@@ -96,6 +93,7 @@ public class InventorySystem : MonoBehaviour
         TriggerPickupPopUp(itemName, itemToAdd.GetComponent<Image>().sprite);
 
         ReCalculateList();
+        QuestManager.Instance.RefreshTrackerList();
     }
 
     private GameObject FindNextEmptySlot()
@@ -164,6 +162,7 @@ public class InventorySystem : MonoBehaviour
             }
         }
         ReCalculateList();
+        QuestManager.Instance.RefreshTrackerList();
     }
 
     public void ReCalculateList()
@@ -181,6 +180,20 @@ public class InventorySystem : MonoBehaviour
                 itemList.Add(result);
             }
         }
+    }
+
+    // Liczy ile przedmiotow mamy o tej samej nazwie
+    public int CheckItemAmount(string name)
+    {
+        int itemCounter = 0;
+        foreach(string item in itemList)
+        {
+            if(item == name)
+            {
+                itemCounter++;
+            }
+        }
+        return itemCounter;
     }
 
 }

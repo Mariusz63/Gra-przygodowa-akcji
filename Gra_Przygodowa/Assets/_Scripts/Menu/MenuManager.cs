@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
+// Singleton
 public class MenuManager : MonoBehaviour
 {
    public static MenuManager Instance { get; set; }
@@ -15,6 +16,13 @@ public class MenuManager : MonoBehaviour
     public GameObject menu;
 
     public bool isMenuOpen;
+    public int currentFrontLevel = 0;
+
+    // Powoduje ze layout Menu bedzie pokazywany pierwszy (przed innymi UI)
+    public int SetAsFront()
+    {
+        return currentFrontLevel++;
+    }
 
     private void Awake()
     {

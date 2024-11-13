@@ -18,7 +18,7 @@ public class EquipableItem : MonoBehaviour
     void Update()
     {
         if(Input.GetMouseButtonDown(0) && // Left Mouse Button
-            InventorySystem.Instance.isOpen == false &&
+           // InventorySystem.Instance.isOpen == false &&
            // CraftingSystem.Instance.isOpen == false &&
             SelectionManager.Instance.handIsVisible == false) 
         {

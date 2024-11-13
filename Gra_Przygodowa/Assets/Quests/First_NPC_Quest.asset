@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29542888534808a4ca005c57f1c3a9c3, type: 3}
+  m_Name: First_NPC_Quest
+  m_EditorClassIdentifier: 
+  initialDialog:
+  - "Hej,\nNie powiniene\u015B tutaj by\u0107.\n"
+  - Hej, zatrzymaj sie!!!!
+  - Mam bojowe zadanie.
+  acceptOption: "Oczywi\u015Bcie, pomog\u0119 Ci!\n"
+  acceptAnswer: "To \u015Bwietnie!\nWystarczy, ze dostarczysz mi 3 jab\u0142ka."
+  declineOption: "Przykro mi, ale nie mog\u0119 tego zrobic."
+  declineAnswer: 'Szkoda,
+
+    jesli zmienisz zdanie to przyjdz do mnie'
+  comebackAfterDecline: "Wi\u0119c jak? Zmieni\u0142e\u015B zdanie?"
+  comebackInProgress: "Nadal masz niewystarczaj\u0105co przdmiot\xF3w!"
+  comebackCompleted: Oto Twoja nagora! Trzymaj.
+  finalWords: "Mam nadzi\u0119, \u017Ce jeszcze si\u0119 spotkamy"
+  coinReward: 20
+  rewardItem1: Stone
+  rewardItem2: Stone
+  firstRequirmentItem: Stick
+  firstRequirementAmount: 3
+  secondRequirmentItem: 
+  secondRequirementAmount: 0
