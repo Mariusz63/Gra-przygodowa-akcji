@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 //Singleton
 public class QuestManager : MonoBehaviour
@@ -71,55 +72,61 @@ public class QuestManager : MonoBehaviour
 
     public void RefreshQuestList()
     {
-        // destroy everything in this content
-        foreach(Transform child in questMenuContent.transform)
+        // Destroy everything in this content
+        foreach (Transform child in questMenuContent.transform)
         {
             Destroy(child.gameObject);
         }
 
-        // active quests
+        // Initialize active completed quests
         foreach (Quest activeQuest in activeQuests)
         {
-            GameObject questPrefab = Instantiate(activeQuestPrefab, Vector3.zero, Quaternion.identity);
-            questPrefab.transform.SetParent(questMenuContent.transform, false);
-
-            QuestRow questRow = questPrefab.GetComponent<QuestRow>();
-            questRow.questName.text = activeQuest.questName;
-            questRow.questGiver.text = activeQuest.questGiver;
-
-            questRow.isActive = true;
-            questRow.isTracking = true;
-
-            questRow.coinAmount.text = $"{activeQuest.info.coinReward}";
-
-            //questRow.firstReward.sprite = "";
-            questRow.firstRewardAmount.text = "";
-
-            //questRow.secondReward.sprite = "";
-            questRow.secondRewardAmount.text = "";
+            InitializeQuestRow(activeQuest, activeQuestPrefab, true, true);
         }
 
-        // completed quests
+        // Initialize completed quests
         foreach (Quest completedQuest in completedQuests)
         {
-            GameObject questPrefab = Instantiate(completedQuestPrefab, Vector3.zero, Quaternion.identity);
-            questPrefab.transform.SetParent(questMenuContent.transform, false);
-
-            QuestRow questRow = questPrefab.GetComponent<QuestRow>();
-            questRow.questName.text = completedQuest.questName;
-            questRow.questGiver.text = completedQuest.questGiver;
-
-            questRow.isActive = false;
-            questRow.isTracking = false;
-
-            questRow.coinAmount.text = $"{completedQuest.info.coinReward}";
-
-            //questRow.firstReward.sprite = "";
-            questRow.firstRewardAmount.text = "";
-
-            //questRow.secondReward.sprite = "";
-            questRow.secondRewardAmount.text = "";
+            InitializeQuestRow(completedQuest, completedQuestPrefab, false, false);
         }
+    }
+
+    private void InitializeQuestRow(Quest quest, GameObject prefab, bool isActive, bool isTracking)
+    {
+        GameObject questPrefab = Instantiate(prefab, Vector3.zero, Quaternion.identity);
+        questPrefab.transform.SetParent(questMenuContent.transform, false);
+
+        QuestRow questRow = questPrefab.GetComponent<QuestRow>();
+        questRow.questName.text = quest.questName;
+        questRow.questGiver.text = quest.questGiver;
+
+        questRow.isActive = isActive;
+        questRow.isTracking = isTracking;
+        questRow.coinAmount.text = $"{quest.info.coinReward}";
+
+        SetReward(questRow.firstReward, questRow.firstRewardAmount, quest.info.rewardItem1);
+        SetReward(questRow.secondReward, questRow.secondRewardAmount, quest.info.rewardItem2);
+    }
+
+    private void SetReward(Image rewardImage, Text rewardAmount, string rewardItem)
+    {
+        if (!string.IsNullOrEmpty(rewardItem))
+        {
+            rewardImage.sprite = GetSpriteForItem(rewardItem);
+            rewardAmount.text = "";  // Mo¿na ustawiæ tekst, jeœli potrzebny
+        }
+        else
+        {
+            rewardImage.gameObject.SetActive(false);
+            rewardAmount.text = "";
+        }
+    }
+
+    //Szukamy "sprite" (obrazka) po nazwie przedmiotu
+    private Sprite GetSpriteForItem(string item)
+    {
+        var itemToGet = Resources.Load<GameObject>(item);
+        return itemToGet.GetComponent<Image>().sprite;
     }
 
     //Kiedy zaakceptujemy zadanie dodajemy je listy zadañ oraz do œledzenia

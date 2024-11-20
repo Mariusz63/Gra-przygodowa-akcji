@@ -44,10 +44,10 @@ public class DungeonCreator : MonoBehaviour
         // StartGeneration();
     }
 
-    //private void Awake()
-    //{
-    //    Instance = this;
-    //}
+    private void Awake()
+    {
+        Instance = this;
+    }
 
     public void StartGeneration()
     {

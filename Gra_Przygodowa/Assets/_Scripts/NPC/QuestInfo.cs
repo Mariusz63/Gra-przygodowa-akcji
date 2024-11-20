@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//ScriptableObject
 [CreateAssetMenu(fileName = "Data", menuName = "ScriptableObjects/QuestInfo", order = 1)]
 public class QuestInfo : ScriptableObject
 {
@@ -36,4 +37,8 @@ public class QuestInfo : ScriptableObject
 
     public string secondRequirmentItem;
     public int secondRequirementAmount;
+
+    [Header("Checkpoint")]
+    public bool hasCheckpoints;
+    public List<Checkpoint> checkpoints;
 }
