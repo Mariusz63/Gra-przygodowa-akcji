@@ -19,7 +19,6 @@ public class InventorySystem : MonoBehaviour
     private GameObject whatSlotToEquip;
 
     public bool isFull;
-    // public bool isOpen;
 
     // Pickup Popup alert;
     public GameObject pickupAlert;
@@ -45,14 +44,13 @@ public class InventorySystem : MonoBehaviour
         //isOpen = false;
 
         PopulateSlotList();
-
         Cursor.visible = false;
     }
 
     private void PopulateSlotList()
     {
-        //searching for transforms inside in inventoryScreenUI
-        foreach (Transform child in inventoryScreenUI.transform)
+        // Pobierz wszystkie obiekty z tagiem "QuickSlot" w hierarchii InventoryScreenUI
+        foreach (Transform child in inventoryScreenUI.GetComponentsInChildren<Transform>(true)) // true uwzglêdnia nieaktywne obiekty
         {
             if (child.CompareTag("QuickSlot"))
             {
@@ -61,30 +59,14 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
-    //void Update()
-    //{
-
-    //    if (Input.GetKeyDown(KeyCode.LeftControl) && !isOpen)
-    //    {
-
-    //        Debug.Log("i is pressed");
-    //        inventoryScreenUI.SetActive(true);
-    //        Cursor.lockState = CursorLockMode.None;
-    //        Cursor.visible = true;
-
-    //        SelectionManager.Instance.DisableSelection();
-    //        SelectionManager.Instance.GetComponent<SelectionManager>().enabled = false;
-
-    //        isOpen = true;
-
-    //    }
-    //}
-
     public void AddToInventory(string itemName)
     {
+        Debug.Log("Dodanie do eq - " + itemName);
         whatSlotToEquip = FindNextEmptySlot();
 
-        itemToAdd = (GameObject)Instantiate(Resources.Load<GameObject>(itemName), whatSlotToEquip.transform.position, whatSlotToEquip.transform.rotation);
+        itemToAdd = (GameObject)Instantiate(Resources.Load<GameObject>(itemName),
+            whatSlotToEquip.transform.position,
+            whatSlotToEquip.transform.rotation);
         itemToAdd.transform.SetParent(whatSlotToEquip.transform);
 
         itemList.Add(itemName);
@@ -98,6 +80,7 @@ public class InventorySystem : MonoBehaviour
 
     private GameObject FindNextEmptySlot()
     {
+        Debug.Log("Szukanie wolnego slota");
         foreach (GameObject slot in slotList)
         {
             if (slot.transform.childCount == 0)
@@ -144,21 +127,21 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
+    // Usuniecie itemka z ekwipunku
     public void RemoveItem(string nameToRemove, int amountToRemove)
     {
         int counter = amountToRemove;
 
-        for (var i = slotList.Count - 1;i>= 0; i--)
+        for (var i = slotList.Count - 1; i >= 0; i--)
         {
             if (slotList[i].transform.childCount > 0)
             {
-                //in inventory we get "clone" 
+                // w ekwipunkyu mamy nazwe przedmiotu z dopiskiem "clone" 
                 if (slotList[i].transform.GetChild(0).name == nameToRemove + "(Clone)" && counter != 0)
                 {
-                   Destroy( slotList[i].transform.GetChild(0).gameObject);
+                    Destroy(slotList[i].transform.GetChild(0).gameObject);
                     counter -= 1;
                 }
-
             }
         }
         ReCalculateList();
@@ -186,9 +169,9 @@ public class InventorySystem : MonoBehaviour
     public int CheckItemAmount(string name)
     {
         int itemCounter = 0;
-        foreach(string item in itemList)
+        foreach (string item in itemList)
         {
-            if(item == name)
+            if (item == name)
             {
                 itemCounter++;
             }

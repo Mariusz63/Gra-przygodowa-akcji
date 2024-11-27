@@ -17,13 +17,12 @@ public class EquipableItem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(0) && // Left Mouse Button
-           // InventorySystem.Instance.isOpen == false &&
-           // CraftingSystem.Instance.isOpen == false &&
+        if(Input.GetMouseButtonDown(0) && // Left Mouse Button        
+            QuestManager.Instance.isQuestMenuOpen == false &&
             SelectionManager.Instance.handIsVisible == false) 
         {
-
             animator.SetTrigger("hit");
+            SwingSoundDelay();
         }
     }
 
@@ -35,5 +34,11 @@ public class EquipableItem : MonoBehaviour
         //{
         //    selectedTree.GetComponent<ChoppableTree>().GetHit();
         //}
+    }
+
+    IEnumerator SwingSoundDelay()
+    {
+        yield return new WaitForSeconds(0.2f);
+        SoundManager.Instance.PlaySound(SoundManager.Instance.toolSwingSound);
     }
 }

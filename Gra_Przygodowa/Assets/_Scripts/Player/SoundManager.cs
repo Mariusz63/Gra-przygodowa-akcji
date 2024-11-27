@@ -8,6 +8,19 @@ public class SoundManager : MonoBehaviour
 {
     public static SoundManager Instance { get; set; }
 
+    //Efekty
+    public AudioSource dropItemSound;
+    public AudioSource toolSwingSound;
+    public AudioSource chopSound;
+    public AudioSource pickupItemSound;
+    public AudioSource grassWalkSound;
+
+    // Muzyka
+    public AudioSource startBGMusic;
+
+    // G³osy
+    public AudioSource voices;
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -20,8 +33,27 @@ public class SoundManager : MonoBehaviour
         }
     }
 
-    public void PlaySound(object grassWalkSound)
+    //Sprawdzamy czy podany dzwiek jest teraz uzywany
+    public void PlaySound(AudioSource soundToPlay)
     {
-        throw new NotImplementedException();
+        if (!soundToPlay.isPlaying)
+        {
+            soundToPlay.Play();
+        }
     }
+
+    public void PlayVoices(AudioClip voiceToPlay)
+    {
+        voices.clip = voiceToPlay;
+        if(!voices.isPlaying)
+        {
+            voices.Play();
+        }
+        else
+        {
+            voices.Stop();
+            voices.Play();
+        }
+    }
+
 }

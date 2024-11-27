@@ -7,24 +7,40 @@ public class QuestInfo : ScriptableObject
 {
     [TextArea(5, 10)]
     public List<string> initialDialog;
+    public List<AudioClip> initialAudioClip;
 
     [Header("Options")]
     [TextArea(5, 10)]
     public string acceptOption;
+    public AudioClip acceptOptionAudioClip;
+
     [TextArea(5, 10)]
     public string acceptAnswer;
+    public AudioClip acceptAnswerAudioClip;
+
     [TextArea(5, 10)]
     public string declineOption;
+    public AudioClip declineOptionAudioClip;
+
     [TextArea(5, 10)]
     public string declineAnswer;
+    public AudioClip declineAnswerrAudioClip;
+
     [TextArea(5, 10)]
     public string comebackAfterDecline;
+    public AudioClip comebackAfterDeclineAudioClip;
+
     [TextArea(5, 10)]
     public string comebackInProgress;
+    public AudioClip comebackInProgressAudioClip;
+
     [TextArea(5, 10)]
     public string comebackCompleted;
+    public AudioClip comebackCompletedAudioClip;
+
     [TextArea(5, 10)]
     public string finalWords;
+    public AudioClip finalWordsAudioClip;
 
     [Header("Rewards")]
     public int coinReward;

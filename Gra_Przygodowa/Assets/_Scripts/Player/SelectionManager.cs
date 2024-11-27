@@ -90,7 +90,7 @@ public class SelectionManager : MonoBehaviour
             //    }
             //}
 
-            if (ourInteractable && ourInteractable.playerInRange)
+            if (ourInteractable && ourInteractable.graczWZasiegu)
             {
                 onTarget = true;
                 selectedObject = ourInteractable.gameObject;

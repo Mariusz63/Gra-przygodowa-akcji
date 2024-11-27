@@ -2,25 +2,25 @@ using UnityEngine;
 
 public class InteractableObject : MonoBehaviour
 {
-    public bool playerInRange;
-    public string itemName;
+    public bool graczWZasiegu;
+    public string nazwaPrzedmiotu;
 
     public string GetItemName()
     {
-        return itemName;
+        return nazwaPrzedmiotu;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && playerInRange && SelectionManager.Instance.onTarget && SelectionManager.Instance.selectedObject == gameObject)
+        if (Input.GetKeyDown(KeyCode.E) && graczWZasiegu && SelectionManager.Instance.onTarget && SelectionManager.Instance.selectedObject == gameObject)
         {
             //if the inventory is NOT full
             if (!InventorySystem.Instance.CheckIfFull())
-            {
-                Debug.Log("Item added to inventory.");
-                InventorySystem.Instance.AddToInventory(itemName);
+            {              
+                InventorySystem.Instance.AddToInventory(nazwaPrzedmiotu);
                 InventorySystem.Instance.pickupItems.Add(gameObject.name); 
                 Destroy(gameObject);
+                Debug.Log("Item added to inventory.");
             }
             else
             {
@@ -33,7 +33,7 @@ public class InteractableObject : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            playerInRange = true;
+            graczWZasiegu = true;
         }
     }
 
@@ -41,7 +41,7 @@ public class InteractableObject : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            playerInRange = false;
+            graczWZasiegu = false;
 
         }
     }

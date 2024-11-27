@@ -5,42 +5,43 @@ using System.Diagnostics.Tracing;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+// Generowanie dungeona
 public class DungeonCreator : MonoBehaviour
 {
     public static DungeonCreator Instance { get; private set; }
 
     [SerializeField]
-    private GameObject entrance;
+    private GameObject wejscie;
 
-    [SerializeField] // Rooms in dungeon
-    private List<GameObject> roomList;
+    [SerializeField] // pokkoje w dungeonie
+    private List<GameObject> pokojeLista;
 
-    [SerializeField] // Special rooms ( ex. special loot, interactions)
-    private List<GameObject> specialRoomList;
+    [SerializeField] // Specjalne pokoje ( ex. special loot, interactions)
+    private List<GameObject> specjalePokojeLista;
 
-    [SerializeField] // Entrances to the dungeon
-    private List<GameObject> altrenceEntrancesList;
-
-    [SerializeField]
-    private List<GameObject> hallwaysList;
+    [SerializeField] // Wejscia do dungeonu
+    private List<GameObject> opcjonalneWejsciaLista;
 
     [SerializeField]
-    private GameObject door;
+    private List<GameObject> korytarzeLista;
 
     [SerializeField]
-    private int noOfRooms = 10;
+    private GameObject drzwi;
 
     [SerializeField]
-    private LayerMask roomsLayerMask;
+    private int liczbaPokoi = 10;
 
-    private List<DungeonPart> generatedRoomsList;
+    [SerializeField]
+    private LayerMask pokojeLayerMask;
 
-    private bool isGenerated = false;
+    private List<DungeonPart> wygenerowanePokojeLista;
+
+    private bool czyWygenerowany = false;
 
     private void Start()
     {
         Instance = this;
-        generatedRoomsList = new List<DungeonPart>();
+        wygenerowanePokojeLista = new List<DungeonPart>();
         // StartGeneration();
     }
 
@@ -51,25 +52,25 @@ public class DungeonCreator : MonoBehaviour
 
     public void StartGeneration()
     {
-        Generate();
-        GenerateAlternateEntrances();
-        FillEmptyEntrances();
-        isGenerated = true;
+        GenerujDungeon();
+        GenerowanieAlternatywnychWejsc();
+        UzupelnijPusteWejscia();
+        czyWygenerowany = true;
     }
 
-    public void Generate()
+    public void GenerujDungeon()
     {
         //Dungeon gererator
-        for (int i = 0; i < noOfRooms - altrenceEntrancesList.Count; i++)
+        for (int i = 0; i < liczbaPokoi - opcjonalneWejsciaLista.Count; i++)
         {
             //if no rooms generated, generate an entrance
-            if (generatedRoomsList.Count < 1)
+            if (wygenerowanePokojeLista.Count < 1)
             {
-                GameObject generatedRoom = Instantiate(entrance, transform.position, transform.rotation);
+                GameObject generatedRoom = Instantiate(wejscie, transform.position, transform.rotation);
                 generatedRoom.transform.SetParent(null);
                 if (generatedRoom.TryGetComponent<DungeonPart>(out DungeonPart dungeonPart))
                 {
-                    generatedRoomsList.Add(dungeonPart);
+                    wygenerowanePokojeLista.Add(dungeonPart);
                 }
             }
             else
@@ -82,10 +83,10 @@ public class DungeonCreator : MonoBehaviour
 
                 while (randomGeneratedRoom == null && retryIndex < totalRetries)
                 {
-                    int randomLinkRoomIndex = Random.Range(0, generatedRoomsList.Count);
-                    DungeonPart roomToTest = generatedRoomsList[randomLinkRoomIndex];
+                    int randomLinkRoomIndex = Random.Range(0, wygenerowanePokojeLista.Count);
+                    DungeonPart roomToTest = wygenerowanePokojeLista[randomLinkRoomIndex];
 
-                    if (roomToTest.HasAvailableEntrypoint(out room1EntryPoint))
+                    if (roomToTest.CzyMaDostepnyPunktWejscia(out room1EntryPoint))
                     {
                         randomGeneratedRoom = roomToTest;
                         break;
@@ -93,27 +94,27 @@ public class DungeonCreator : MonoBehaviour
                     retryIndex++;
                 }
 
-                GameObject doorToAlign = Instantiate(door, transform.position, transform.rotation);
+                GameObject doorToAlign = Instantiate(drzwi, transform.position, transform.rotation);
 
                 if (shouldPlaceHallway)
                 {
-                    int randomIndex = Random.Range(0, hallwaysList.Count);
-                    GameObject generatedHallway = Instantiate(hallwaysList[randomIndex], transform.position, transform.rotation);
+                    int randomIndex = Random.Range(0, korytarzeLista.Count);
+                    GameObject generatedHallway = Instantiate(korytarzeLista[randomIndex], transform.position, transform.rotation);
                     generatedHallway.transform.SetParent(null);
                     if (generatedHallway.TryGetComponent<DungeonPart>(out DungeonPart dungeonPart))
                     {
-                        if (dungeonPart.HasAvailableEntrypoint(out Transform room2Entrypoint))
+                        if (dungeonPart.CzyMaDostepnyPunktWejscia(out Transform room2Entrypoint))
                         {
-                            generatedRoomsList.Add(dungeonPart);
+                            wygenerowanePokojeLista.Add(dungeonPart);
                             doorToAlign.transform.position = room1EntryPoint.transform.position;
                             doorToAlign.transform.rotation = room1EntryPoint.transform.rotation;
-                            AlignRooms(randomGeneratedRoom.transform, generatedHallway.transform, room1EntryPoint, room2Entrypoint);
+                            WyrownaniePomieszczen(randomGeneratedRoom.transform, generatedHallway.transform, room1EntryPoint, room2Entrypoint);
 
-                            if (HandleIntersection(dungeonPart))
+                            if (ObslugaSkrzyzowan(dungeonPart))
                             {
-                                dungeonPart.UnuseEntrypoint(room2Entrypoint);
-                                randomGeneratedRoom.UnuseEntrypoint(room1EntryPoint);
-                                RetryPlacement(generatedHallway, doorToAlign);
+                                dungeonPart.NieuzywanyPunktWejscia(room2Entrypoint);
+                                randomGeneratedRoom.NieuzywanyPunktWejscia(room1EntryPoint);
+                                PonowProbeUmieszczenia(generatedHallway, doorToAlign);
                                 continue;
                             }
                         }
@@ -122,42 +123,42 @@ public class DungeonCreator : MonoBehaviour
                 else
                 {
                     GameObject generatedRoom;
-                    if (specialRoomList.Count > 0)
+                    if (specjalePokojeLista.Count > 0)
                     {
                         bool shouldPlaceSpecialRoom = Random.Range(0f, 1f) > 0.9f;
 
                         if (shouldPlaceSpecialRoom)
                         {
-                            int randomIndex = Random.Range(0, specialRoomList.Count);
-                            generatedRoom = Instantiate(specialRoomList[randomIndex], transform.position, transform.rotation);
+                            int randomIndex = Random.Range(0, specjalePokojeLista.Count);
+                            generatedRoom = Instantiate(specjalePokojeLista[randomIndex], transform.position, transform.rotation);
                         }
                         else
                         {
-                            int randomIndex = Random.Range(0, roomList.Count);
-                            generatedRoom = Instantiate(roomList[randomIndex], transform.position, transform.rotation);
+                            int randomIndex = Random.Range(0, pokojeLista.Count);
+                            generatedRoom = Instantiate(pokojeLista[randomIndex], transform.position, transform.rotation);
                         }
                     }
                     else
                     {
-                        int randomIndex = Random.Range(0, roomList.Count);
-                        generatedRoom = Instantiate(roomList[randomIndex], transform.position, transform.rotation);
+                        int randomIndex = Random.Range(0, pokojeLista.Count);
+                        generatedRoom = Instantiate(pokojeLista[randomIndex], transform.position, transform.rotation);
                     }
                     generatedRoom.transform.SetParent(null);
 
-                    if(generatedRoom.TryGetComponent<DungeonPart>(out DungeonPart part))
+                    if (generatedRoom.TryGetComponent<DungeonPart>(out DungeonPart part))
                     {
-                        if(part.HasAvailableEntrypoint(out Transform room2Entrypoint))
+                        if (part.CzyMaDostepnyPunktWejscia(out Transform room2Entrypoint))
                         {
-                            generatedRoomsList.Add(part);
+                            wygenerowanePokojeLista.Add(part);
                             doorToAlign.transform.position = room1EntryPoint.transform.position;
                             doorToAlign.transform.rotation = room1EntryPoint.transform.rotation;
-                            AlignRooms(randomGeneratedRoom.transform, generatedRoom.transform,room1EntryPoint, room2Entrypoint);
+                            WyrownaniePomieszczen(randomGeneratedRoom.transform, generatedRoom.transform, room1EntryPoint, room2Entrypoint);
 
-                            if(HandleIntersection(part))
+                            if (ObslugaSkrzyzowan(part))
                             {
-                                part.UnuseEntrypoint(room2Entrypoint);
-                                randomGeneratedRoom.UnuseEntrypoint(room1EntryPoint);
-                                RetryPlacement(generatedRoom, doorToAlign);
+                                part.NieuzywanyPunktWejscia(room2Entrypoint);
+                                randomGeneratedRoom.NieuzywanyPunktWejscia(room1EntryPoint);
+                                PonowProbeUmieszczenia(generatedRoom, doorToAlign);
                                 continue;
                             }
                         }
@@ -168,7 +169,7 @@ public class DungeonCreator : MonoBehaviour
         }
     }
 
-    private void RetryPlacement(GameObject itemToPlace, GameObject doorToPlace)
+    private void PonowProbeUmieszczenia(GameObject itemToPlace, GameObject doorToPlace)
     {
         DungeonPart randomGeneratedRoom = null;
         Transform room1Entrypoint = null;
@@ -177,10 +178,10 @@ public class DungeonCreator : MonoBehaviour
 
         while (randomGeneratedRoom == null && retryIndex < totalRetries)
         {
-            int randomLinkRoomIndex = Random.Range(0, generatedRoomsList.Count - 1);
-            DungeonPart roomToTest = generatedRoomsList[randomLinkRoomIndex];
+            int randomLinkRoomIndex = Random.Range(0, wygenerowanePokojeLista.Count - 1);
+            DungeonPart roomToTest = wygenerowanePokojeLista[randomLinkRoomIndex];
 
-            if (roomToTest.HasAvailableEntrypoint(out room1Entrypoint))
+            if (roomToTest.CzyMaDostepnyPunktWejscia(out room1Entrypoint))
             {
                 randomGeneratedRoom = roomToTest;
                 break;
@@ -190,28 +191,27 @@ public class DungeonCreator : MonoBehaviour
 
         if (itemToPlace.TryGetComponent<DungeonPart>(out DungeonPart dungeonPart))
         {
-            if (dungeonPart.HasAvailableEntrypoint(out Transform room2Entrypoint))
+            if (dungeonPart.CzyMaDostepnyPunktWejscia(out Transform room2Entrypoint))
             {
                 doorToPlace.transform.position = room1Entrypoint.transform.position;
                 doorToPlace.transform.rotation = room1Entrypoint.transform.rotation;
-                AlignRooms(randomGeneratedRoom.transform, itemToPlace.transform, room1Entrypoint, room2Entrypoint);
+                WyrownaniePomieszczen(randomGeneratedRoom.transform, itemToPlace.transform, room1Entrypoint, room2Entrypoint);
 
-                if (HandleIntersection(dungeonPart))
+                if (ObslugaSkrzyzowan(dungeonPart))
                 {
-                    dungeonPart.UnuseEntrypoint(room2Entrypoint);
-                    randomGeneratedRoom.UnuseEntrypoint(room1Entrypoint);
-                    RetryPlacement(itemToPlace, doorToPlace);
+                    dungeonPart.NieuzywanyPunktWejscia(room2Entrypoint);
+                    randomGeneratedRoom.NieuzywanyPunktWejscia(room1Entrypoint);
+                    PonowProbeUmieszczenia(itemToPlace, doorToPlace);
                 }
             }
         }
-
     }
 
-    private bool HandleIntersection(DungeonPart dungeonPart)
+    private bool ObslugaSkrzyzowan(DungeonPart dungeonPart)
     {
         bool didIntersect = false;
 
-        Collider[] hits = Physics.OverlapBox(dungeonPart.collider.bounds.center, dungeonPart.collider.bounds.size / 2, Quaternion.identity, roomsLayerMask);
+        Collider[] hits = Physics.OverlapBox(dungeonPart.collider.bounds.center, dungeonPart.collider.bounds.size / 2, Quaternion.identity, pokojeLayerMask);
 
         foreach (Collider hit in hits)
         {
@@ -226,12 +226,8 @@ public class DungeonCreator : MonoBehaviour
         return didIntersect;
     }
 
-    private void AlignRooms(Transform transform1, Transform transform2, Transform room1EntryPoint, Transform room2Entrypoint)
-    {
-        //Debug.Log($"room1 {transform1}");
-        //Debug.Log($"room2 {transform2}");
-        //Debug.Log($"room1Entry {room1EntryPoint}");
-        //Debug.Log($"room2Entry {room2EntryPoint}");
+    private void WyrownaniePomieszczen(Transform transform1, Transform transform2, Transform room1EntryPoint, Transform room2Entrypoint)
+    {    
         float angle = Vector3.Angle(room1EntryPoint.forward, room1EntryPoint.forward);
 
         transform2.TransformPoint(room2Entrypoint.position);
@@ -242,16 +238,16 @@ public class DungeonCreator : MonoBehaviour
         Physics.SyncTransforms();
     }
 
-    public void GenerateAlternateEntrances()
+    public void GenerowanieAlternatywnychWejsc()
     {
-        if (altrenceEntrancesList.Count < 1) return;
+        if (opcjonalneWejsciaLista.Count < 1) return;
     }
 
-    public void FillEmptyEntrances()
+    public void UzupelnijPusteWejscia()
     {
-        generatedRoomsList.ForEach(roomList => roomList.FillEmptyDoors());
+        wygenerowanePokojeLista.ForEach(roomList => roomList.UzupelnijPusteDrzwi());
     }
 
-    public List<DungeonPart> GetGeneratedRooms() => generatedRoomsList;
-    public bool IsGenerated() => isGenerated;
+    public List<DungeonPart> PobierzWygenerowanePokoje() => wygenerowanePokojeLista;
+    public bool CzyWygenerowany() => czyWygenerowany;
 }

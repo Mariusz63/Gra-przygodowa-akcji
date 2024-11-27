@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -191,12 +192,50 @@ public class QuestManager : MonoBehaviour
             if (trackedQuest.info.secondRequirmentItem != "") // Jeœli mamy 2 przedmioty
             {
                 tRow.requirements.text = $"{req1} " + firstItemAmount + "/" + $"{req1Amount}\n" +
-               $"{req2}" + secondItemAmount + "/" + $"{req2Amount}\n";
+               $"{req2}" + secondItemAmount + "/" + $"{req2Amount}";
             }
             else // jeœli mamy 1 przedmiot
             {
-                tRow.requirements.text = $"{req1} " + firstItemAmount + "/" + $"{req1Amount}\n";
+                tRow.requirements.text = $"{req1} " + firstItemAmount + "/" + $"{req1Amount}";
+            }
+
+            // Jesli quest ma checkpointy chcemy je dodac do opisu
+            if(trackedQuest.info.hasCheckpoints)
+            {
+                var existingText = tRow.requirements.text;
+                tRow.requirements.text = PrintCheckpoint(trackedQuest,existingText);
             }
         }
     }
+
+    //private string PrintCheckpoint(Quest trackedQuest, string existingText)
+    //{
+    //    string finalText = existingText;
+    //    foreach (Checkpoint cp in trackedQuest.info.checkpoints)
+    //    {
+    //        if (cp.isCompleted)
+    //        {
+    //            finalText = finalText + "\n" + cp.name + " [Completed]";
+    //        }
+    //        else
+    //        {
+    //            finalText = finalText + "\n" + cp.name;
+    //        }
+    //    }
+    //    return finalText;
+    //}
+
+    //Obsuga checpoint
+    private string PrintCheckpoint(Quest trackedQuest, string existingText)
+    {
+        string finalText = existingText;
+
+        foreach (Checkpoint cp in trackedQuest.info.checkpoints)
+        {
+            finalText += $"\n{cp.name}{(cp.isCompleted ? " [Completed]" : " [In progress]")}";
+        }
+        return finalText;
+    }
+
+
 }

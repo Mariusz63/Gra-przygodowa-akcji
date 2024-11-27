@@ -57,11 +57,9 @@ public class NPC : MonoBehaviour
             // If we return after declining the quest
             if (currentActiveQuest.declined)
             {
-
                 DialogSystem.Instance.OpenDialogUI();
-
                 npcDialogText.text = currentActiveQuest.info.comebackAfterDecline;
-
+                SoundManager.Instance.PlayVoices(currentActiveQuest.info.comebackAfterDeclineAudioClip);
                 SetAcceptAndDeclineOptions();
             }
 
@@ -75,6 +73,8 @@ public class NPC : MonoBehaviour
                     DialogSystem.Instance.OpenDialogUI();
 
                     npcDialogText.text = currentActiveQuest.info.comebackCompleted;
+                    SoundManager.Instance.PlayVoices(currentActiveQuest.info.comebackCompletedAudioClip);
+
                     optionButton1Text.text = "[Take Reward]";
                     optionButton1.onClick.RemoveAllListeners();
                     optionButton1.onClick.AddListener(() =>
@@ -87,6 +87,7 @@ public class NPC : MonoBehaviour
                     DialogSystem.Instance.OpenDialogUI();
 
                     npcDialogText.text = currentActiveQuest.info.comebackInProgress;
+                    SoundManager.Instance.PlayVoices(currentActiveQuest.info.comebackInProgressAudioClip);
                     optionButton1Text.text = "[Close]";
                     optionButton1.onClick.RemoveAllListeners();
                     optionButton1.onClick.AddListener(() =>
@@ -102,6 +103,7 @@ public class NPC : MonoBehaviour
                 DialogSystem.Instance.OpenDialogUI();
 
                 npcDialogText.text = currentActiveQuest.info.finalWords;
+                SoundManager.Instance.PlayVoices(currentActiveQuest.info.finalWordsAudioClip);
                 optionButton1Text.text = "[Close]";
                 optionButton1.onClick.RemoveAllListeners();
                 optionButton1.onClick.AddListener(() =>
@@ -227,6 +229,8 @@ public class NPC : MonoBehaviour
         DialogSystem.Instance.OpenDialogUI();
 
         npcDialogText.text = currentActiveQuest.info.initialDialog[currentDialog];
+        SoundManager.Instance.PlayVoices(currentActiveQuest.info.initialAudioClip[currentDialog]);
+
         optionButton1Text.text = "Next";
         optionButton1.onClick.RemoveAllListeners();
         optionButton1.onClick.AddListener(() =>
@@ -242,12 +246,16 @@ public class NPC : MonoBehaviour
         if (currentDialog == currentActiveQuest.info.initialDialog.Count - 1) // If its the last dialog 
         {
             npcDialogText.text = currentActiveQuest.info.initialDialog[currentDialog];
+            SoundManager.Instance.PlayVoices(currentActiveQuest.info.initialAudioClip[currentDialog]);
+
             currentActiveQuest.initialDialogCompleted = true;
             SetAcceptAndDeclineOptions();
         }
         else  // If there are more dialogs
         {
             npcDialogText.text = currentActiveQuest.info.initialDialog[currentDialog];
+            SoundManager.Instance.PlayVoices(currentActiveQuest.info.initialAudioClip[currentDialog]);
+
             optionButton1Text.text = "Next";
             optionButton1.onClick.RemoveAllListeners();
             optionButton1.onClick.AddListener(() =>
@@ -267,6 +275,8 @@ public class NPC : MonoBehaviour
         if (currentActiveQuest.hasNoRequirements)
         {
             npcDialogText.text = currentActiveQuest.info.comebackCompleted;
+            SoundManager.Instance.PlayVoices(currentActiveQuest.info.comebackCompletedAudioClip);
+
             optionButton1Text.text = "[Take Reward]";
             optionButton1.onClick.RemoveAllListeners();
             optionButton1.onClick.AddListener(() =>
@@ -278,6 +288,8 @@ public class NPC : MonoBehaviour
         else
         {
             npcDialogText.text = currentActiveQuest.info.acceptAnswer;
+            SoundManager.Instance.PlayVoices(currentActiveQuest.info.acceptAnswerAudioClip);
+
             CloseDialogUI();
         }
     }

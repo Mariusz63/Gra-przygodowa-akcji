@@ -8,5 +8,5 @@ public class Checkpoint : ScriptableObject
 {
     // opis 
     public string description;
-    public bool isCompleted;
+    public bool isCompleted = false;
 }

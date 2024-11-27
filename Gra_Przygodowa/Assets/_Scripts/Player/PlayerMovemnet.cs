@@ -17,17 +17,16 @@ public class PlayerMovement : MonoBehaviour
     Vector3 velocity;
     bool isGrounded;
 
-    private Vector3 lastPosition = new Vector3(0f,0f,0f);
+    private Vector3 lastPosition = new Vector3(0f, 0f, 0f);
     public bool isMoving;
 
     // Update is called once per frame
     void Update()
     {
-        if(DialogSystem.Instance.dialogUIActive == false)
+        if (DialogSystem.Instance.dialogUIActive == false)
         {
             Movement();
         }
-        
     }
 
     public void Movement()
@@ -59,15 +58,16 @@ public class PlayerMovement : MonoBehaviour
 
         controller.Move(velocity * Time.deltaTime);
 
-        if(lastPosition != gameObject.transform.position && isGrounded == true)
+        //jesli ostatnia pozycja rozni sie od terazniejszej ozacza to ze sie poruszamy
+        if (lastPosition != gameObject.transform.position && isGrounded == true)
         {
             isMoving = true;
-            //SoundManager.Instance.PlaySound(SoundManager.Instance.grassWalkSound);
+            SoundManager.Instance.PlaySound(SoundManager.Instance.grassWalkSound);
         }
         else
         {
             isMoving = false;
-            //SoundManager.Instance.grassWalkSound.Stop();
+            SoundManager.Instance.grassWalkSound.Stop();
         }
         lastPosition = gameObject.transform.position;
     }

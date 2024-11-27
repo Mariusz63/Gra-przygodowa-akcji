@@ -4,26 +4,26 @@ using UnityEngine;
 
 public class DungeonPart : MonoBehaviour
 {
-    public enum DungeonPartType 
+    public enum DungeonPartType
     {
         Room,
         Hallway
     }
 
     [SerializeField]
-    private LayerMask roomsLayerMask;
+    private LayerMask pokojeLayerMask;
 
     [SerializeField]
     private DungeonPartType dungeonPartType;
 
-    [SerializeField] // fill empty space after creating dungeon
+    [SerializeField] // Wype³nia pust¹ przestrzeñ po stworzeniu lochu
     private GameObject fillerWall;
 
     public List<Transform> entrypointsList;
 
     public new Collider collider;
 
-    public bool HasAvailableEntrypoint(out Transform entrypoint)
+    public bool CzyMaDostepnyPunktWejscia(out Transform entrypoint)
     {
         Transform resultingEntry = null;
         bool result = false;
@@ -31,12 +31,12 @@ public class DungeonPart : MonoBehaviour
         int totalRetries = 100;
         int retryIndex = 0;
 
-        if(entrypointsList.Count == 1)
+        if (entrypointsList.Count == 1)
         {
             Transform entry = entrypointsList[0];
-            if(entry.TryGetComponent<EntryPoint>(out EntryPoint res))
+            if (entry.TryGetComponent<EntryPoint>(out EntryPoint res))
             {
-                if (res.IsOccupied())
+                if (res.CzyZajety())
                 {
                     result = false;
                     resultingEntry = null;
@@ -45,25 +45,25 @@ public class DungeonPart : MonoBehaviour
                 {
                     result = true;
                     resultingEntry = entry;
-                    res.SetOccupied();
+                    res.UstawNaZajety();
                 }
                 entrypoint = resultingEntry;
                 return result;
             }
         }
 
-        while(resultingEntry == null && retryIndex < totalRetries)
+        while (resultingEntry == null && retryIndex < totalRetries)
         {
             int randomEntryIndex = Random.Range(0, entrypointsList.Count);
             Transform entry = entrypointsList[randomEntryIndex];
 
-            if(entry.TryGetComponent<EntryPoint>(out EntryPoint entryPoint))
+            if (entry.TryGetComponent<EntryPoint>(out EntryPoint entryPoint))
             {
-                if (!entryPoint.IsOccupied())
+                if (!entryPoint.CzyZajety())
                 {
                     resultingEntry = entry;
                     result = true;
-                    entryPoint.SetOccupied();
+                    entryPoint.UstawNaZajety();
                     break;
                 }
             }
@@ -73,21 +73,21 @@ public class DungeonPart : MonoBehaviour
         return result;
     }
 
-    public void UnuseEntrypoint(Transform entrypoint)
+    public void NieuzywanyPunktWejscia(Transform entrypoint)
     {
-        if(entrypoint.TryGetComponent<EntryPoint>(out EntryPoint res))
+        if (entrypoint.TryGetComponent<EntryPoint>(out EntryPoint res))
         {
-            res.SetOccupied(false);
+            res.UstawNaZajety(false);
         }
     }
 
-    public void FillEmptyDoors()
+    public void UzupelnijPusteDrzwi()
     {
         entrypointsList.ForEach((entry) =>
         {
-            if(entry.TryGetComponent(out EntryPoint entryPoint))
+            if (entry.TryGetComponent(out EntryPoint entryPoint))
             {
-                if (!entryPoint.IsOccupied())
+                if (!entryPoint.CzyZajety())
                 {
                     GameObject wall = Instantiate(fillerWall);
                     wall.transform.position = entry.transform.position;
@@ -102,5 +102,4 @@ public class DungeonPart : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireCube(collider.bounds.center, collider.bounds.size);
     }
-
 }
