@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,6 +32,7 @@ public class InventoryItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     private GameObject itemPendingEquipping;
     public bool isInsideQuickSlot; // is inside the quickSlot
     public bool isSelected; // item we actually selected
+    public bool isUsable; // is usable
 
 
     private void Start()
@@ -87,7 +89,32 @@ public class InventoryItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 EquipSystem.Instance.AddToQuickSlots(gameObject);
                 isInsideQuickSlot = true;
             }
+
+            if (isUsable)
+            {
+                UseItem();
+            }
         }
+    }
+
+    private void UseItem()
+    {
+        // Closing all opened UI / Menus
+        itemInfoUI.SetActive(false);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        SelectionManager.Instance.EnableSelection();
+        SelectionManager.Instance.enabled = true;
+
+        // we need to add (Clone) to name because after adding item to inventory become "clone"
+        switch (gameObject.name)
+        {
+            case "StorageBox(Clone)":
+                break;
+            default: break; // do nothing;
+        }
+
     }
 
     // Triggered when the mouse button is released over the item that has this script.
