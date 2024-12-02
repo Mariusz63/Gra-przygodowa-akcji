@@ -23,7 +23,8 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (DialogSystem.Instance.dialogUIActive == false)
+        if (DialogSystem.Instance.dialogUIActive == false &&
+            StorageManager.Instance.storageUIOpen == false)
         {
             Movement();
         }
@@ -70,5 +71,7 @@ public class PlayerMovement : MonoBehaviour
             SoundManager.Instance.grassWalkSound.Stop();
         }
         lastPosition = gameObject.transform.position;
+        Debug.Log($"isGrounded: {isGrounded}, velocity.y: {velocity.y}");
+
     }
 }

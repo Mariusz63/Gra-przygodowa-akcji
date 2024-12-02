@@ -18,7 +18,10 @@ public class MouseMovement : MonoBehaviour
     void Update()
     {
         //if its not open then check for input
-        if (!MenuManager.Instance.isMenuOpen && !DialogSystem.Instance.dialogUIActive && !QuestManager.Instance.isQuestMenuOpen)
+        if (!MenuManager.Instance.isMenuOpen && 
+            !DialogSystem.Instance.dialogUIActive && 
+            !QuestManager.Instance.isQuestMenuOpen &&
+            !StorageManager.Instance.storageUIOpen)
         {
             //Gets Axis from Input Manager in Unity
             float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;

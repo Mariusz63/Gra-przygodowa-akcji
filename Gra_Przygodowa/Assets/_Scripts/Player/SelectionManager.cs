@@ -19,6 +19,7 @@ public class SelectionManager : MonoBehaviour
 
     //public GameObject selectedTree;
     public GameObject chopHolder;
+    public GameObject selectedStorageBox;
 
     private void Start()
     {
@@ -48,8 +49,8 @@ public class SelectionManager : MonoBehaviour
             var selectionTransform = hit.transform;
             InteractableObject ourInteractable = selectionTransform.GetComponent<InteractableObject>();
 
+            // NPC 
             NPC npc = selectionTransform.GetComponent<NPC>();
-
             if(npc && npc.playerInRange)
             {
                 interaction_text.text = "Talk";
@@ -90,6 +91,26 @@ public class SelectionManager : MonoBehaviour
             //    }
             //}
 
+
+            // Storage Box
+            StorageBox storageBox = selectionTransform.GetComponent<StorageBox>();
+            if(storageBox && storageBox.isPlayerInRange && PlacementSystem.Instance.inPlacementMode == false)
+            {
+                interaction_text.text = "Open";
+                interaction_Info_UI.SetActive(true) ;
+                selectedStorageBox = storageBox.gameObject;
+
+                // Check is the player click left button
+                if (Input.GetMouseButtonDown(0))
+                    StorageManager.Instance.OpenBox(storageBox);
+            }
+            else
+            {
+                if (selectedStorageBox != null)
+                    selectedStorageBox = null;
+            }
+
+            // Pickable items
             if (ourInteractable && ourInteractable.graczWZasiegu)
             {
                 onTarget = true;
@@ -102,37 +123,39 @@ public class SelectionManager : MonoBehaviour
                 {
                     centerDotIcon.gameObject.SetActive(false);
                     handIcon.gameObject.SetActive(true);
-
                     handIsVisible = true;
                 }
                 else
                 {
                     centerDotIcon.gameObject.SetActive(true);
                     handIcon.gameObject.SetActive(false);
-
                     handIsVisible = false;
-
                 }
             }
             else // if there is a hit, but without an Interactable Script
             {
                 onTarget = false;
-               // interaction_Info_UI.SetActive(false);
+                interaction_Info_UI.SetActive(false);
                 centerDotIcon.gameObject.SetActive(true);
                 handIcon.gameObject.SetActive(false);
-
                 handIsVisible = false;
             }
 
+            if (!npc && !ourInteractable && !storageBox)
+            {
+                interaction_text.text = "";
+                interaction_Info_UI.SetActive(false);
+            }
         }
         else // if there is no hit at all
         {
             interaction_Info_UI.SetActive(false);
             centerDotIcon.gameObject.SetActive(true);
             handIcon.gameObject.SetActive(false);
-
             handIsVisible = false;
         }
+
+        
     }
 
 
