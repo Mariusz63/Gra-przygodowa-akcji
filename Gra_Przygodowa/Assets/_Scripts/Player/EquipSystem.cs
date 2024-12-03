@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -129,7 +130,7 @@ public class EquipSystem : MonoBehaviour
                 }
 
                 // when we selected the same number we delete gameobject
-                if(selectedItemModel != null)
+                if (selectedItemModel != null)
                 {
                     DestroyImmediate(selectedItemModel.gameObject);
                     selectedItemModel = null;
@@ -154,14 +155,14 @@ public class EquipSystem : MonoBehaviour
         }
 
         //remove clone from name to get only item name
-        string selectedItemName = selectedItem.name.Replace("(Clone)","");
-        selectedItemModel = Instantiate(Resources.Load<GameObject>(selectedItemName + "_Model"), new Vector3(0.6f,0,0.4f), Quaternion.Euler(0, -12.5f, -20f));
+        string selectedItemName = selectedItem.name.Replace("(Clone)", "");
+        selectedItemModel = Instantiate(Resources.Load<GameObject>(selectedItemName + "_Model"), new Vector3(0.6f, 0, 0.4f), Quaternion.Euler(0, -12.5f, -20f));
         selectedItemModel.transform.SetParent(toolHolder.transform, false);
     }
 
     bool CheckIfSlotIsFull(int slotNUmber)
     {
-        if (quickSlotsList[slotNUmber-1].transform.childCount > 0)
+        if (quickSlotsList[slotNUmber - 1].transform.childCount > 0)
         {
             return true;
         }
@@ -171,7 +172,7 @@ public class EquipSystem : MonoBehaviour
 
     GameObject GetSelectedItem(int slotNumber)
     {
-        return quickSlotsList[slotNumber -1].transform.GetChild(0).gameObject;
+        return quickSlotsList[slotNumber - 1].transform.GetChild(0).gameObject;
     }
 
     public void AddToQuickSlots(GameObject itemToEquip)
@@ -206,7 +207,6 @@ public class EquipSystem : MonoBehaviour
 
     public bool CheckIfFull()
     {
-
         int counter = 0;
 
         foreach (GameObject slot in quickSlotsList)
@@ -225,5 +225,22 @@ public class EquipSystem : MonoBehaviour
         {
             return false;
         }
+    }
+
+    public bool IsHoldingWeapon()
+    {
+        if (selectedItem != null)
+        {
+            return selectedItem.GetComponent<Weapon>() != null;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public int GetWeaponDamage()
+    {
+        return selectedItem?.GetComponent<Weapon>()?.weaponDemage ?? 0;
     }
 }

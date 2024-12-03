@@ -71,7 +71,5 @@ public class PlayerMovement : MonoBehaviour
             SoundManager.Instance.grassWalkSound.Stop();
         }
         lastPosition = gameObject.transform.position;
-        Debug.Log($"isGrounded: {isGrounded}, velocity.y: {velocity.y}");
-
     }
 }

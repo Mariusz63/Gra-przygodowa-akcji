@@ -14,5 +14,11 @@ namespace Assets._Scripts.Enums
             mediumBox,
             bigBox
         }
+
+        public enum AnimalType
+        {
+            Spider
+
+        }
     }
 }

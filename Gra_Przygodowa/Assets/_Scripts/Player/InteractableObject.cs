@@ -42,7 +42,6 @@ public class InteractableObject : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             graczWZasiegu = false;
-
         }
     }
 }

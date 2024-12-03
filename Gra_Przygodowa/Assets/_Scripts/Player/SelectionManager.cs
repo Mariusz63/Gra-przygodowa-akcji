@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
@@ -110,6 +112,22 @@ public class SelectionManager : MonoBehaviour
                     selectedStorageBox = null;
             }
 
+            // Animal
+            Animal animal = selectionTransform.GetComponent<Animal>();  
+            if (animal && animal.playerInRange)
+            {
+                interaction_text.text = animal.animalName;
+                interaction_Info_UI.SetActive(true);
+
+                if (Input.GetMouseButtonDown(0) && EquipSystem.Instance.IsHoldingWeapon())
+                    StartCoroutine(DealDamage(animal,0.3f,EquipSystem.Instance.GetWeaponDamage()));      
+            }
+            else
+            {
+                interaction_text.text = "";
+                interaction_Info_UI.SetActive(false);
+            }
+
             // Pickable items
             if (ourInteractable && ourInteractable.graczWZasiegu)
             {
@@ -158,6 +176,11 @@ public class SelectionManager : MonoBehaviour
         
     }
 
+    IEnumerator DealDamage(Animal animal, float delay, int damage)
+    {
+        yield return new WaitForSeconds(delay);
+        animal.TakeDamage(damage);
+    }
 
     public void DisableSelection() 
     { 
