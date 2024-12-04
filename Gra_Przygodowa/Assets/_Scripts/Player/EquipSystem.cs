@@ -156,13 +156,14 @@ public class EquipSystem : MonoBehaviour
 
         //remove clone from name to get only item name
         string selectedItemName = selectedItem.name.Replace("(Clone)", "");
+        Debug.Log(selectedItemName);
         selectedItemModel = Instantiate(Resources.Load<GameObject>(selectedItemName + "_Model"), new Vector3(0.6f, 0, 0.4f), Quaternion.Euler(0, -12.5f, -20f));
         selectedItemModel.transform.SetParent(toolHolder.transform, false);
     }
 
     bool CheckIfSlotIsFull(int slotNUmber)
     {
-        if (quickSlotsList[slotNUmber - 1].transform.childCount > 0)
+        if (quickSlotsList[slotNUmber - 1].transform.childCount >= 0)
         {
             return true;
         }
@@ -182,13 +183,12 @@ public class EquipSystem : MonoBehaviour
         // Set transform of our object
         itemToEquip.transform.SetParent(availableSlot.transform, false);
 
-        /*
+        
         // Getting clean name
         string cleanName = itemToEquip.name.Replace("(Clone)", "");
         // Adding item to list
         itemList.Add(cleanName);
-        */
-
+        
         InventorySystem.Instance.ReCalculateList();
 
     }
