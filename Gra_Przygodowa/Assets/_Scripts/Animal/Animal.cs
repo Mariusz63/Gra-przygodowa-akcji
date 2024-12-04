@@ -20,10 +20,16 @@ public class Animal : MonoBehaviour
     [SerializeField] AudioClip animalHitAndDie;
 
     [SerializeField] AnimalType thisAnimalType;
+    [SerializeField] ParticleSystem bloodSplashParticles;
+    [SerializeField] GameObject spwaenBloodPuddle;
+
+    private Animator animator;
+    public bool isDead = false;
 
     public void Start()
     {
         currentHealt = maxHealth;
+        animator = GetComponent<Animator>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -44,17 +50,32 @@ public class Animal : MonoBehaviour
 
     public void TakeDamage(int damage)
     {
-        currentHealt -= damage;
+        if (!isDead)
+        {
+            currentHealt -= damage;
 
-        if(currentHealt <= 0)
-        {
-            PlayDieSound();
-            Destroy(gameObject);
+            bloodSplashParticles.Play();
+
+            if (currentHealt <= 0)
+            {
+                PlayDieSound();
+                animator.SetTrigger("DIE");
+                // GetComponent<AI_Movement>().enabled = false;
+                //Destroy(gameObject);
+                PuddleDelay();
+                 isDead = true;
+            }
+            else
+            {
+                PlayHitSound();
+            }
         }
-        else
-        {
-            PlayHitSound();
-        }
+    }
+
+    IEnumerator PuddleDelay()
+    {
+        yield return new WaitForSeconds(1f);
+        spwaenBloodPuddle.SetActive(true);
     }
 
     void PlayHitSound()

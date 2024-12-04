@@ -6,6 +6,7 @@ using UnityEngine;
 public class EquipableItem : MonoBehaviour
 {
     public Animator animator;
+    public bool swingWait = false;
 
 
     // Start is called before the first frame update
@@ -19,10 +20,14 @@ public class EquipableItem : MonoBehaviour
     {
         if(Input.GetMouseButtonDown(0) && // Left Mouse Button        
             QuestManager.Instance.isQuestMenuOpen == false &&
-            SelectionManager.Instance.handIsVisible == false) 
+            SelectionManager.Instance.handIsVisible == false &&
+            swingWait == false) 
         {
+            // wait for the swing 
+            swingWait = true;
+            StartCoroutine(SwingSoundDelay());
             animator.SetTrigger("hit");
-            SwingSoundDelay();
+            StartCoroutine(NewSwingSoundDelay());
         }
     }
 
@@ -40,5 +45,12 @@ public class EquipableItem : MonoBehaviour
     {
         yield return new WaitForSeconds(0.2f);
         SoundManager.Instance.PlaySound(SoundManager.Instance.toolSwingSound);
+    }
+
+    //TO DO: its hardcoded for axe
+    IEnumerator NewSwingSoundDelay()
+    {
+        yield return new WaitForSeconds(1f);
+        swingWait = false;
     }
 }

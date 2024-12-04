@@ -243,4 +243,16 @@ public class EquipSystem : MonoBehaviour
     {
         return selectedItem?.GetComponent<Weapon>()?.weaponDemage ?? 0;
     }
+
+    public bool IsThereASwingLock()
+    {
+        if(selectedItemModel && selectedItemModel.GetComponent<EquipableItem>())
+        {
+            return selectedItemModel.GetComponent<EquipableItem>().swingWait;
+        }
+        else
+        {
+            return false;
+        }
+    }
 }
