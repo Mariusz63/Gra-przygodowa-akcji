@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -41,14 +42,40 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
 
     public void OnEndDrag(PointerEventData eventData)
     {
-
+        var tempItemReference = itemBeingDragged;
         itemBeingDragged = null;
 
-        if (transform.parent == startParent || transform.parent == transform.root)
+        // Dragged item outside of inventory 
+        if (tempItemReference.transform.parent == tempItemReference.transform.root)
         {
-            transform.position = startPosition;
-            transform.SetParent(startParent);
+            // Hide the icon of the item at this point
+                CancelDragging(tempItemReference);
+        }
 
+        // Dropped in the same slot
+        if (tempItemReference.transform.parent == startParent)
+        {
+            CancelDragging(tempItemReference);
+        }
+
+        // Dropped in another slot
+        if (tempItemReference.transform.parent != tempItemReference.transform.root &&
+            tempItemReference.transform.parent != startParent)
+        {
+            // Other slot did not accept item (Probably different item)
+            if (tempItemReference.transform.parent.childCount > 2)
+            {
+                CancelDragging(tempItemReference);
+                Debug.Log("Was not accepted into this slot");
+            }
+            else // item was moved to othe slot
+            {
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    DivideStack(tempItemReference);
+                }
+                Debug.Log("Should moved into other slot");
+            }
         }
 
         Debug.Log("OnEndDrag");
@@ -56,4 +83,30 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
         canvasGroup.blocksRaycasts = true;
     }
 
+    private void DivideStack(GameObject tempItemReference)
+    {
+        InventoryItem item = tempItemReference.GetComponent<InventoryItem>();
+        // Check if item/stack has move than 1 item
+        if(item.amountInInventory> 1 )
+        {
+            item.amountInInventory--;
+            InventorySystem.Instance.AddToInventory(item.thisName);
+        }
+    }
+
+    void CancelDragging(GameObject tempItemReference)
+    {
+        transform.position = startPosition;
+        transform.SetParent(startParent);
+        tempItemReference.SetActive(true);
+    }
+
+    private void DropItemIntoTheWorld(GameObject tempItemReference)
+    {
+        // Get clean name
+        string cleanName = tempItemReference.name.Split(new string[] { "(Clone)" }, StringSplitOptions.None)[0];
+
+        // Instantiate item
+        GameObject item = Instantiate(Resources.Load<GameObject>(cleanName+ "_Model"));
+    }
 }

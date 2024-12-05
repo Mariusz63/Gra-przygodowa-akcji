@@ -139,7 +139,7 @@ public class SelectionManager : MonoBehaviour
 
             // Pickable items
             InteractableObject ourInteractable = selectionTransform.GetComponent<InteractableObject>();
-            if (ourInteractable && ourInteractable.graczWZasiegu)
+            if (ourInteractable && ourInteractable.playerInRange)
             {
                 onTarget = true;
                 selectedObject = ourInteractable.gameObject;
@@ -149,6 +149,7 @@ public class SelectionManager : MonoBehaviour
 
                 ActiveCenterDot();
             }
+
 
             if (!npc && !ourInteractable && !storageBox && !animal)
             {
@@ -167,7 +168,10 @@ public class SelectionManager : MonoBehaviour
         }
     }
 
-    // Calculate loot and spawn items on the ground
+    /// <summary>
+    /// Calculate loot and spawn items on the ground
+    /// </summary>
+    /// <param name="lootable"></param>
     private void Loot(Lootable lootable)
     {
         // Calcualte

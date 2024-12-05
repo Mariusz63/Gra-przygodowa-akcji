@@ -34,6 +34,7 @@ public class InventoryItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public bool isSelected; // item we actually selected
     public bool isUsable; // is usable
 
+    public int amountInInventory = 1;
 
     private void Start()
     {
@@ -56,7 +57,10 @@ public class InventoryItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         }
     }
 
-    // Triggered when the mouse enters into the area of the item that has this script.
+    /// <summary>
+    /// Triggered when the mouse enters into the area of the item that has this script.
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnPointerEnter(PointerEventData eventData)
     {
         itemInfoUI.SetActive(true);
@@ -65,13 +69,19 @@ public class InventoryItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         itemInfoUI_itemFunctionality.text = thisFunctionality;
     }
 
-    // Triggered when the mouse exits the area of the item that has this script.
+    /// <summary>
+    /// Triggered when the mouse exits the area of the item that has this script.
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnPointerExit(PointerEventData eventData)
     {
         itemInfoUI.SetActive(false);
     }
 
-    // Triggered when the mouse is clicked over the item that has this script.
+    /// <summary>
+    /// Triggered when the mouse is clicked over the item that has this script.
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnPointerDown(PointerEventData eventData)
     {
         //Right Mouse Button Click on
@@ -119,7 +129,10 @@ public class InventoryItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     }
 
-    // Triggered when the mouse button is released over the item that has this script.
+    /// <summary>
+    /// Triggered when the mouse button is released over the item that has this script.
+    /// </summary>
+    /// <param name="eventData"></param>
     public void OnPointerUp(PointerEventData eventData)
     {
         if (eventData.button == PointerEventData.InputButton.Right)

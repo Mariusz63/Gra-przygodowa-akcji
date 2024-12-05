@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// Set a list of items to be obtained and keep items already obtained and is calculated
+/// <summary>
+/// Set a list of items to be obtained and keep items already obtained and is calculated
+/// </summary>
 public class Lootable : MonoBehaviour
 {
     public List<LootPossibility> possibleLoot;
@@ -11,7 +13,9 @@ public class Lootable : MonoBehaviour
     public bool wasLootCalculated;
 }
 
-// Set possible loot
+/// <summary>
+/// Set possible loot
+/// </summary>
 [System.Serializable]
 public class LootPossibility 
 {
@@ -20,7 +24,9 @@ public class LootPossibility
     public int amountMax;
 }
 
-// Stores information about the won lot
+/// <summary>
+/// Stores information about the won lot
+/// </summary>
 [System.Serializable]
 public class LootRecived
 {

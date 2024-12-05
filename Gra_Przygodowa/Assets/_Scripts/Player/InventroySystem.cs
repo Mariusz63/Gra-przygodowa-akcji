@@ -26,6 +26,8 @@ public class InventorySystem : MonoBehaviour
     public Image pickupImage;
 
     public List<string> pickupItems;
+    // TO DO: hardcoded, in future add upgrade
+    public int stackLimit = 3;
 
     private void Awake()
     {
@@ -61,21 +63,53 @@ public class InventorySystem : MonoBehaviour
 
     public void AddToInventory(string itemName)
     {
-        Debug.Log("Dodanie do eq - " + itemName);
-        whatSlotToEquip = FindNextEmptySlot();
+        Debug.Log("Dodanie do eq");
 
-        itemToAdd = (GameObject)Instantiate(Resources.Load<GameObject>(itemName),
-            whatSlotToEquip.transform.position,
-            whatSlotToEquip.transform.rotation);
-        itemToAdd.transform.SetParent(whatSlotToEquip.transform);
+        GameObject stack = CheckIfStackExists(itemName);
 
-        itemList.Add(itemName);
+        if (stack != null)
+        {
+            Debug.Log("Dodanie do eq - stack");
+            //Add one to existing items
+            stack.GetComponent<InventorySlot>().itemInSlot.amountInInventory++;
+            stack.GetComponent<InventorySlot>().UpdateItemInSlot();
+        }
+        else
+        {
+            Debug.Log("Dodanie do eq - pojedynczy");
+            whatSlotToEquip = FindNextEmptySlot();
 
-        Sprite sprite = itemToAdd.GetComponent<Image>().sprite;
+            itemToAdd = (GameObject)Instantiate(Resources.Load<GameObject>(itemName),
+                whatSlotToEquip.transform.position,
+                whatSlotToEquip.transform.rotation);
+            itemToAdd.transform.SetParent(whatSlotToEquip.transform);
+
+            itemList.Add(itemName);
+        }
+
+        //Sprite sprite = itemToAdd.GetComponent<Image>().sprite;
         TriggerPickupPopUp(itemName, itemToAdd.GetComponent<Image>().sprite);
 
         ReCalculateList();
         QuestManager.Instance.RefreshTrackerList();
+        Debug.Log("Dodanie do eq - " + itemName + "Koniec");
+    }
+
+    private GameObject CheckIfStackExists(string itemName)
+    {
+        foreach (GameObject slot in slotList)
+        {
+            InventorySlot inventorySlot = slot.GetComponent<InventorySlot>();
+            inventorySlot.UpdateItemInSlot();
+
+            if(inventorySlot != null && inventorySlot.itemInSlot != null)
+            {
+                if (inventorySlot.itemInSlot.thisName == itemName &&
+                    inventorySlot.itemInSlot.amountInInventory < stackLimit)
+                    return slot;
+            }
+        }
+        return null;
     }
 
     private GameObject FindNextEmptySlot()
@@ -83,7 +117,7 @@ public class InventorySystem : MonoBehaviour
         Debug.Log("Szukanie wolnego slota");
         foreach (GameObject slot in slotList)
         {
-            if (slot.transform.childCount == 0)
+            if (slot.transform.childCount <= 1)
             {
                 return slot;
             }
@@ -127,7 +161,33 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
-    // Usuniecie itemka z ekwipunku
+    public bool CheckSlotsAvailable(int emptyNeeded)
+    {
+        int emptySlot = 0;
+
+        foreach (GameObject slot in slotList)
+        {
+            if (slot.transform.childCount <= 1)
+            {
+                emptySlot += 1;
+            }
+        }
+
+        if (emptySlot >= emptyNeeded)
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Usuniecie itemka z ekwipunku
+    /// </summary>
+    /// <param name="nameToRemove"></param>
+    /// <param name="amountToRemove"></param>
     public void RemoveItem(string nameToRemove, int amountToRemove)
     {
         int counter = amountToRemove;
@@ -165,7 +225,11 @@ public class InventorySystem : MonoBehaviour
         }
     }
 
-    // Liczy ile przedmiotow mamy o tej samej nazwie
+    /// <summary>
+    /// Liczy ile przedmiotow mamy o tej samej nazwie
+    /// </summary>
+    /// <param name="name"></param>
+    /// <returns></returns>
     public int CheckItemAmount(string name)
     {
         int itemCounter = 0;

@@ -45,31 +45,31 @@ public class QuestManager : MonoBehaviour
     public void Update()
     {
         // Obs³uga Menu Questów
-        if(Input.GetKeyUp(KeyCode.Q) && !isQuestMenuOpen)
+        if (Input.GetKeyUp(KeyCode.Q))
         {
-            questMenu.SetActive(true);
-            questMenu.GetComponentInChildren<Canvas>().sortingOrder = MenuManager.Instance.SetAsFront();
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = true;
+            if (!isQuestMenuOpen)
+            {
+                // Otwórz menu questów
+                questMenu.SetActive(true);
+                questMenu.GetComponentInChildren<Canvas>().sortingOrder = MenuManager.Instance.SetAsFront();
 
-            SelectionManager.Instance.DisableSelection();
-            SelectionManager.Instance.GetComponent<SelectionManager>().enabled = false;
-            isQuestMenuOpen = true;
-        }else if(Input.GetKeyUp(KeyCode.Q) && isQuestMenuOpen)
-        {
-            questMenu.SetActive(false);
+                Cursor.lockState = CursorLockMode.None; // Odblokuj kursor
+                Cursor.visible = true;
 
-            //TO DO: mozliwe ze do usuniecia
-            //if (!InventorySystem.Instance.isOpen)
-            //{
-            //    Cursor.lockState = CursorLockMode.Locked; 
-            //    Cursor.visible = false;
-
-            //    SelectionManager.Instance.EnableSelection();
-            //    SelectionManager.Instance.GetComponent<SelectionManager>().enabled=true;
-            //}    
+                SelectionManager.Instance.DisableSelection();
+                isQuestMenuOpen = true;
+            }
+            else
+            {
+                // Zamknij menu questów
+                questMenu.SetActive(false);
+                Cursor.visible = false;
+                SelectionManager.Instance.EnableSelection();
+                isQuestMenuOpen = false;
+            }
         }
     }
+
 
     public void RefreshQuestList()
     {

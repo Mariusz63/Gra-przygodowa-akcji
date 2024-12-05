@@ -2,22 +2,36 @@ using UnityEngine;
 
 public class InteractableObject : MonoBehaviour
 {
-    public bool graczWZasiegu;
-    public string nazwaPrzedmiotu;
+    public bool playerInRange;
+    public string itemName;
+    public float detectionRange = 6;
 
     public string GetItemName()
     {
-        return nazwaPrzedmiotu;
+        return itemName;
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E) && graczWZasiegu && SelectionManager.Instance.onTarget && SelectionManager.Instance.selectedObject == gameObject)
+        float distance = Vector3.Distance(PlayerState.Instance.playerBody.transform.position, transform.position);
+        if(distance < detectionRange)
+        {
+            playerInRange = true;
+        }
+        else
+        {
+            playerInRange = false;
+        }
+
+        if (Input.GetKeyDown(KeyCode.E) && 
+            playerInRange && 
+            SelectionManager.Instance.onTarget && 
+            SelectionManager.Instance.selectedObject == gameObject)
         {
             //if the inventory is NOT full
-            if (!InventorySystem.Instance.CheckIfFull())
+            if (InventorySystem.Instance.CheckSlotsAvailable(1))
             {              
-                InventorySystem.Instance.AddToInventory(nazwaPrzedmiotu);
+                InventorySystem.Instance.AddToInventory(itemName);
                 InventorySystem.Instance.pickupItems.Add(gameObject.name); 
                 Destroy(gameObject);
                 Debug.Log("Item added to inventory.");
@@ -33,7 +47,7 @@ public class InteractableObject : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            graczWZasiegu = true;
+            playerInRange = true;
         }
     }
 
@@ -41,7 +55,7 @@ public class InteractableObject : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            graczWZasiegu = false;
+            playerInRange = false;
         }
     }
 }

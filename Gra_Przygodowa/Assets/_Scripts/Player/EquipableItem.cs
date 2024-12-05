@@ -31,7 +31,9 @@ public class EquipableItem : MonoBehaviour
         }
     }
 
-    //trigger this code in animator
+    /// <summary>
+    /// trigger this code in animator
+    /// </summary>
     public void GetHitAnim()
     {
         //GameObject selectedTree = SelectionManager.Instance.selectedTree;

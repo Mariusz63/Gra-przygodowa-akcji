@@ -78,6 +78,9 @@ public class Animal : MonoBehaviour
         spwaenBloodPuddle.SetActive(true);
     }
 
+    /// <summary>
+    /// Playing hit sound by animal type
+    /// </summary>
     void PlayHitSound()
     {
         switch (thisAnimalType)
@@ -90,6 +93,9 @@ public class Animal : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Playing die sound by animal type
+    /// </summary>
     void PlayDieSound()
     {
         switch (thisAnimalType)
