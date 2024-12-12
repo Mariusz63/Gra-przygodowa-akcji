@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Runtime.Serialization.Formatters.Binary;
+using TreeEditor;
 using UnityEngine;
 using UnityEngine.Playables;
 using UnityEngine.Rendering;
@@ -82,9 +83,14 @@ public class SaveManager : MonoBehaviour
         DisableLoadingScreen();
     }
 
+    /// <summary>
+    /// Runs when we load the game
+    /// </summary>
+    /// <param name="environmentData"></param>
     private void SetEnviromentData(EnviromentData environmentData)
     {
-        foreach (Transform itemType in EnviromentManager.Instance.allItems.transform)
+        // ------------------ Picked Up items ------------------ //
+        foreach (Transform itemType in EnvironmentManager.Instance.allItems.transform)
         {
             foreach (Transform item in itemType.transform)
             {
@@ -94,16 +100,54 @@ public class SaveManager : MonoBehaviour
                 }
             }
         }
-
         InventorySystem.Instance.pickupItems = environmentData.pickedupItems;
+
+        // -------------------- Trees ---------------------------//
+
+        //Destroy all default trees in scene
+        foreach (Transform tree in EnvironmentManager.Instance.allTrees.transform)
+        {
+            Destroy(tree.gameObject);
+        }
+
+        // Add trees and stumps 
+        foreach (TreeData treeData in environmentData.treeData)
+        {
+            var treePrefab = Instantiate(Resources.Load<GameObject>(treeData.name),
+                new Vector3(treeData.position.x, treeData.position.y, treeData.position.z),
+                Quaternion.Euler(treeData.rotation.x, treeData.rotation.y, treeData.rotation.z));
+            treePrefab.transform.SetParent(EnvironmentManager.Instance.allTrees.transform);
+        }
+
+        // ---------------------- Aniamls ----------------------//
+
+        // Destroy animals that sholud not exist
+        foreach (Transform animalType in EnvironmentManager.Instance.allAnimals.transform)
+        {
+            foreach (Transform animal in animalType)
+            {
+                if (environmentData.animals.Contains(animal.gameObject.name) == false)
+                    Destroy(animal.gameObject);
+            }
+        }
+
+        // ------------------- Storage ------------------------//
+        foreach (StorageData storage in environmentData.storage)
+        {
+            var storageBoxPrefab = Instantiate(Resources.Load<GameObject>("StorageBoxModel"),
+                 new Vector3(storage.position.x, storage.position.y, storage.position.z),
+                 Quaternion.Euler(storage.rotation.x, storage.rotation.y, storage.rotation.z));
+
+            storageBoxPrefab.GetComponent<StorageBox>().items = storage.items;
+            storageBoxPrefab.transform.SetParent(EnvironmentManager.Instance.allPleacables.transform);
+        }
     }
 
     private void SetPlayerData(PlayerData playerData)
     {
         //Setting Player stats
         PlayerState.Instance.currentHealth = playerData.playerStats[0];
-        PlayerState.Instance.currentCalories = playerData.playerStats[1];
-        PlayerState.Instance.currentHydration = playerData.playerStats[2];
+        PlayerState.Instance.currentStamina = playerData.playerStats[1];
 
         //Setting Player Position
         Vector3 loadedPosition;
@@ -164,18 +208,69 @@ public class SaveManager : MonoBehaviour
         SelectSavingType(data, slotNumber);
     }
 
+    /// <summary>
+    /// Runs when we save game
+    /// </summary>
+    /// <returns></returns>
     private EnviromentData GetEnviromentData()
     {
+        //Get all items
         List<string> itemPickedup = InventorySystem.Instance.pickupItems;
-        return new EnviromentData(itemPickedup);
+
+        // Get all Trees and stumps
+        List<TreeData> treeToSave = new List<TreeData>();
+        foreach (Transform tree in EnvironmentManager.Instance.allTrees.transform)
+        {
+            if (tree.CompareTag("Tree"))
+            {
+                var td = new TreeData();
+                td.name = "Tree_Parent"; // This needs to be same as prefab name
+                td.position = tree.position;
+                td.rotation = new Vector3(tree.rotation.x, tree.rotation.y, tree.rotation.z);
+                treeToSave.Add(td);
+            }
+            else
+            {
+                var td = new TreeData();
+                td.name = "Stump"; // This needs to be same as prefab name
+                td.position = tree.position;
+                td.rotation = new Vector3(tree.rotation.x, tree.rotation.y, tree.rotation.z);
+                treeToSave.Add(td);
+            }
+        }
+
+        // Get all animals 
+        List<string> allAnimals = new List<string>();
+        foreach (Transform animalType in EnvironmentManager.Instance.allAnimals.transform)
+        {
+            foreach (Transform animal in animalType)
+            {
+                allAnimals.Add(animal.gameObject.name);
+            }
+        }
+
+        // Get all storages
+        List<StorageData> allStorage = new List<StorageData>();
+        foreach (Transform placeable in EnvironmentManager.Instance.allPleacables.transform)
+        {
+            if (placeable.gameObject.GetComponent<StorageBox>())
+            {
+                var storageData = new StorageData();
+                storageData.items = placeable.gameObject.GetComponent<StorageBox>().items;
+                storageData.position = placeable.position;
+                storageData.rotation = new Vector3(placeable.rotation.x, placeable.rotation.y, placeable.rotation.z);
+                allStorage.Add(storageData);
+            }
+        }
+
+        return new EnviromentData(itemPickedup, treeToSave, allAnimals, allStorage);
     }
 
     private PlayerData GetPlayerData()
     {
         float[] playerStats = new float[3];
         playerStats[0] = PlayerState.Instance.currentHealth;
-        playerStats[1] = PlayerState.Instance.currentCalories;
-        playerStats[2] = PlayerState.Instance.currentHydration;
+        playerStats[1] = PlayerState.Instance.currentStamina;
 
         float[] playerPosAndRot = new float[6];
         playerPosAndRot[0] = PlayerState.Instance.playerBody.transform.position.x;

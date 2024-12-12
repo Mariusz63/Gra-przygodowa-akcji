@@ -85,12 +85,15 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
 
     private void DivideStack(GameObject tempItemReference)
     {
+        // Optional - Activate UI with division logic (slider, user input)
+
         InventoryItem item = tempItemReference.GetComponent<InventoryItem>();
         // Check if item/stack has move than 1 item
         if(item.amountInInventory> 1 )
         {
+            // Add new item to inventory
             item.amountInInventory--;
-            InventorySystem.Instance.AddToInventory(item.thisName);
+            InventorySystem.Instance.AddToInventory(item.thisName, false); // false because we dont wont stack itmes
         }
     }
 

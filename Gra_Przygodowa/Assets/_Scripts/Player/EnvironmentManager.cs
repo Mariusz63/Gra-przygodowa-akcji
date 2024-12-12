@@ -2,11 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnviromentManager : MonoBehaviour
+public class EnvironmentManager : MonoBehaviour
 {
-    public static EnviromentManager Instance { get; set; }
+    public static EnvironmentManager Instance { get; set; }
 
     public GameObject allItems;
+    public GameObject allTrees;
+    public GameObject allPleacables;
+    public GameObject allAnimals;    
 
     private void Awake()
     {

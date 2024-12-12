@@ -20,7 +20,7 @@ public class SelectionManager : MonoBehaviour
 
     public bool handIsVisible; //if hand is visible we wont to swing the tools
 
-    //public GameObject selectedTree;
+    public GameObject selectedTree;
     public GameObject chopHolder;
     public GameObject selectedStorageBox;
 

@@ -12,20 +12,16 @@ public class PlayerState : MonoBehaviour
     public float currentHealth;
     public float maxHealth;
 
-    // ------ Player Calories ------- //
-    public float currentCalories;
-    public float maxCalories;
+    // ------ Player Stamina ------- //
+    public float currentStamina;
+    public float maxStamina;
+    public float staminaDecrese = 1;
 
-    float distanceTravelled = 0;
-    Vector3 lastPosition;
+    // Declare lastPosition and distanceTravelled variables
+    private Vector3 lastPosition;
+    private float distanceTravelled = 0;
 
     public GameObject playerBody;
-
-    // ------ Player Hydration ------- //
-    public float currentHydration;
-    public float maxHydration;
-
-    public bool isHydrationActive = true;
 
     private void Awake()
     {
@@ -42,34 +38,32 @@ public class PlayerState : MonoBehaviour
     private void Start()
     {
         currentHealth = maxHealth;
-        currentCalories = maxCalories;
-        currentHydration = maxHydration;
+        currentStamina = maxStamina;
 
-        StartCoroutine(decreaseHtdration());
-    }
-
-    IEnumerator decreaseHtdration()
-    {
-        while (isHydrationActive)
-        {
-            currentHydration -= 1;
-            yield return new WaitForSeconds(10);
-        }
+        // Initialize lastPosition to the starting position of the player
+        lastPosition = playerBody.transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
+        // Calculate the distance from the previous position to the current position
+        float frameDistance = Vector3.Distance(playerBody.transform.position, lastPosition);
+        distanceTravelled += frameDistance;
 
-        distanceTravelled += Vector3.Distance(playerBody.transform.position, lastPosition);
-        lastPosition = transform.position; //lastPosition is now position
+        Debug.Log("distanceTravelled: " + distanceTravelled.ToString("F2"));
 
-        if (distanceTravelled >= 6)
+        // Reset distanceTravelled and reduce stamina when the threshold is reached
+        if (distanceTravelled >= 15)
         {
             distanceTravelled = 0;
-            currentCalories -= 1;
+            currentStamina -= staminaDecrese;
+
+            Debug.Log("Stamina decreased! Current Stamina: " + currentStamina);
         }
 
+        // Update lastPosition to the current position at the end of the frame
+        lastPosition = playerBody.transform.position;
     }
 
     public void setHealth(float newHealth)
@@ -77,13 +71,8 @@ public class PlayerState : MonoBehaviour
         currentHealth = newHealth;
     }
 
-    public void setHydration(float newHydration)
-    {
-        currentHydration = newHydration;
-    }
-
     public void setCalories(float newCalories)
     {
-        currentCalories = newCalories;
+        currentStamina = newCalories;
     }
 }

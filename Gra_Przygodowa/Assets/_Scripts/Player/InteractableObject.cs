@@ -31,7 +31,7 @@ public class InteractableObject : MonoBehaviour
             //if the inventory is NOT full
             if (InventorySystem.Instance.CheckSlotsAvailable(1))
             {              
-                InventorySystem.Instance.AddToInventory(itemName);
+                InventorySystem.Instance.AddToInventory(itemName,true);
                 InventorySystem.Instance.pickupItems.Add(gameObject.name); 
                 Destroy(gameObject);
                 Debug.Log("Item added to inventory.");
