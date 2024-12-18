@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -56,6 +57,15 @@ public class ItemSlot : MonoBehaviour, IDropHandler
                 DragDrop.itemBeingDragged.transform.SetParent(transform);
             }
         }
+
+        StartCoroutine(DelayedSacn());
+    }
+
+    IEnumerator DelayedSacn()
+    {
+        yield return new WaitForSeconds(0.3f);
+        SellSystem.Instance.ScanItemsInSlots();
+        SellSystem.Instance.UpdateSellAmountUI();
     }
 
     /// <summary>

@@ -8,7 +8,21 @@ using UnityEngine.UI;
 //Singleton 
 public class SelectionManager : MonoBehaviour
 {
+    #region || ---------- Singleton ----------- ||
     public static SelectionManager Instance { get; set; }
+
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+    #endregion
 
     public bool onTarget;
     public GameObject selectedObject;   //We want this particular object
@@ -30,18 +44,6 @@ public class SelectionManager : MonoBehaviour
         interaction_text = interaction_Info_UI.GetComponent<Text>();
     }
 
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-        }
-    }
-
     void Update()
     {
         Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
@@ -50,6 +52,27 @@ public class SelectionManager : MonoBehaviour
         if (Physics.Raycast(ray, out hit))
         {
             var selectionTransform = hit.transform;
+
+            // Shop System
+            ShopSystem shop = selectionTransform.GetComponent<ShopSystem>();
+            if(shop && shop.playerInRange)
+            {
+                if(!shop.isTalkingWithPlayer)
+                {
+                    interaction_text.text = "Talk";
+                    interaction_Info_UI.SetActive(true);
+                }
+                else
+                {
+                    interaction_text.text = "";
+                    interaction_Info_UI.SetActive(false);
+                }
+           
+                if (Input.GetMouseButton(0) && shop.isTalkingWithPlayer == false)
+                {
+                    shop.Talk();
+                }
+            }
 
             // NPC 
             NPC npc = selectionTransform.GetComponent<NPC>();
@@ -71,24 +94,22 @@ public class SelectionManager : MonoBehaviour
             }
 
             // Chopp tree
-            //ChoppableTree choppableTree = selectionTransform.GetComponent<ChoppableTree>();
-
-            //if (choppableTree && choppableTree.playerInRange)
-            //{
-            //    choppableTree.canBeChopped = true;
-            //    selectedTree = choppableTree.gameObject;
-            //    chopHolder.gameObject.SetActive(true);
-            //}
-            //else
-            //{
-            //    if(selectedTree != null)
-            //    {
-            //        selectedTree.gameObject.GetComponent<ChoppableTree>().canBeChopped = false;
-            //        selectedTree = null;
-            //        chopHolder.gameObject.SetActive(false);
-            //    }
-            //}
-
+            ChoppableTree choppableTree = selectionTransform.GetComponent<ChoppableTree>();
+            if (choppableTree && choppableTree.playerInRange)
+            {
+                choppableTree.canBeChopped = true;
+                selectedTree = choppableTree.gameObject;
+                chopHolder.gameObject.SetActive(true);
+            }
+            else
+            {
+                if (selectedTree != null)
+                {
+                    selectedTree.gameObject.GetComponent<ChoppableTree>().canBeChopped = false;
+                    selectedTree = null;
+                    chopHolder.gameObject.SetActive(false);
+                }
+            }
 
             // Storage Box
             StorageBox storageBox = selectionTransform.GetComponent<StorageBox>();
@@ -151,7 +172,7 @@ public class SelectionManager : MonoBehaviour
             }
 
 
-            if (!npc && !ourInteractable && !storageBox && !animal)
+            if (!npc && !ourInteractable && !storageBox && !animal && !choppableTree && !shop)
             {
                 interaction_text.text = "";
                 interaction_Info_UI.SetActive(false);

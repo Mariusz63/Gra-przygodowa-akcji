@@ -1,34 +1,14 @@
 using System;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 //Singleton
 public class InventorySystem : MonoBehaviour
 {
+    #region || ---------------- Singleton --------------- ||
     public static InventorySystem Instance { get; set; }
-
-    public GameObject inventoryScreenUI;
-    public GameObject itemInfoUI;
-
-    // Contain all slots
-    public List<InventorySlot> slotList = new List<InventorySlot>();
-    public List<string> itemList = new List<string>();
-
-    private GameObject itemToAdd;
-    private InventorySlot whatSlotToEquip;
-
-    public bool isFull;
-
-    // Pickup Popup alert;
-    public GameObject pickupAlert;
-    public Text pickupName;
-    public Image pickupImage;
-
-    public List<string> pickupItems;
-
-    // TO DO: hardcoded, in future add upgrade
-    public int stackLimit = 5;
 
     private void Awake()
     {
@@ -41,13 +21,85 @@ public class InventorySystem : MonoBehaviour
             Instance = this;
         }
     }
+    #endregion
+
+    public GameObject inventoryScreenUI;
+    public GameObject itemInfoUI;
+
+    // Contain all slots
+    public List<InventorySlot> slotList = new List<InventorySlot>();
+    public List<string> itemList = new List<string>();
+
+    private GameObject itemToAdd;
+    private InventorySlot whatSlotToEquip;
+
+    public bool isFull;
+    public bool isOpen;
+
+    // Pickup Popup alert;
+    [Header("Pickup Popup alert")]
+    public GameObject pickupAlert;
+    public Text pickupName;
+    public Image pickupImage;
+
+    public List<string> pickupItems;
+
+    // TO DO: hardcoded, in future add upgrade
+    public int stackLimit = 5;
+
+    // For shopping, actual amount of coins
+    [Header("Shopping")]
+    public int currentCoins = 0;
+    public TextMeshProUGUI currencyUI;
 
     void Start()
     {
-        //isOpen = false;
+        isOpen = false;
+        MovementManager.Instance.canLookAround = false;
 
         PopulateSlotList();
         Cursor.visible = false;
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.I) && !isOpen)
+        {
+            OpenUI();
+        }
+        else if (Input.GetKeyDown(KeyCode.I) && isOpen)
+        {
+            CloseUI();
+        }
+        currencyUI.text = $"{currentCoins}";
+    }
+
+    private void CloseUI()
+    {
+        inventoryScreenUI.SetActive(false);
+
+        if (!StorageManager.Instance.storageUIOpen && 
+            !BuySystem.Instance.ShopKeeper.isTalkingWithPlayer)
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+            SelectionManager.Instance.DisableSelection();
+            SelectionManager.Instance.GetComponent<SelectionManager>().enabled = true;
+        }
+
+        isOpen = false;
+    }
+
+    private void OpenUI()
+    {
+        inventoryScreenUI.SetActive(true);
+        inventoryScreenUI.GetComponent<Canvas>().sortingOrder = MenuManager.Instance.SetAsFront();
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        SelectionManager.Instance.DisableSelection();
+        SelectionManager.Instance.GetComponent<SelectionManager>().enabled = false;
+        isOpen = true;
+        ReCalculateList();
     }
 
     private void PopulateSlotList()
@@ -191,21 +243,21 @@ public class InventorySystem : MonoBehaviour
         int remainingAmountToRemove = amountToRemove;
 
         // Iterate over the amount to remove
-        while(remainingAmountToRemove != 0)
+        while (remainingAmountToRemove != 0)
         {
             int previousRemainingAmount = remainingAmountToRemove;
             // Iterate over onventory slots
             foreach (InventorySlot slot in slotList)
             {
                 //If the slot is not empty and contains the item we want to remove
-                if(slot.itemInSlot != null && slot.itemInSlot.thisName == itemName)
+                if (slot.itemInSlot != null && slot.itemInSlot.thisName == itemName)
                 {
                     // Decrese the amount of the item in the slot
                     slot.itemInSlot.amountInInventory--;
                     remainingAmountToRemove--;
 
                     // Remove item from slot if its amount become zero
-                    if(slot.itemInSlot.amountInInventory == 0)
+                    if (slot.itemInSlot.amountInInventory == 0)
                     {
                         Destroy(slot.itemInSlot.gameObject);
                         slot.itemInSlot = null;
@@ -215,7 +267,7 @@ public class InventorySystem : MonoBehaviour
             }
 
             // This should never happen, but we should check this to prevent an endless loop while in debug
-            if(previousRemainingAmount == remainingAmountToRemove)
+            if (previousRemainingAmount == remainingAmountToRemove)
             {
                 Debug.Log("Item not found or insufficient quantity in inventory");
                 break;

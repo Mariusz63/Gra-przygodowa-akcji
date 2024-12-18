@@ -12,7 +12,22 @@ using UnityEngine.SceneManagement;
 
 public class SaveManager : MonoBehaviour
 {
+    #region || -------------- Singleton ---------------- ||
     public static SaveManager Instance;
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+
+        DontDestroyOnLoad(gameObject);
+    }
+    #endregion
 
     public bool isSavingToJson;
 
@@ -37,21 +52,7 @@ public class SaveManager : MonoBehaviour
         jsonPathProject = Application.dataPath + Path.AltDirectorySeparatorChar;
         jsonPathPersistant = Application.persistentDataPath + Path.AltDirectorySeparatorChar;
         binaryPath = Application.persistentDataPath + Path.AltDirectorySeparatorChar;
-    }
-
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-        }
-
-        DontDestroyOnLoad(gameObject);
-    }
+    } 
 
     #region // ---- Loading ---- //
 

@@ -6,7 +6,20 @@ using UnityEngine;
 // Singleton
 public class PlayerState : MonoBehaviour
 {
+    #region || --------- Singleton ----------- ||
     public static PlayerState Instance { get; set; }
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
+    #endregion
 
     // ------ Player Health ------- //
     public float currentHealth;
@@ -22,18 +35,6 @@ public class PlayerState : MonoBehaviour
     private float distanceTravelled = 0;
 
     public GameObject playerBody;
-
-    private void Awake()
-    {
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-        }
-        else
-        {
-            Instance = this;
-        }
-    }
 
     private void Start()
     {

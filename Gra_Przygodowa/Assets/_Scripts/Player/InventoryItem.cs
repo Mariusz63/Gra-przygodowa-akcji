@@ -8,9 +8,11 @@ using UnityEngine.UI;
 public class InventoryItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerUpHandler
 {
     // --- Is this item trashable --- //
+    [Header("Trashable")]
     public bool isTrashable;
 
     // --- Item Info UI --- //
+    [Header("Item Info")]
     private GameObject itemInfoUI;
 
     private Text itemInfoUI_itemName;
@@ -20,6 +22,7 @@ public class InventoryItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public string thisName, thisDescription, thisFunctionality;
 
     // --- Consumption --- //
+    [Header("Consumption")]
     private GameObject itemPendingConsumption;
     public bool isConsumable;
 
@@ -27,6 +30,7 @@ public class InventoryItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public float staminaEffect;
 
     // --- Equipping --- //
+    [Header("Equipping")]
     public bool isEquippable;
     private GameObject itemPendingEquipping;
     public bool isInsideQuickSlot; // is inside the quickSlot
@@ -34,6 +38,9 @@ public class InventoryItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public bool isUsable; // is usable
 
     public int amountInInventory = 1;
+
+    [Header("Shopping")]
+    public int sellingPrice;
 
     private void Start()
     {
