@@ -52,7 +52,7 @@ public class PlayerState : MonoBehaviour
         float frameDistance = Vector3.Distance(playerBody.transform.position, lastPosition);
         distanceTravelled += frameDistance;
 
-        Debug.Log("distanceTravelled: " + distanceTravelled.ToString("F2"));
+        //Debug.Log("distanceTravelled: " + distanceTravelled.ToString("F2"));
 
         // Reset distanceTravelled and reduce stamina when the threshold is reached
         if (distanceTravelled >= 15)

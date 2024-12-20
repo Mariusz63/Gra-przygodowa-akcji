@@ -49,6 +49,9 @@ public class QuestManager : MonoBehaviour
         {
             if (!isQuestMenuOpen)
             {
+                MovementManager.Instance.EnableLook(false);
+                MovementManager.Instance.EnableMovement(false);
+
                 // Otwórz menu questów
                 questMenu.SetActive(true);
                 questMenu.GetComponentInChildren<Canvas>().sortingOrder = MenuManager.Instance.SetAsFront();
@@ -61,6 +64,9 @@ public class QuestManager : MonoBehaviour
             }
             else
             {
+                MovementManager.Instance.EnableLook(true);
+                MovementManager.Instance.EnableMovement(true);
+
                 // Zamknij menu questów
                 questMenu.SetActive(false);
                 Cursor.visible = false;
@@ -69,7 +75,6 @@ public class QuestManager : MonoBehaviour
             }
         }
     }
-
 
     public void RefreshQuestList()
     {
@@ -236,6 +241,4 @@ public class QuestManager : MonoBehaviour
         }
         return finalText;
     }
-
-
 }

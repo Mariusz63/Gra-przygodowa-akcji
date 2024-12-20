@@ -138,7 +138,7 @@ public class SelectionManager : MonoBehaviour
                 {
                     interaction_text.text = "Loot";
                     interaction_Info_UI.SetActive(true);
-                    ActiveCenterDot();
+                    ActiveHandIcon();
 
                     if (Input.GetMouseButtonDown(0))
                     {
@@ -151,7 +151,7 @@ public class SelectionManager : MonoBehaviour
                     interaction_text.text = animal.animalName;
                     interaction_Info_UI.SetActive(true);
 
-                    ActiveCenterDot();
+                    ActiveHandIcon();
 
                     if (Input.GetMouseButtonDown(0) && EquipSystem.Instance.IsHoldingWeapon() && EquipSystem.Instance.IsThereASwingLock() == false)
                         StartCoroutine(DealDamage(animal, 0.3f, EquipSystem.Instance.GetWeaponDamage()));
@@ -168,7 +168,7 @@ public class SelectionManager : MonoBehaviour
                 interaction_text.text = ourInteractable.GetItemName();
                 interaction_Info_UI.SetActive(true);
 
-                ActiveCenterDot();
+                ActiveHandIcon();
             }
 
 
@@ -185,7 +185,6 @@ public class SelectionManager : MonoBehaviour
                 centerDotIcon.gameObject.SetActive(true);
                 handIcon.gameObject.SetActive(false);
             }
-
         }
     }
 
@@ -244,7 +243,7 @@ public class SelectionManager : MonoBehaviour
         Destroy(body);
     }
 
-    private void ActiveCenterDot()
+    private void ActiveHandIcon()
     {
         centerDotIcon.gameObject.SetActive(false);
         handIcon.gameObject.SetActive(true);

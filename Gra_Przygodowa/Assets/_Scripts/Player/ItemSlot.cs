@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -28,14 +29,13 @@ public class ItemSlot : MonoBehaviour, IDropHandler
             DragDrop.itemBeingDragged.transform.SetParent(transform);
             DragDrop.itemBeingDragged.transform.localPosition = new Vector2(0, 0);
 
-            if (transform.CompareTag("QuickSlot") == false)
+            if (transform.CompareTag("QuickSlot") == false || transform.CompareTag("Slot"))
             {
                 DragDrop.itemBeingDragged.GetComponent<InventoryItem>().isInsideQuickSlot = false;
                 InventorySystem.Instance.ReCalculateList();
-
             }
 
-            if (transform.CompareTag("QuickSlot"))
+            if (transform.CompareTag("QuickSlot") || transform.CompareTag("Slot"))
             {
                 DragDrop.itemBeingDragged.GetComponent<InventoryItem>().isInsideQuickSlot = true;
                 // we need to recalculate list because its no longer inside the system

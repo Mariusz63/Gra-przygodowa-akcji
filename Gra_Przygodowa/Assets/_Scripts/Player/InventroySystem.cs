@@ -65,10 +65,12 @@ public class InventorySystem : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.I) && !isOpen)
         {
+            MovementManager.Instance.EnableLook(false);
             OpenUI();
         }
         else if (Input.GetKeyDown(KeyCode.I) && isOpen)
         {
+            MovementManager.Instance.EnableLook(true);
             CloseUI();
         }
         currencyUI.text = $"{currentCoins}";
@@ -76,7 +78,7 @@ public class InventorySystem : MonoBehaviour
 
     private void CloseUI()
     {
-        inventoryScreenUI.SetActive(false);
+        //inventoryScreenUI.SetActive(false);
 
         if (!StorageManager.Instance.storageUIOpen && 
             !BuySystem.Instance.ShopKeeper.isTalkingWithPlayer)
@@ -92,8 +94,8 @@ public class InventorySystem : MonoBehaviour
 
     private void OpenUI()
     {
-        inventoryScreenUI.SetActive(true);
-        inventoryScreenUI.GetComponent<Canvas>().sortingOrder = MenuManager.Instance.SetAsFront();
+        //inventoryScreenUI.SetActive(true);
+        //inventoryScreenUI.GetComponent<Canvas>().sortingOrder = MenuManager.Instance.SetAsFront();
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         SelectionManager.Instance.DisableSelection();
@@ -279,7 +281,6 @@ public class InventorySystem : MonoBehaviour
 
         }
     }
-
 
     /// <summary>
     /// Usuniecie itemka z ekwipunku

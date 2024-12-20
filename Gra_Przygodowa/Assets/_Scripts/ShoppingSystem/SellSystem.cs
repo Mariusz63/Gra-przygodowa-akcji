@@ -48,16 +48,21 @@ public class SellSystem : MonoBehaviour
         {
             //Go back to main shop menu
             ShopKeeper.DialogMode();
-        }
-        
+        }     
     }
 
+    /// <summary>
+    /// Zwraca wartoœæ true, jeœli lista przedmiotów do sprzeda¿y jest pusta
+    /// </summary>
+    /// <returns></returns>
     private bool SellPanelIsEmpty()
     {
         return itemsToBeSold.Count <= 0;
     }
 
-
+    /// <summary>
+    /// Oblicza wartoœæ wszystkich przedmiotów do sprzeda¿y, usuwa je z gry i aktualizuje interfejs
+    /// </summary>
     private void SellItems()
     {
         List<GameObject> itemsToDestroy = new List<GameObject>();
@@ -78,6 +83,9 @@ public class SellSystem : MonoBehaviour
         UpdateSellAmountUI();
     }
 
+    /// <summary>
+    /// Przegl¹da panel sprzeda¿y, aby zidentyfikowaæ wszystkie sloty
+    /// </summary>
     private void GetAllSlots()
     {
         sellSlots.Clear();
@@ -88,6 +96,9 @@ public class SellSystem : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Przeszukuje sloty, aby zebraæ przedmioty gotowe do sprzeda¿y
+    /// </summary>
     public void ScanItemsInSlots()
     {
         itemsToBeSold.Clear();
@@ -98,6 +109,9 @@ public class SellSystem : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Aktualizuje widoczn¹ kwotê sprzeda¿y w interfejsie u¿ytkownika
+    /// </summary>
     public void UpdateSellAmountUI()
     {
         int totalPriceToDisplay = 0;
