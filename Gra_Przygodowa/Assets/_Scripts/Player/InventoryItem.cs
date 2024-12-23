@@ -128,7 +128,7 @@ public class InventoryItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             case "StorageBox(Clone)":
                 PlacementSystem.Instance.inventoryItemToDestory = gameObject;
-                PlacementSystem.Instance.ActivatePlacementMode("StorageBoxModel");
+                PlacementSystem.Instance.ActivatePlacementMode("StorageBox_Model");
                 break;
             default: break; // do nothing;
         }

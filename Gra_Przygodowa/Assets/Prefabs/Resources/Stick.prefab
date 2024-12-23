@@ -127,3 +127,4 @@ MonoBehaviour:
   isSelected: 0
   isUsable: 0
   amountInInventory: 1
+  sellingPrice: 5

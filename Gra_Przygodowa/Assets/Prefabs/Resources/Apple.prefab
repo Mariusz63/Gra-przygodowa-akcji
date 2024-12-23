@@ -94,14 +94,15 @@ MonoBehaviour:
   thisName: Apple
   thisDescription: Fresh apple
   thisFunctionality: Eat it for encrese health
-  isConsumable: 0
+  isConsumable: 1
   healthEffect: 10
   staminaEffect: 8
-  isEquippable: 0
+  isEquippable: 1
   isInsideQuickSlot: 1
   isSelected: 0
   isUsable: 1
   amountInInventory: 1
+  sellingPrice: 15
 --- !u!225 &1372353956352325016
 CanvasGroup:
   m_ObjectHideFlags: 0

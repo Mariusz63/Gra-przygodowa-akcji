@@ -60,7 +60,7 @@ public class PlayerState : MonoBehaviour
             distanceTravelled = 0;
             currentStamina -= staminaDecrese;
 
-            Debug.Log("Stamina decreased! Current Stamina: " + currentStamina);
+           // Debug.Log("Stamina decreased! Current Stamina: " + currentStamina);
         }
 
         // Update lastPosition to the current position at the end of the frame

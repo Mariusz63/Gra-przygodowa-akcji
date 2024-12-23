@@ -170,5 +170,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b125992101cc8f64f9ae82703f5ce533, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graczWZasiegu: 0
-  nazwaPrzedmiotu: Stick
+  playerInRange: 0
+  itemName: Stick
+  detectionRange: 6

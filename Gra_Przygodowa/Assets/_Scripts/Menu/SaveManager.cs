@@ -135,7 +135,7 @@ public class SaveManager : MonoBehaviour
         // ------------------- Storage ------------------------//
         foreach (StorageData storage in environmentData.storage)
         {
-            var storageBoxPrefab = Instantiate(Resources.Load<GameObject>("StorageBoxModel"),
+            var storageBoxPrefab = Instantiate(Resources.Load<GameObject>("StorageBox_Model"),
                  new Vector3(storage.position.x, storage.position.y, storage.position.z),
                  Quaternion.Euler(storage.rotation.x, storage.rotation.y, storage.rotation.z));
 

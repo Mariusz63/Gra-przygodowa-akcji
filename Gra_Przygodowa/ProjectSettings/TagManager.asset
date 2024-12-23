@@ -7,6 +7,8 @@ TagManager:
   - QuickSlot
   - Pickable
   - Selectable
+  - Slot
+  - Waypoints
   layers:
   - Default
   - TransparentFX

@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInRange: 0
-  itemName: Green Apple
+  itemName: Apple
   detectionRange: 6
 --- !u!54 &-7206734051045308363
 Rigidbody:

@@ -57,7 +57,6 @@ public class ItemSlot : MonoBehaviour, IDropHandler
                 DragDrop.itemBeingDragged.transform.SetParent(transform);
             }
         }
-
         StartCoroutine(DelayedSacn());
     }
 
