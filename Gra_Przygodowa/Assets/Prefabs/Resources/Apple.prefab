@@ -90,7 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9a0b3f7e75fd0240ae886ea4dda3237, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isTrashable: 0
+  isTrashable: 1
   thisName: Apple
   thisDescription: Fresh apple
   thisFunctionality: Eat it for encrese health

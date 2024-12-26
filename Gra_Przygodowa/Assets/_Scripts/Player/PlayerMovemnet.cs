@@ -43,12 +43,12 @@ public class PlayerMovement : MonoBehaviour
         float z = Input.GetAxis("Vertical");
 
         float currentSpeed = speed;
-        MovementManager.Instance.isSprinting = false;
+        MovementManager.Instance.canSprinting = false;
         // Przyspieszenie, jeœli lewy Shift jest wciœniêty
         if (Input.GetKey(Sprint))
         {
             currentSpeed *= sprintMultiplier;
-            MovementManager.Instance.isSprinting = true;
+            MovementManager.Instance.canSprinting = true;
         }
 
         //right is the red Axis, foward is the blue axis
@@ -58,7 +58,6 @@ public class PlayerMovement : MonoBehaviour
         //check if the player is on the ground so he can jump
         if ((Input.GetButtonDown("Jump") || Input.GetKeyDown(Jump)) && isGrounded)
         {
-            Debug.Log("Player is jumping!");
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
         
@@ -67,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
 
         //jesli ostatnia pozycja rozni sie od terazniejszej ozacza to ze sie poruszamy
-        if (lastPosition != gameObject.transform.position && isGrounded == true)
+        if (lastPosition != gameObject.transform.position && isGrounded == true && MovementManager.Instance.canMove)
         {
             isMoving = true;
             SoundManager.Instance.PlaySound(SoundManager.Instance.grassWalkSound);

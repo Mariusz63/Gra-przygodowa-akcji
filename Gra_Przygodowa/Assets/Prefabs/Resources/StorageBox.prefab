@@ -122,7 +122,7 @@ MonoBehaviour:
   isConsumable: 0
   healthEffect: 0
   staminaEffect: 0
-  isEquippable: 0
+  isEquippable: 1
   isInsideQuickSlot: 0
   isSelected: 0
   isUsable: 1

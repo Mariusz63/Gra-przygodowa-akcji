@@ -155,7 +155,6 @@ public class EquipSystem : MonoBehaviour
 
         //remove clone from name to get only item name
         string selectedItemName = selectedItem.name.Replace("(Clone)", "");
-        Debug.Log(selectedItemName);
         selectedItemModel = Instantiate(Resources.Load<GameObject>(selectedItemName + "_Model"), 
             new Vector3(0.6f, 0, 0.4f), // position
             Quaternion.Euler(0, -90, -20f)); // rotation
@@ -165,7 +164,6 @@ public class EquipSystem : MonoBehaviour
 
     bool CheckIfSlotIsFull(int slotNUmber)
     {
-        Debug.Log("CheckIfSlotIsFull "+quickSlotsList.Count);
         if (quickSlotsList[slotNUmber - 1].transform.childCount > 0)
         {
             return true;
@@ -191,7 +189,6 @@ public class EquipSystem : MonoBehaviour
         itemList.Add(cleanName);
         
         InventorySystem.Instance.ReCalculateList();
-
     }
 
     public GameObject FindNextEmptySlot()
@@ -240,9 +237,9 @@ public class EquipSystem : MonoBehaviour
         }
     }
 
-    public int GetWeaponDamage()
+    public float GetWeaponDamage()
     {
-        return selectedItem?.GetComponent<Weapon>()?.weaponDemage ?? 0;
+        return selectedItem?.GetComponent<Weapon>()?.WeaponDemage ?? PlayerState.Instance.playerDamage;
     }
 
     public bool IsThereASwingLock()

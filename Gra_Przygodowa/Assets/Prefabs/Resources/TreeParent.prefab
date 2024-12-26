@@ -54,6 +54,37 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!1 &8148059222711384864
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 116076826414968436}
+  m_Layer: 0
+  m_Name: stumpPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &116076826414968436
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8148059222711384864}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.159, z: 0.235}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1068116932604342744}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1071240301081765946
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -123,6 +154,10 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2863403498932242013, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
+      propertyPath: m_Size.y
+      value: 7.0814667
+      objectReference: {fileID: 0}
+    - target: {fileID: 2863403498932242013, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
       propertyPath: m_Size.z
       value: 6
       objectReference: {fileID: 0}
@@ -131,16 +166,32 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2863403498932242013, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
+      propertyPath: m_Center.y
+      value: -0.040733337
+      objectReference: {fileID: 0}
+    - target: {fileID: 2863403498932242013, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6989220094744898921, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
       propertyPath: m_Size.x
-      value: 1
+      value: 1.0659797
+      objectReference: {fileID: 0}
+    - target: {fileID: 6989220094744898921, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
+      propertyPath: m_Size.y
+      value: 7.7208624
       objectReference: {fileID: 0}
     - target: {fileID: 6989220094744898921, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
       propertyPath: m_Size.z
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6989220094744898921, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
+      propertyPath: m_Center.x
+      value: 0.03299001
+      objectReference: {fileID: 0}
+    - target: {fileID: 6989220094744898921, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
+      propertyPath: m_Center.y
+      value: -0.3604312
       objectReference: {fileID: 0}
     - target: {fileID: 8287471916108549747, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
       propertyPath: m_LocalPosition.y
@@ -150,7 +201,10 @@ PrefabInstance:
     - {fileID: 3983510657877990757, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
     - {fileID: 2848915081946833233, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4356059539544546, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 116076826414968436}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 1263149652669372, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
       insertIndex: -1
@@ -177,11 +231,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerInRange: 0
-  canBeChopped: 1
+  canBeChopped: 0
   treeMaxHealth: 50
   treeHealth: 0
   animator: {fileID: 8169830758454060790}
   staminaSpentChoppingWood: 10
+  spawnChoppedTree: {fileID: 8148059222711384864}
 --- !u!4 &1068116932604342744 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4356059539544546, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}

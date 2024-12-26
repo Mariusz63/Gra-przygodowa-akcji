@@ -46,9 +46,14 @@ public class SettingsManager : MonoBehaviour
     {
         LoadAndSetVolume();
         //LoadGraphicsSettings
-        //LoadKeyBinds
+        LoadKeyBinds();
 
         yield return new WaitForSeconds(0.1f);
+    }
+
+    private void LoadKeyBinds()
+    {
+        throw new NotImplementedException();
     }
 
     private void LoadAndSetVolume()

@@ -11,7 +11,6 @@ public class StorageBox : MonoBehaviour
     // All items in storage box
     [SerializeField] public List<string> items;
 
-
     public BoxType thisBoxType;
 
     private void Update()

@@ -23,12 +23,13 @@ public class Animal : MonoBehaviour
 
     [SerializeField] AnimalType thisAnimalType;
     [SerializeField] ParticleSystem bloodSplashParticles;
-    [SerializeField] GameObject spwaenBloodPuddle;
+    [SerializeField] GameObject spawnBloodPuddle;
 
     public Slider healthBarSlider;
 
     private Animator animator;
     public bool isDead = false;
+    public bool isLooted = false;
 
     public void Start()
     {
@@ -59,7 +60,7 @@ public class Animal : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int damage)
+    public void TakeDamage(float damage)
     {
         UpdateHealthBar();
         if (!isDead)
@@ -71,7 +72,7 @@ public class Animal : MonoBehaviour
             {
                 PlayDieSound();
                 animator.SetTrigger("DIE");
-
+                healthBarSlider.value = 0;
                 StartCoroutine(PuddleDelay());
                 isDead = true;
             }
@@ -86,7 +87,7 @@ public class Animal : MonoBehaviour
     IEnumerator PuddleDelay()
     {
         yield return new WaitForSeconds(1f);
-        spwaenBloodPuddle.SetActive(true);
+        spawnBloodPuddle.SetActive(true);      
     }
 
     /// <summary>

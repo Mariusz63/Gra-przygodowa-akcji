@@ -55,10 +55,10 @@ public class InventorySystem : MonoBehaviour
     void Start()
     {
         isOpen = false;
-        MovementManager.Instance.canLookAround = false;
+        //MovementManager.Instance.canLookAround = false;
 
         PopulateSlotList();
-        Cursor.visible = false;
+        //Cursor.visible = false;
     }
 
     private void Update()
@@ -66,11 +66,13 @@ public class InventorySystem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.I) && !isOpen)
         {
             MovementManager.Instance.EnableLook(false);
+            MovementManager.Instance.EnableMovement(false);     
             OpenUI();
         }
         else if (Input.GetKeyDown(KeyCode.I) && isOpen)
         {
             MovementManager.Instance.EnableLook(true);
+            MovementManager.Instance.EnableMovement(true);            
             CloseUI();
         }
         currencyUI.text = $"{currentCoins}";
@@ -85,10 +87,10 @@ public class InventorySystem : MonoBehaviour
         {
             Cursor.lockState = CursorLockMode.Locked;
             Cursor.visible = false;
-            SelectionManager.Instance.DisableSelection();
+            SelectionManager.Instance.EnableSelection();
             SelectionManager.Instance.GetComponent<SelectionManager>().enabled = true;
+            
         }
-
         isOpen = false;
     }
 
@@ -119,8 +121,6 @@ public class InventorySystem : MonoBehaviour
 
     public void AddToInventory(string itemName, bool shouldStack)
     {
-        Debug.Log("Dodanie do eq");
-
         InventorySlot stack = CheckIfStackExists(itemName);
 
         if (stack != null && shouldStack)

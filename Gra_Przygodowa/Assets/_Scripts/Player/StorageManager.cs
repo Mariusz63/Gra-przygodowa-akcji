@@ -27,6 +27,8 @@ public class StorageManager : MonoBehaviour
 
     public void OpenBox(StorageBox storage)
     {
+        MovementManager.Instance.EnableLook(false);
+        MovementManager.Instance.EnableMovement(false);
         SetSelectedStorage(storage);
 
         PopulateStorage(GetRelevantUI(selectedStorage));
@@ -69,6 +71,9 @@ public class StorageManager : MonoBehaviour
 
     public void CloseBox()
     {
+        MovementManager.Instance.EnableLook(true);
+        MovementManager.Instance.EnableMovement(true);
+
         RecalculateStorage(GetRelevantUI(selectedStorage));
 
         GetRelevantUI(selectedStorage).SetActive(false);

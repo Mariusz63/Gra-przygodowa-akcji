@@ -36,6 +36,9 @@ public class PlayerState : MonoBehaviour
     private Vector3 lastPosition;
     private float distanceTravelled = 0;
 
+    // Player hand damage
+    public float playerDamage = 5;
+
     public GameObject playerBody;
 
     private void Start()
@@ -60,8 +63,9 @@ public class PlayerState : MonoBehaviour
         if (distanceTravelled >= disntaceToDecreseStamina)
         {
             distanceTravelled = 0;
-            if (MovementManager.Instance.isSprinting)
-                currentStamina -= (staminaDecrese * staminaDecreseMultiplier);
+            float staminaToDecreseSprinting = staminaDecrese * staminaDecreseMultiplier;
+            if (MovementManager.Instance.canSprinting && currentStamina> staminaToDecreseSprinting)
+                currentStamina -= (staminaToDecreseSprinting);
             currentStamina -= staminaDecrese;
         }
 

@@ -22,6 +22,8 @@ public class EquipableItem : MonoBehaviour
             SelectionManager.Instance.handIsVisible == false &&
             swingWait == false) 
         {
+            GetHitAnim();
+
             // wait for the swing 
             swingWait = true;
             StartCoroutine(SwingSoundDelay());
@@ -38,7 +40,7 @@ public class EquipableItem : MonoBehaviour
         GameObject selectedTree = SelectionManager.Instance.selectedTree;
         if (selectedTree != null)
         {
-            selectedTree.GetComponent<ChoppableTree>().GetHit();
+            selectedTree.GetComponent<ChoppableTree>().GetHit(EquipSystem.Instance.GetWeaponDamage());
         }
     }
 

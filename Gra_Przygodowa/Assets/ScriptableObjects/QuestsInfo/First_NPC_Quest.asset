@@ -37,10 +37,10 @@ MonoBehaviour:
   comebackCompleted: Oto Twoja nagora! Trzymaj.
   comebackCompletedAudioClip: {fileID: 8300000, guid: 8dd05a27aef726547a1dfc2cebf09779, type: 3}
   finalWords: "Mam nadzi\u0119, \u017Ce jeszcze si\u0119 spotkamy"
-  finalWordsAudioClip: {fileID: 0}
+  finalWordsAudioClip: {fileID: 8300000, guid: 8dd05a27aef726547a1dfc2cebf09779, type: 3}
   coinReward: 20
-  rewardItem1: Stone
-  rewardItem2: Stone
+  rewardItem1: Apple
+  rewardItem2: 
   firstRequirmentItem: Stick
   firstRequirementAmount: 3
   secondRequirmentItem: 

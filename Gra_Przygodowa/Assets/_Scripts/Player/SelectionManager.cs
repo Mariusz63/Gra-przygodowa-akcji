@@ -100,7 +100,7 @@ public class SelectionManager : MonoBehaviour
                 choppableTree.canBeChopped = true;
                 selectedTree = choppableTree.gameObject;
                 chopHolder.gameObject.SetActive(true);
-            }
+             }
             else
             {
                 if (selectedTree != null)
@@ -140,10 +140,11 @@ public class SelectionManager : MonoBehaviour
                     interaction_Info_UI.SetActive(true);
                     ActiveHandIcon();
 
-                    if (Input.GetMouseButtonDown(0))
+                    if (Input.GetMouseButtonDown(0) && !animal.isLooted)
                     {
                         Lootable lootable = animal.GetComponent<Lootable>();
                         Loot(lootable);
+                        animal.isLooted = true;
                     }
                 }
                 else
@@ -171,7 +172,7 @@ public class SelectionManager : MonoBehaviour
                 ActiveHandIcon();
             }
 
-
+        
             if (!npc && !ourInteractable && !storageBox && !animal && !choppableTree && !shop)
             {
                 interaction_text.text = "";
@@ -195,7 +196,7 @@ public class SelectionManager : MonoBehaviour
     private void Loot(Lootable lootable)
     {
         // Calcualte
-        if (lootable.wasLootCalculated == false)
+        if (lootable.wasLootCalculated == false )
         {
             List<LootRecived> recivedLoot = new List<LootRecived>();
 
@@ -232,14 +233,14 @@ public class SelectionManager : MonoBehaviour
                     new Vector3(lootSpawnPosition.x, lootSpawnPosition.y + 0.25f, lootSpawnPosition.z), Quaternion.Euler(0, 0, 0));
             }
         }
-
         // Destroy body
         DestroyDeadBody(lootable.gameObject);
     }
 
     IEnumerator DestroyDeadBody(GameObject body)
     {
-        yield return new WaitForSeconds(10f);
+        Debug.Log("Destroy");
+        yield return new WaitForSeconds(2f);
         Destroy(body);
     }
 
@@ -250,11 +251,12 @@ public class SelectionManager : MonoBehaviour
         handIsVisible = true;
     }
 
-    IEnumerator DealDamage(Animal animal, float delay, int damage)
+    IEnumerator DealDamage(Animal animal, float delay, float damage)
     {
         yield return new WaitForSeconds(delay);
         animal.TakeDamage(damage);
     }
+
 
     public void DisableSelection()
     {
