@@ -171,11 +171,11 @@ public class InventoryItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             if ((healthBeforeConsumption + healthEffect) > maxHealth)
             {
-                PlayerState.Instance.setHealth(maxHealth);
+                PlayerState.Instance.SetHealth(maxHealth);
             }
             else
             {
-                PlayerState.Instance.setHealth(healthBeforeConsumption + healthEffect);
+                PlayerState.Instance.SetHealth(healthBeforeConsumption + healthEffect);
             }
         }
     }
@@ -193,11 +193,11 @@ public class InventoryItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         {
             if ((staminaBeforeConsumption + caloriesEffect) > maxStamina)
             {
-                PlayerState.Instance.setCalories(maxStamina);
+                PlayerState.Instance.SetStamina(maxStamina);
             }
             else
             {
-                PlayerState.Instance.setCalories(staminaBeforeConsumption + caloriesEffect);
+                PlayerState.Instance.SetStamina(staminaBeforeConsumption + caloriesEffect);
             }
         }
     }

@@ -7,12 +7,14 @@ public class PlayerMovement : MonoBehaviour
     public float speed = 12f;
     public float gravity = -9.81f * 2;
     public float jumpHeight = 3f;
+    public float sprintMultiplier = 1.5f;
 
     public Transform groundCheck;
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
 
     public KeyCode Jump = KeyCode.Space;
+    public KeyCode Sprint = KeyCode.LeftShift;
 
     Vector3 velocity;
     bool isGrounded;
@@ -23,16 +25,8 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if (DialogSystem.Instance.dialogUIActive == false &&
-        //    StorageManager.Instance.storageUIOpen == false)
-        //{
-        //    Movement();
-        //}
-
         if (MovementManager.Instance.canMove)
-        {
             Movement();
-        }
     }
 
     public void Movement()
@@ -48,18 +42,26 @@ public class PlayerMovement : MonoBehaviour
         float x = Input.GetAxis("Horizontal");
         float z = Input.GetAxis("Vertical");
 
+        float currentSpeed = speed;
+        MovementManager.Instance.isSprinting = false;
+        // Przyspieszenie, jeœli lewy Shift jest wciœniêty
+        if (Input.GetKey(Sprint))
+        {
+            currentSpeed *= sprintMultiplier;
+            MovementManager.Instance.isSprinting = true;
+        }
+
         //right is the red Axis, foward is the blue axis
         Vector3 move = transform.right * x + transform.forward * z;
-
-        controller.Move(move * speed * Time.deltaTime);
+        controller.Move(move * currentSpeed * Time.deltaTime);
 
         //check if the player is on the ground so he can jump
         if ((Input.GetButtonDown("Jump") || Input.GetKeyDown(Jump)) && isGrounded)
         {
-            //the equation for jumping
+            Debug.Log("Player is jumping!");
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
-
+        
         velocity.y += gravity * Time.deltaTime;
 
         controller.Move(velocity * Time.deltaTime);

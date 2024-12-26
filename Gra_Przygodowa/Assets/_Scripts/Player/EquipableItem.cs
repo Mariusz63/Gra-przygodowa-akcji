@@ -35,11 +35,11 @@ public class EquipableItem : MonoBehaviour
     /// </summary>
     public void GetHitAnim()
     {
-        //GameObject selectedTree = SelectionManager.Instance.selectedTree;
-        //if (selectedTree != null)
-        //{
-        //    selectedTree.GetComponent<ChoppableTree>().GetHit();
-        //}
+        GameObject selectedTree = SelectionManager.Instance.selectedTree;
+        if (selectedTree != null)
+        {
+            selectedTree.GetComponent<ChoppableTree>().GetHit();
+        }
     }
 
     IEnumerator SwingSoundDelay()

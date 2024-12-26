@@ -62,7 +62,6 @@ public class BuySystem : MonoBehaviour
 
             InventoryItem inventoryItem = listItem.inventoryItem.GetComponent<InventoryItem>();
 
-            Debug.Log("Shop item:" + inventoryItem.thisName);
             // Set the actual data
             shopItemSlot.shopItemData = listItem;
             // Setting the Name

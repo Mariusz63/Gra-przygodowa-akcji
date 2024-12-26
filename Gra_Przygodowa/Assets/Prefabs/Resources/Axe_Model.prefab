@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 4064687290978874648}
   - component: {fileID: 6451835373734144548}
   - component: {fileID: 8815015341624773060}
-  - component: {fileID: 4397626434479122963}
   - component: {fileID: 4111198920670612643}
   - component: {fileID: 7965064866357100994}
   m_Layer: 7
@@ -123,6 +122,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 4064687290978874648}
+  swingWait: 0
 --- !u!114 &8815015341624773060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,35 +135,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b125992101cc8f64f9ae82703f5ce533, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  graczWZasiegu: 0
-  nazwaPrzedmiotu: Axe
---- !u!54 &4397626434479122963
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8272611177671345394}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
+  playerInRange: 0
+  itemName: 
+  detectionRange: 6
 --- !u!65 &4111198920670612643
 BoxCollider:
   m_ObjectHideFlags: 0

@@ -14,14 +14,16 @@ public class ResourceHealthBar : MonoBehaviour
     private void Awake()
     {
         slider = GetComponent<Slider>();
+        if (globalState == null)
+        {
+            Debug.LogError("GlobalState is not assigned to ResourceHealthBar.");
+        }
     }
 
     public void Update()
     {
         currentHealth = globalState.GetComponent<GlobalState>().resourceHealth;
         maxHealth = globalState.GetComponent<GlobalState>().resourceMaxHealth;
-
-        float fillValue = currentHealth / maxHealth; // 0 - empty, 1 - full
-        slider.value = fillValue;
+        slider.value = currentHealth / maxHealth; // 0 - empty, 1 - full
     }
 }

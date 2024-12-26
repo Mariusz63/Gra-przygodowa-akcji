@@ -23,6 +23,7 @@ public class MovementManager : MonoBehaviour
 
     public bool canMove = true; // Keyboard Movement
     public bool canLookAround = true; // Mouse Movement
+    public bool isSprinting = false; // is sprinting
 
     public void EnableMovement(bool trigger)
     {

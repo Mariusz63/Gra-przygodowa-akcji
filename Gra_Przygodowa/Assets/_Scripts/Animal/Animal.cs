@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
+using UnityEngine.UI;
 using static Assets._Scripts.Enums.Enum;
 
 public class Animal : MonoBehaviour
@@ -11,17 +12,20 @@ public class Animal : MonoBehaviour
     public bool playerInRange;
 
     [Header("Animal statistics")]
-    [SerializeField] int currentHealt;
-    [SerializeField] int maxHealth;
+    [SerializeField] float currentHealt;
+    [SerializeField] float maxHealth;
 
     [Header("Sounds")]
     [SerializeField] AudioSource soundChannel;
     [SerializeField] AudioClip animalHit;
     [SerializeField] AudioClip animalHitAndDie;
+    [SerializeField] AudioClip animalAttack;
 
     [SerializeField] AnimalType thisAnimalType;
     [SerializeField] ParticleSystem bloodSplashParticles;
     [SerializeField] GameObject spwaenBloodPuddle;
+
+    public Slider healthBarSlider;
 
     private Animator animator;
     public bool isDead = false;
@@ -32,11 +36,17 @@ public class Animal : MonoBehaviour
         animator = GetComponent<Animator>();
     }
 
+    private void UpdateHealthBar()
+    {
+        healthBarSlider.value = currentHealt / maxHealth;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             playerInRange = true;
+            healthBarSlider.gameObject.SetActive(true);
         }
     }
 
@@ -45,29 +55,30 @@ public class Animal : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             playerInRange = false;
+            healthBarSlider.gameObject.SetActive(false);
         }
     }
 
     public void TakeDamage(int damage)
     {
+        UpdateHealthBar();
         if (!isDead)
         {
             currentHealt -= damage;
-
             bloodSplashParticles.Play();
 
             if (currentHealt <= 0)
             {
                 PlayDieSound();
                 animator.SetTrigger("DIE");
-                // GetComponent<AI_Movement>().enabled = false;
-                //Destroy(gameObject);
-                PuddleDelay();
-                 isDead = true;
+
+                StartCoroutine(PuddleDelay());
+                isDead = true;
             }
             else
             {
                 PlayHitSound();
+                animator.SetTrigger("HIT");
             }
         }
     }
@@ -102,6 +113,21 @@ public class Animal : MonoBehaviour
         {
             case AnimalType.Spider:
                 soundChannel.PlayOneShot(animalHitAndDie);
+                break;
+            default:
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Playing attack sound by animal type
+    /// </summary>
+    public void PlayAttackSound()
+    {
+        switch (thisAnimalType)
+        {
+            case AnimalType.Spider:
+                soundChannel.PlayOneShot(animalAttack);
                 break;
             default:
                 break;

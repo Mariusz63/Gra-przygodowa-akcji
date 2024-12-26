@@ -80,7 +80,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 479eafb2543431043a8ee390637ac0f7, type: 3}
+  m_Sprite: {fileID: 21300000, guid: fe025e83f69d0b54f8a4fe3c7c128fd7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -121,9 +121,10 @@ MonoBehaviour:
   thisFunctionality: Right click to position the item.
   isConsumable: 0
   healthEffect: 0
-  caloriesEffect: 0
-  hydrationEffect: 0
+  staminaEffect: 0
   isEquippable: 0
   isInsideQuickSlot: 0
   isSelected: 0
   isUsable: 1
+  amountInInventory: 1
+  sellingPrice: 0

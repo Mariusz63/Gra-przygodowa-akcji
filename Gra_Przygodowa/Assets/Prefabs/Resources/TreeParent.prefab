@@ -27,8 +27,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1068116932604342744}
   m_Father: {fileID: 0}
@@ -76,7 +76,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4356059539544546, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.54
       objectReference: {fileID: 0}
     - target: {fileID: 4356059539544546, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
       propertyPath: m_LocalPosition.z
@@ -110,6 +110,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 136912090096690544, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
+      propertyPath: m_Radius
+      value: 1.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 946333845010139992, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2863403498932242013, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
       propertyPath: m_Size.x
       value: 6
@@ -117,6 +125,22 @@ PrefabInstance:
     - target: {fileID: 2863403498932242013, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
       propertyPath: m_Size.z
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2863403498932242013, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2863403498932242013, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6989220094744898921, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6989220094744898921, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
+      propertyPath: m_Size.z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8287471916108549747, guid: 41282c525de09854e95ed5d9f9c17fb5, type: 3}
       propertyPath: m_LocalPosition.y
@@ -182,4 +206,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerInRange: 0
   itemName: Tree
-  detectionRange: 6
+  detectionRange: 4

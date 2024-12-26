@@ -91,31 +91,31 @@ public class EquipSystem : MonoBehaviour
 
     void SelectQuickSlot(int number)
     {
+        Debug.Log("SelectQuickSlot fun slot number:" + number);
         if (CheckIfSlotIsFull(number) == true)
         {
             if (selectedNumber != number)
             {
                 // we selected item and deselect previous item
                 selectedNumber = number;
+                selectedItem = GetSelectedItem(number);
 
                 //unselect previously selected item
                 if (selectedItem != null)
                 {
                     selectedItem.gameObject.GetComponent<InventoryItem>().isSelected = false;
                 }
-
-                selectedItem = GetSelectedItem(number);
+            
                 selectedItem.GetComponent<InventoryItem>().isSelected = true;
-
                 SetEquippedModel(selectedItem);
 
                 //changing the color
                 foreach (Transform child in numbersHolder.transform)
                 {
-                    child.transform.Find("Text").GetComponent<Text>().color = Color.gray;
+                    child.transform.Find("Text (Legacy)").GetComponent<Text>().color = Color.gray;
                 }
 
-                Text toBeChanged = numbersHolder.transform.Find("number" + number).transform.Find("Text").GetComponent<Text>();
+                Text toBeChanged = numbersHolder.transform.Find("number" + number).transform.Find("Text (Legacy)").GetComponent<Text>();
                 toBeChanged.color = Color.white;
             }
             else // we are trying to select the same slot
@@ -139,7 +139,7 @@ public class EquipSystem : MonoBehaviour
                 //changing the color
                 foreach (Transform child in numbersHolder.transform)
                 {
-                    child.transform.Find("Text").GetComponent<Text>().color = Color.gray;
+                    child.transform.Find("Text (Legacy)").GetComponent<Text>().color = Color.gray;
                 }
             }
         }
@@ -147,7 +147,6 @@ public class EquipSystem : MonoBehaviour
 
     private void SetEquippedModel(GameObject selectedItem)
     {
-
         if (selectedItemModel != null)
         {
             DestroyImmediate(selectedItemModel.gameObject);
@@ -157,13 +156,17 @@ public class EquipSystem : MonoBehaviour
         //remove clone from name to get only item name
         string selectedItemName = selectedItem.name.Replace("(Clone)", "");
         Debug.Log(selectedItemName);
-        selectedItemModel = Instantiate(Resources.Load<GameObject>(selectedItemName + "_Model"), new Vector3(0.6f, 0, 0.4f), Quaternion.Euler(0, -12.5f, -20f));
+        selectedItemModel = Instantiate(Resources.Load<GameObject>(selectedItemName + "_Model"), 
+            new Vector3(0.6f, 0, 0.4f), // position
+            Quaternion.Euler(0, -90, -20f)); // rotation
+
         selectedItemModel.transform.SetParent(toolHolder.transform, false);
     }
 
     bool CheckIfSlotIsFull(int slotNUmber)
     {
-        if (quickSlotsList[slotNUmber - 1].transform.childCount >= 0)
+        Debug.Log("CheckIfSlotIsFull "+quickSlotsList.Count);
+        if (quickSlotsList[slotNUmber - 1].transform.childCount > 0)
         {
             return true;
         }
@@ -181,9 +184,7 @@ public class EquipSystem : MonoBehaviour
         // Find next free slot
         GameObject availableSlot = FindNextEmptySlot();
         // Set transform of our object
-        itemToEquip.transform.SetParent(availableSlot.transform, false);
-
-        
+        itemToEquip.transform.SetParent(availableSlot.transform, false);        
         // Getting clean name
         string cleanName = itemToEquip.name.Replace("(Clone)", "");
         // Adding item to list

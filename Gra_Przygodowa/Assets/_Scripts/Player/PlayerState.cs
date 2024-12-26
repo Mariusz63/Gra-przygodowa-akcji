@@ -29,6 +29,8 @@ public class PlayerState : MonoBehaviour
     public float currentStamina;
     public float maxStamina;
     public float staminaDecrese = 1;
+    public float staminaDecreseMultiplier = 1.5f;
+    public float disntaceToDecreseStamina = 20f;
 
     // Declare lastPosition and distanceTravelled variables
     private Vector3 lastPosition;
@@ -55,25 +57,51 @@ public class PlayerState : MonoBehaviour
         //Debug.Log("distanceTravelled: " + distanceTravelled.ToString("F2"));
 
         // Reset distanceTravelled and reduce stamina when the threshold is reached
-        if (distanceTravelled >= 15)
+        if (distanceTravelled >= disntaceToDecreseStamina)
         {
             distanceTravelled = 0;
+            if (MovementManager.Instance.isSprinting)
+                currentStamina -= (staminaDecrese * staminaDecreseMultiplier);
             currentStamina -= staminaDecrese;
-
-           // Debug.Log("Stamina decreased! Current Stamina: " + currentStamina);
         }
+
 
         // Update lastPosition to the current position at the end of the frame
         lastPosition = playerBody.transform.position;
     }
 
-    public void setHealth(float newHealth)
+    public void SetHealth(float newHealth)
     {
         currentHealth = newHealth;
     }
 
-    public void setCalories(float newCalories)
+    /// <summary>
+    /// Set 
+    /// </summary>
+    /// <param name="newStamina"></param>
+    public void SetStamina(float newStamina)
     {
-        currentStamina = newCalories;
+        currentStamina = newStamina;
     }
+
+    /// <summary>
+    /// Reduce health
+    /// </summary>
+    /// <param name="damage"></param>
+    public void TakeDamage(int damage)
+    {
+        currentHealth -= damage;
+
+        if (currentHealth < 0)
+        {
+            Debug.Log("Player is dead");
+        }
+        else
+        {
+            Debug.Log("Player is hurt");
+        }
+
+    }
+
+
 }

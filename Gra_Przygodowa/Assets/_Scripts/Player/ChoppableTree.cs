@@ -41,6 +41,13 @@ public class ChoppableTree : MonoBehaviour
 
     public void GetHit()
     {
+        StartCoroutine(hit());
+    }
+
+    public IEnumerator hit()
+    {
+        yield return new WaitForSeconds(0.6f);
+
         animator.SetTrigger("shake");
         treeHealth -= 5;
 
@@ -63,7 +70,6 @@ public class ChoppableTree : MonoBehaviour
 
         GameObject brokenTree = Instantiate(Resources.Load<GameObject>("ChoppedTree"), 
             new Vector3(treePosition.x, treePosition.y + 1, treePosition.z), Quaternion.Euler(0,0,0));
-
     }
 
     private void Update()

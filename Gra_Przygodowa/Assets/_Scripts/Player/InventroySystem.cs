@@ -125,14 +125,12 @@ public class InventorySystem : MonoBehaviour
 
         if (stack != null && shouldStack)
         {
-            Debug.Log("Dodanie do eq - stack");
             //Add one to existing items
             stack.itemInSlot.amountInInventory++;
             stack.UpdateItemInSlot();
         }
         else
         {
-            Debug.Log("Dodanie do eq - pojedynczy");
             whatSlotToEquip = FindNextEmptySlot();
 
             itemToAdd = (GameObject)Instantiate(Resources.Load<GameObject>(itemName),
@@ -148,7 +146,6 @@ public class InventorySystem : MonoBehaviour
 
         ReCalculateList();
         QuestManager.Instance.RefreshTrackerList();
-        Debug.Log("Dodanie do eq - " + itemName + "Koniec");
     }
 
     private InventorySlot CheckIfStackExists(string itemName)
