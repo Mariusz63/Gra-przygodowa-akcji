@@ -39,7 +39,19 @@ public class PlayerState : MonoBehaviour
     // Player hand damage
     public float playerDamage = 5;
 
+    public bool isPLayerDead;
+    public RespawnLocation respawnLocation;
+    public event Action OnRespawnRegistered;
+
     public GameObject playerBody;
+
+    // ------- Player Audio ----------
+    public AudioSource playerAudioSource;
+    public AudioClip playerPainSound;
+    public AudioClip playerDeathSound;
+
+    private float hurtSoundDelay = 2f;
+    private float nextHurtTime = 1f;
 
     private void Start()
     {
@@ -64,7 +76,7 @@ public class PlayerState : MonoBehaviour
         {
             distanceTravelled = 0;
             float staminaToDecreseSprinting = staminaDecrese * staminaDecreseMultiplier;
-            if (MovementManager.Instance.canSprinting && currentStamina> staminaToDecreseSprinting)
+            if (MovementManager.Instance.canSprinting && currentStamina > staminaToDecreseSprinting)
                 currentStamina -= (staminaToDecreseSprinting);
             currentStamina -= staminaDecrese;
         }
@@ -96,16 +108,67 @@ public class PlayerState : MonoBehaviour
     {
         currentHealth -= damage;
 
-        if (currentHealth < 0)
+        if (currentHealth <= 0 && !isPLayerDead)
         {
             Debug.Log("Player is dead");
+            PlayerDead();
         }
         else
         {
-            Debug.Log("Player is hurt");
-        }
+            if (currentHealth > 0 && Time.time >= nextHurtTime)
+            {
+                Debug.Log("Player is hurt");
+                playerAudioSource.PlayOneShot(playerPainSound);          
+                nextHurtTime = Time.time + hurtSoundDelay;
+            }
 
+        }
     }
 
+    public void PlayerDead()
+    {
+        isPLayerDead = true;
+        playerAudioSource.PlayOneShot(playerDeathSound);
 
+        // TO DO: death screen
+        //deathscreen.setActive(true);
+
+        RespawnPlayer();// button can trigger this method
+    }
+
+    public void RespawnPlayer()
+    {
+        StartCoroutine(RespawnCoroutine());
+    }
+
+    public IEnumerator RespawnCoroutine()
+    {
+        playerBody.GetComponent<PlayerMovement>().enabled = false;
+        playerBody.GetComponent<MouseMovement>().enabled = false;
+
+        if (respawnLocation != null)
+        {
+            Vector3 position = respawnLocation.transform.position;
+            position.y += 7f; // go above the location
+            position.z += 7f; // next too the location
+
+            playerBody.transform.position = position;// actualy respawn the player
+
+            currentHealth = maxHealth;
+            currentStamina = maxStamina;
+        }
+
+        yield return new WaitForSeconds(0.3f);
+
+        isPLayerDead = false;
+
+        playerBody.GetComponent<PlayerMovement>().enabled = true;
+        playerBody.GetComponent<MouseMovement>().enabled = true;
+    }
+
+    public void SetRegisteredLocation(RespawnLocation _respawnLocation)
+    {
+        respawnLocation = _respawnLocation;
+        OnRespawnRegistered?.Invoke();
+    }
 }
