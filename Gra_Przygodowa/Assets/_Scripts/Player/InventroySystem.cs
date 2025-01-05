@@ -111,7 +111,7 @@ public class InventorySystem : MonoBehaviour
         // Pobierz wszystkie obiekty z tagiem "QuickSlot" w hierarchii InventoryScreenUI
         foreach (Transform child in inventoryScreenUI.GetComponentsInChildren<Transform>(true)) // true uwzglêdnia nieaktywne obiekty
         {
-            if (child.CompareTag("QuickSlot"))
+            if (child.CompareTag("QuickSlot") || child.CompareTag("Slot"))
             {
                 InventorySlot slot = child.GetComponent<InventorySlot>();
                 slotList.Add(slot);

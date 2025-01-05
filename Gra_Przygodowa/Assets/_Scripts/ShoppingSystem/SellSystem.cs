@@ -37,16 +37,17 @@ public class SellSystem : MonoBehaviour
     private void Start()
     {
         GetAllSlots();
-
         sellBTN.onClick.AddListener(SellItems);
         backBTN.onClick.AddListener(ExitSellMode);
     }
 
+    /// <summary>
+    /// Go back to main shop menu
+    /// </summary>
     private void ExitSellMode()
     {
         if (SellPanelIsEmpty())
-        {
-            //Go back to main shop menu
+        {       
             ShopKeeper.DialogMode();
         }     
     }
@@ -91,7 +92,7 @@ public class SellSystem : MonoBehaviour
         sellSlots.Clear();
         foreach (Transform child in sellPanel.transform)
         {
-            if(child.CompareTag("Slot"))
+            if(child.CompareTag("Slot") || child.CompareTag("QuickSlot"))
                 sellSlots.Add(child.GetComponent<InventorySlot>());
         }
     }

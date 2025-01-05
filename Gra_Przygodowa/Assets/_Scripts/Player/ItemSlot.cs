@@ -22,14 +22,14 @@ public class ItemSlot : MonoBehaviour, IDropHandler
         Debug.Log("OnDrop");
 
         //if the slot is empty
-        if (transform.childCount <=1)
+        if (transform.childCount <= 1)
         {
             SoundManager.Instance.PlaySound(SoundManager.Instance.dropItemSound);
-
+            Debug.Log($"Slot {gameObject.name} is empty. Adding item...");
             DragDrop.itemBeingDragged.transform.SetParent(transform);
             DragDrop.itemBeingDragged.transform.localPosition = new Vector2(0, 0);
 
-            if (transform.CompareTag("QuickSlot") == false || transform.CompareTag("Slot"))
+            if (!transform.CompareTag("QuickSlot") && !transform.CompareTag("Slot"))
             {
                 DragDrop.itemBeingDragged.GetComponent<InventoryItem>().isInsideQuickSlot = false;
                 InventorySystem.Instance.ReCalculateList();
@@ -41,14 +41,23 @@ public class ItemSlot : MonoBehaviour, IDropHandler
                 // we need to recalculate list because its no longer inside the system
                 InventorySystem.Instance.ReCalculateList();
             }
+
+            if (transform.CompareTag("Slot"))
+            {
+                Debug.Log("Item added to Slot");
+            }
+            else if (transform.CompareTag("QuickSlot"))
+            {
+                Debug.Log("Item added to QuickSlot");
+            }
         }
         else // The slot is not empty
         {
             InventoryItem draggedItem = DragDrop.itemBeingDragged.GetComponent<InventoryItem>();
             // Check if both items are the same and limit is not reached
-            if (draggedItem.thisName == GetStoredItem().thisName && IsLimitExceded(draggedItem) == false) 
+            if (draggedItem.thisName == GetStoredItem().thisName && IsLimitExceded(draggedItem) == false)
             {
-               // Merge dragged item and stored item
+                // Merge dragged item and stored item
                 GetStoredItem().amountInInventory += draggedItem.amountInInventory;
                 DestroyImmediate(DragDrop.itemBeingDragged);
             }
@@ -56,15 +65,19 @@ public class ItemSlot : MonoBehaviour, IDropHandler
             {
                 DragDrop.itemBeingDragged.transform.SetParent(transform);
             }
+            Debug.Log($"Slot {gameObject.name} is already occupied.");
         }
         StartCoroutine(DelayedSacn());
     }
 
     IEnumerator DelayedSacn()
     {
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(0.1f);
+        Debug.Log("DelayedScan Started");
         SellSystem.Instance.ScanItemsInSlots();
         SellSystem.Instance.UpdateSellAmountUI();
+        Debug.Log("SellSystem Updated");
+
     }
 
     /// <summary>

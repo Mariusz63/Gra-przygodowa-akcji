@@ -4,7 +4,6 @@ using UnityEngine.EventSystems;
 
 public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandler
 {
-
     [SerializeField] private Canvas canvas;
     private RectTransform rectTransform;
     private CanvasGroup canvasGroup;
@@ -19,7 +18,6 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
         canvasGroup = GetComponent<CanvasGroup>();
     }
 
-
     public void OnBeginDrag(PointerEventData eventData)
     {
         Debug.Log("OnBeginDrag");
@@ -30,14 +28,12 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
         startParent = transform.parent;
         transform.SetParent(transform.root);
         itemBeingDragged = gameObject;
-
     }
 
     public void OnDrag(PointerEventData eventData)
     {
         //So the item will move with our mouse (at same speed)  and so it will be consistant if the canvas has a different scale (other then 1);
         rectTransform.anchoredPosition += eventData.delta;
-
     }
 
     public void OnEndDrag(PointerEventData eventData)
@@ -49,7 +45,7 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
         if (tempItemReference.transform.parent == tempItemReference.transform.root)
         {
             // Hide the icon of the item at this point
-                CancelDragging(tempItemReference);
+            CancelDragging(tempItemReference);
         }
 
         // Dropped in the same slot
@@ -89,7 +85,7 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
 
         InventoryItem item = tempItemReference.GetComponent<InventoryItem>();
         // Check if item/stack has move than 1 item
-        if(item.amountInInventory> 1 )
+        if (item.amountInInventory > 1)
         {
             // Add new item to inventory
             item.amountInInventory--;
@@ -110,6 +106,6 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
         string cleanName = tempItemReference.name.Split(new string[] { "(Clone)" }, StringSplitOptions.None)[0];
 
         // Instantiate item
-        GameObject item = Instantiate(Resources.Load<GameObject>(cleanName+ "_Model"));
+        GameObject item = Instantiate(Resources.Load<GameObject>(cleanName + "_Model"));
     }
 }

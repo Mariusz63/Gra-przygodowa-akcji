@@ -295,8 +295,8 @@ GameObject:
   - component: {fileID: 6946163500690343400}
   - component: {fileID: 3190286867018455627}
   m_Layer: 5
-  m_Name: Slot4
-  m_TagString: Slot
+  m_Name: QuickSlot4
+  m_TagString: QuickSlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -316,10 +316,10 @@ RectTransform:
   - {fileID: 7679581851272817109}
   m_Father: {fileID: 7238530171561495365}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 400.34192, y: -74.77855}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6761670988801154901
 CanvasRenderer:
@@ -546,8 +546,8 @@ GameObject:
   - component: {fileID: 8563034328169973559}
   - component: {fileID: 412079728809374905}
   m_Layer: 5
-  m_Name: Slot9
-  m_TagString: Slot
+  m_Name: QuickSlot9
+  m_TagString: QuickSlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -567,10 +567,10 @@ RectTransform:
   - {fileID: 2621399144363344233}
   m_Father: {fileID: 7238530171561495365}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 400.34192, y: -184.77855}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5661914786863547898
 CanvasRenderer:
@@ -650,8 +650,8 @@ GameObject:
   - component: {fileID: 4851999531521346359}
   - component: {fileID: 178815976818094138}
   m_Layer: 5
-  m_Name: Slot10
-  m_TagString: Slot
+  m_Name: QuickSlot10
+  m_TagString: QuickSlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -671,10 +671,10 @@ RectTransform:
   - {fileID: 888473990831488843}
   m_Father: {fileID: 7238530171561495365}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 510.34192, y: -184.77855}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3644307676224033890
 CanvasRenderer:
@@ -901,8 +901,8 @@ GameObject:
   - component: {fileID: 6944713278865220238}
   - component: {fileID: 7718990253259817645}
   m_Layer: 5
-  m_Name: Slot5
-  m_TagString: Slot
+  m_Name: QuickSlot5
+  m_TagString: QuickSlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -922,10 +922,10 @@ RectTransform:
   - {fileID: 2575214156344849130}
   m_Father: {fileID: 7238530171561495365}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 510.34192, y: -74.77855}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &858788669455315856
 CanvasRenderer:
@@ -1152,8 +1152,8 @@ GameObject:
   - component: {fileID: 5281824307252759267}
   - component: {fileID: 4278767538309023689}
   m_Layer: 5
-  m_Name: Slot1
-  m_TagString: Slot
+  m_Name: QuickSlot1
+  m_TagString: QuickSlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1173,10 +1173,10 @@ RectTransform:
   - {fileID: 2142351227752623615}
   m_Father: {fileID: 7238530171561495365}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 70.34192, y: -74.77855}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1248719291266150733
 CanvasRenderer:
@@ -1834,7 +1834,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &4670531297802360549
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1910,8 +1910,8 @@ GameObject:
   - component: {fileID: 8185396267777582830}
   - component: {fileID: 7481629518469844325}
   m_Layer: 5
-  m_Name: Slot3
-  m_TagString: Slot
+  m_Name: QuickSlot3
+  m_TagString: QuickSlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1931,10 +1931,10 @@ RectTransform:
   - {fileID: 2397947853850159265}
   m_Father: {fileID: 7238530171561495365}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 290.34192, y: -74.77855}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5141699460795746397
 CanvasRenderer:
@@ -2093,8 +2093,8 @@ GameObject:
   - component: {fileID: 6193296523019332130}
   - component: {fileID: 2908839903926844836}
   m_Layer: 5
-  m_Name: Slot6
-  m_TagString: Slot
+  m_Name: QuickSlot6
+  m_TagString: QuickSlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2114,10 +2114,10 @@ RectTransform:
   - {fileID: 1520480444594954317}
   m_Father: {fileID: 7238530171561495365}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 70.34192, y: -184.77855}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &561599307140611967
 CanvasRenderer:
@@ -2464,8 +2464,8 @@ GameObject:
   - component: {fileID: 2581226097023056633}
   - component: {fileID: 2068495569199414169}
   m_Layer: 5
-  m_Name: Slot8
-  m_TagString: Slot
+  m_Name: QuickSlot8
+  m_TagString: QuickSlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2485,10 +2485,10 @@ RectTransform:
   - {fileID: 5035396951582762096}
   m_Father: {fileID: 7238530171561495365}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 290.34192, y: -184.77855}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5589107567898770592
 CanvasRenderer:
@@ -2689,8 +2689,8 @@ GameObject:
   - component: {fileID: 4178782451388838388}
   - component: {fileID: 3400550732661989143}
   m_Layer: 5
-  m_Name: Slot7
-  m_TagString: Slot
+  m_Name: QuickSlot7
+  m_TagString: QuickSlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2710,10 +2710,10 @@ RectTransform:
   - {fileID: 3712429797664714785}
   m_Father: {fileID: 7238530171561495365}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 180.34192, y: -184.77855}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5475421356581051893
 CanvasRenderer:
@@ -2793,8 +2793,8 @@ GameObject:
   - component: {fileID: 3518930726402240259}
   - component: {fileID: 7128506433145895902}
   m_Layer: 5
-  m_Name: Slot2
-  m_TagString: Slot
+  m_Name: QuickSlot2
+  m_TagString: QuickSlot
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2814,10 +2814,10 @@ RectTransform:
   - {fileID: 827877108067366077}
   m_Father: {fileID: 7238530171561495365}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 180.34192, y: -74.77855}
-  m_SizeDelta: {x: 100, y: 100}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &606360164637188122
 CanvasRenderer:
