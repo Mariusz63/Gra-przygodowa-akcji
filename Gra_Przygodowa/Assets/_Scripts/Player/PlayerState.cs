@@ -44,6 +44,7 @@ public class PlayerState : MonoBehaviour
     public event Action OnRespawnRegistered;
 
     public GameObject playerBody;
+    public GameObject deathscreenUI;
 
     // ------- Player Audio ----------
     public AudioSource playerAudioSource;
@@ -60,6 +61,7 @@ public class PlayerState : MonoBehaviour
 
         // Initialize lastPosition to the starting position of the player
         lastPosition = playerBody.transform.position;
+        deathscreenUI.SetActive(false);
     }
 
     // Update is called once per frame
@@ -121,7 +123,6 @@ public class PlayerState : MonoBehaviour
                 playerAudioSource.PlayOneShot(playerPainSound);          
                 nextHurtTime = Time.time + hurtSoundDelay;
             }
-
         }
     }
 
@@ -129,11 +130,17 @@ public class PlayerState : MonoBehaviour
     {
         isPLayerDead = true;
         playerAudioSource.PlayOneShot(playerDeathSound);
+        //RespawnPlayer();
+        OpenDeadScreen(true);
+    }
 
-        // TO DO: death screen
-        //deathscreen.setActive(true);
-
-        RespawnPlayer();// button can trigger this method
+    public void OpenDeadScreen(bool isOpen)
+    {
+        deathscreenUI.SetActive(isOpen);
+        playerBody.GetComponent<PlayerMovement>().enabled = !isOpen;
+        playerBody.GetComponent<MouseMovement>().enabled = !isOpen;
+        Cursor.lockState = isOpen ? CursorLockMode.None : CursorLockMode.Locked;
+        Cursor.visible = isOpen;
     }
 
     public void RespawnPlayer()
@@ -142,10 +149,7 @@ public class PlayerState : MonoBehaviour
     }
 
     public IEnumerator RespawnCoroutine()
-    {
-        playerBody.GetComponent<PlayerMovement>().enabled = false;
-        playerBody.GetComponent<MouseMovement>().enabled = false;
-
+    { 
         if (respawnLocation != null)
         {
             Vector3 position = respawnLocation.transform.position;
@@ -161,9 +165,7 @@ public class PlayerState : MonoBehaviour
         yield return new WaitForSeconds(0.3f);
 
         isPLayerDead = false;
-
-        playerBody.GetComponent<PlayerMovement>().enabled = true;
-        playerBody.GetComponent<MouseMovement>().enabled = true;
+        OpenDeadScreen(false);
     }
 
     public void SetRegisteredLocation(RespawnLocation _respawnLocation)

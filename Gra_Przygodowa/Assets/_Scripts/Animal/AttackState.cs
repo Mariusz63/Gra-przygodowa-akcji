@@ -28,7 +28,7 @@ public class AttackState : StateMachineBehaviour
     {
         LookAtPlayer();
 
-        if (attackTimer < 0)
+        if (attackTimer < 0 && (PlayerState.Instance.currentHealth > 0))
         {
             AttackPlayer();
             attackTimer = 1f / attackRate;
@@ -40,7 +40,7 @@ public class AttackState : StateMachineBehaviour
 
         // --- CHeck if agent should stop atatcking ---- //
         float distanceFromPlayer = Vector3.Distance(player.position, agent.transform.position);
-        if ((distanceFromPlayer > stopAttackingDistance) || (PlayerState.Instance.currentHealth < 0))
+        if ((distanceFromPlayer > stopAttackingDistance) || (PlayerState.Instance.currentHealth <= 0))
         {
             animator.SetBool("isAttacking", false);
         }
