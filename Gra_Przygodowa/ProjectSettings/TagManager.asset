@@ -9,6 +9,7 @@ TagManager:
   - Selectable
   - Slot
   - Waypoints
+  - Tree
   layers:
   - Default
   - TransparentFX
