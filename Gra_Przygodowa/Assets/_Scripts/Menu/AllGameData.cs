@@ -2,7 +2,7 @@
 using System.Reflection.Emit;
 using UnityEditor.Experimental.RestService;
 
-[Serializable]
+[System.Serializable]
 public class AllGameData
 {
     public PlayerData playerData;
@@ -10,5 +10,4 @@ public class AllGameData
     public EnviromentData environmentData;
 
     //public ConstructionData constructionData;
-
 }

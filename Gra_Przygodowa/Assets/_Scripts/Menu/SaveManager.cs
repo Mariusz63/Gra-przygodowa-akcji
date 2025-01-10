@@ -52,7 +52,7 @@ public class SaveManager : MonoBehaviour
         jsonPathProject = Application.dataPath + Path.AltDirectorySeparatorChar;
         jsonPathPersistant = Application.persistentDataPath + Path.AltDirectorySeparatorChar;
         binaryPath = Application.persistentDataPath + Path.AltDirectorySeparatorChar;
-    } 
+    }
 
     #region // ---- Loading ---- //
 
@@ -117,6 +117,7 @@ public class SaveManager : MonoBehaviour
             var treePrefab = Instantiate(Resources.Load<GameObject>(treeData.name),
                 new Vector3(treeData.position.x, treeData.position.y, treeData.position.z),
                 Quaternion.Euler(treeData.rotation.x, treeData.rotation.y, treeData.rotation.z));
+
             treePrefab.transform.SetParent(EnvironmentManager.Instance.allTrees.transform);
         }
 
@@ -146,6 +147,7 @@ public class SaveManager : MonoBehaviour
 
     private void SetPlayerData(PlayerData playerData)
     {
+        Debug.Log("SetPlayerData");
         //Setting Player stats
         PlayerState.Instance.currentHealth = playerData.playerStats[0];
         PlayerState.Instance.currentStamina = playerData.playerStats[1];
@@ -155,16 +157,24 @@ public class SaveManager : MonoBehaviour
         loadedPosition.x = playerData.playerPositionAndRotation[0];
         loadedPosition.y = playerData.playerPositionAndRotation[1];
         loadedPosition.z = playerData.playerPositionAndRotation[2];
-
-        PlayerState.Instance.playerBody.transform.position = loadedPosition;
+        //PlayerState.Instance.playerBody.transform.position = loadedPosition;
 
         //Setting Player Rotation
         Vector3 loadedRotation;
         loadedRotation.x = playerData.playerPositionAndRotation[3];
         loadedRotation.y = playerData.playerPositionAndRotation[4];
         loadedRotation.z = playerData.playerPositionAndRotation[5];
+        // PlayerState.Instance.playerBody.transform.rotation = Quaternion.Euler(loadedRotation);
 
-        PlayerState.Instance.playerBody.transform.rotation = Quaternion.Euler(loadedRotation);
+        if (PlayerState.Instance != null && PlayerState.Instance.playerBody != null)
+        {
+            PlayerState.Instance.playerBody.transform.position = loadedPosition;
+            PlayerState.Instance.playerBody.transform.rotation = Quaternion.Euler(loadedRotation);
+        }
+        else
+        {
+            Debug.LogWarning("Player body jest null!");
+        }
 
         // Setting the quick slots content
         foreach (string item in playerData.quickSlotContent)
@@ -229,6 +239,8 @@ public class SaveManager : MonoBehaviour
                 td.position = tree.position;
                 td.rotation = new Vector3(tree.rotation.x, tree.rotation.y, tree.rotation.z);
                 treeToSave.Add(td);
+                //var td = new TreeData(tree.position, tree.eulerAngles, "Tree_Parent");
+                //treeToSave.Add(td);
             }
             else
             {
@@ -237,6 +249,8 @@ public class SaveManager : MonoBehaviour
                 td.position = tree.position;
                 td.rotation = new Vector3(tree.rotation.x, tree.rotation.y, tree.rotation.z);
                 treeToSave.Add(td);
+                //var td = new TreeData(tree.position, tree.eulerAngles, "Stump");
+                //treeToSave.Add(td);
             }
         }
 
@@ -269,7 +283,7 @@ public class SaveManager : MonoBehaviour
 
     private PlayerData GetPlayerData()
     {
-        float[] playerStats = new float[3];
+        float[] playerStats = new float[2];
         playerStats[0] = PlayerState.Instance.currentHealth;
         playerStats[1] = PlayerState.Instance.currentStamina;
 
@@ -278,10 +292,9 @@ public class SaveManager : MonoBehaviour
         playerPosAndRot[1] = PlayerState.Instance.playerBody.transform.position.y;
         playerPosAndRot[2] = PlayerState.Instance.playerBody.transform.position.z;
 
-        playerPosAndRot[2] = PlayerState.Instance.playerBody.transform.rotation.x;
-        playerPosAndRot[2] = PlayerState.Instance.playerBody.transform.rotation.y;
-        playerPosAndRot[2] = PlayerState.Instance.playerBody.transform.rotation.z;
-
+        playerPosAndRot[3] = PlayerState.Instance.playerBody.transform.rotation.x;
+        playerPosAndRot[4] = PlayerState.Instance.playerBody.transform.rotation.y;
+        playerPosAndRot[5] = PlayerState.Instance.playerBody.transform.rotation.z;
 
         //string[] inventoryContent = InventorySystem.Instance.itemList.ToArray();
         string[] quickSlotContent = GetQuickSlotsContent();
@@ -363,12 +376,12 @@ public class SaveManager : MonoBehaviour
     {
         string json = JsonUtility.ToJson(gameData);
 
-        string encrypted = EncryptionDecryption(json);
+        //string encrypted = EncryptionDecryption(json);
 
         // change to jsonPathPersistant
         using (StreamWriter writer = new StreamWriter(jsonPathProject + fileName + slotNumber + ".json"))
         {
-            writer.Write(encrypted);
+            writer.Write(json);
             print("Saved Game to Json file at " + jsonPathProject + fileName + slotNumber + ".json");
         };
 
@@ -380,9 +393,9 @@ public class SaveManager : MonoBehaviour
         {
             string json = reader.ReadToEnd();
 
-            string decrypted = EncryptionDecryption(json);
+            // string decrypted = EncryptionDecryption(json);
 
-            AllGameData gameData = JsonUtility.FromJson<AllGameData>(decrypted);
+            AllGameData gameData = JsonUtility.FromJson<AllGameData>(json);
             return gameData;
         };
     }
@@ -512,7 +525,14 @@ public class SaveManager : MonoBehaviour
 
     public void DisableLoadingScreen()
     {
-        loadingScreen.gameObject.SetActive(false);
+        if (loadingScreen != null)
+        {
+            loadingScreen.gameObject.SetActive(false);
+        }
+        else
+        {
+            Debug.LogWarning("Loading screen jest null!");
+        }
     }
 
     #endregion

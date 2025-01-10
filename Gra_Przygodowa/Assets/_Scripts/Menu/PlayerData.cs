@@ -1,6 +1,6 @@
 ﻿using System;
 
-[Serializable]
+[System.Serializable]
 public class PlayerData
 {
     public float[] playerStats;// [0] - Health, [1] - Calories, [2] - Hydration
