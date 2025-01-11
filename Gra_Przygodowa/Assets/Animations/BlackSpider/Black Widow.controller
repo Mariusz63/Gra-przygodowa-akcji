@@ -122,22 +122,22 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: -3178775321777959785}
-    m_Position: {x: 0, y: 430, z: 0}
+    m_Position: {x: 430, y: 440, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 5990568681263935021}
     m_Position: {x: 340, y: 300, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6525549778826363202}
-    m_Position: {x: 570, y: 10, z: 0}
+    m_Position: {x: 590, y: 130, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -7696640536878379039}
     m_Position: {x: 590, y: 310, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -2052114459755798345}
-    m_Position: {x: 880, y: 340, z: 0}
+    m_Position: {x: 850, y: 320, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6651635504339129893}
-    m_Position: {x: 430, y: 190, z: 0}
+    m_Position: {x: 460, y: 210, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions:
   - {fileID: 7347836903017211277}
@@ -145,9 +145,9 @@ AnimatorStateMachine:
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
   m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: 310, y: 100, z: 0}
-  m_EntryPosition: {x: 50, y: 200, z: 0}
-  m_ExitPosition: {x: 900, y: 210, z: 0}
+  m_AnyStatePosition: {x: 310, y: 130, z: 0}
+  m_EntryPosition: {x: 230, y: 440, z: 0}
+  m_ExitPosition: {x: 840, y: 230, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: -3178775321777959785}
 --- !u!1101 &-5704553061705963326

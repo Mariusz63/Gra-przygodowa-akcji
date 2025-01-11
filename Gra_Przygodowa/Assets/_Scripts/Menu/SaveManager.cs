@@ -426,7 +426,6 @@ public class SaveManager : MonoBehaviour
         PlayerPrefs.SetString("VolumeSettings", JsonUtility.ToJson(volumeSettings));
         PlayerPrefs.Save();
         print("Saved to player pref");
-
     }
 
     public VolumeSettings LoadVolumeSettings()
@@ -441,7 +440,38 @@ public class SaveManager : MonoBehaviour
     #endregion
 
     #region // ---- Key Binds ---- //
+    [Serializable]
+    public class KeybindSettings
+    {
+        public Dictionary<string, KeyCode> keybinds = new Dictionary<string, KeyCode>();
+    }
 
+    public void SaveKeybindingSettings()
+    {
+        KeybindSettings keybindSettings = new KeybindSettings()
+        {
+            keybinds = SettingsManager.Instance.GetKeybinds()
+        };
+
+        // Save as JSON
+        PlayerPrefs.SetString("KeybindSettings", JsonUtility.ToJson(keybindSettings));
+        PlayerPrefs.Save();
+        Debug.Log("Keybind settings saved");
+    }
+
+    public KeybindSettings LoadKeybindingSettings()
+    {
+        if (PlayerPrefs.HasKey("KeybindSettings"))
+        {
+            Debug.Log("Keybind settings loaded");
+            return JsonUtility.FromJson<KeybindSettings>(PlayerPrefs.GetString("KeybindSettings"));
+        }
+        else
+        {
+            Debug.LogWarning("Keybind settings not found, using defaults.");
+            return new KeybindSettings();
+        }
+    }
     #endregion
 
     #endregion

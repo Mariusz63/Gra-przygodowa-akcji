@@ -11,6 +11,7 @@ public class SettingsManager : MonoBehaviour
     public static SettingsManager Instance;
     public Button saveButton;
 
+    [Header("Volume UI")]
     public Slider masterSlider;
     public GameObject masterVolume;
 
@@ -19,6 +20,25 @@ public class SettingsManager : MonoBehaviour
 
     public Slider effectsSlider;
     public GameObject effectsVolume;
+
+    [Header("Keybinding UI Buttons")]
+    [SerializeField] private Button jump;
+    [SerializeField] private Button walkFront;
+    [SerializeField] private Button walkLeft;
+    [SerializeField] private Button walkRight;
+    [SerializeField] private Button walkBack;
+    [SerializeField] private Button interaction;
+    [SerializeField] private Button hit;
+    [SerializeField] private Button getItem;
+
+    private string currentKey;
+
+    private Dictionary<string, KeyCode> keybinds;
+
+    public Dictionary<string, KeyCode> GetKeybinds()
+    {
+        return keybinds;
+    }
 
     private void Awake()
     {
@@ -34,9 +54,19 @@ public class SettingsManager : MonoBehaviour
 
     private void Start()
     {
+        jump.onClick.AddListener(() => StartRebinding("Jump"));
+        walkFront.onClick.AddListener(() => StartRebinding("WalkFront"));
+        walkLeft.onClick.AddListener(() => StartRebinding("WalkLeft"));
+        walkRight.onClick.AddListener(() => StartRebinding("WalkRight"));
+        walkBack.onClick.AddListener(() => StartRebinding("WalkBack"));
+        interaction.onClick.AddListener(() => StartRebinding("Interaction"));
+        hit.onClick.AddListener(() => StartRebinding("Hit"));
+        getItem.onClick.AddListener(() => StartRebinding("GetItem"));
+
         saveButton.onClick.AddListener(() =>
         {
-            SaveManager.Instance.SaveVolumeSettings(musicSlider.value, effectsSlider.value ,masterSlider.value);
+            SaveManager.Instance.SaveVolumeSettings(musicSlider.value, effectsSlider.value, masterSlider.value);
+            SaveManager.Instance.SaveKeybindingSettings();
         });
 
         StartCoroutine(LoadAndApplySettings());
@@ -46,15 +76,28 @@ public class SettingsManager : MonoBehaviour
     {
         LoadAndSetVolume();
         //LoadGraphicsSettings
-        //LoadKeyBinds();
+        LoadKeyBinds();
 
         yield return new WaitForSeconds(0.1f);
     }
 
     private void LoadKeyBinds()
     {
-        throw new NotImplementedException();
+        KeybindSettings keybindingSettings = SaveManager.Instance.LoadKeybindingSettings();
+
+        if (keybindingSettings.keybinds == null || keybindingSettings.keybinds.Count == 0)
+        {
+            InitializeKeybinds();
+            SaveManager.Instance.SaveKeybindingSettings();
+            UpdateUI();
+        }
+        else
+        {
+            InitializeKeybinds(); // Ensure all keys are present
+            SetKeybindsFromSettings(keybindingSettings);
+        }
     }
+
 
     private void LoadAndSetVolume()
     {
@@ -71,4 +114,67 @@ public class SettingsManager : MonoBehaviour
         effectsVolume.GetComponent<TextMeshProUGUI>().text = "" + (effectsSlider.value) + "";
     }
 
+    private void InitializeKeybinds()
+    {
+        keybinds = new Dictionary<string, KeyCode>()
+    {
+        { "Jump", KeyCode.Space },
+        { "WalkFront", KeyCode.W },
+        { "WalkLeft", KeyCode.A },
+        { "WalkRight", KeyCode.D },
+        { "WalkBack", KeyCode.S },
+        { "Interaction", KeyCode.E },
+        { "Hit", KeyCode.Mouse0 },
+        { "GetItem", KeyCode.F }
+    };
+    }
+
+    private void SetKeybindsFromSettings(KeybindSettings settings)
+    {
+        foreach (var key in settings.keybinds)
+        {
+            if (keybinds.ContainsKey(key.Key))
+            {
+                keybinds[key.Key] = key.Value;
+            }
+        }
+        UpdateUI();
+    }
+
+    private void UpdateUI()
+    {
+        jump.GetComponentInChildren<TextMeshProUGUI>().text = keybinds["Jump"].ToString();
+        walkFront.GetComponentInChildren<TextMeshProUGUI>().text = keybinds["WalkFront"].ToString();
+        walkLeft.GetComponentInChildren<TextMeshProUGUI>().text = keybinds["WalkLeft"].ToString();
+        walkRight.GetComponentInChildren<TextMeshProUGUI>().text = keybinds["WalkRight"].ToString();
+        walkBack.GetComponentInChildren<TextMeshProUGUI>().text = keybinds["WalkBack"].ToString();
+        interaction.GetComponentInChildren<TextMeshProUGUI>().text = keybinds["Interaction"].ToString();
+        hit.GetComponentInChildren<TextMeshProUGUI>().text = keybinds["Hit"].ToString();
+        getItem.GetComponentInChildren<TextMeshProUGUI>().text = keybinds["GetItem"].ToString();
+    }
+
+    private void StartRebinding(string key)
+    {
+        currentKey = key;
+        StartCoroutine(WaitForKeyPress());
+    }
+
+    private IEnumerator WaitForKeyPress()
+    {
+        while (!Input.anyKeyDown)
+        {
+            yield return null;
+        }
+
+        foreach (KeyCode keyCode in Enum.GetValues(typeof(KeyCode)))
+        {
+            if (Input.GetKeyDown(keyCode))
+            {
+                keybinds[currentKey] = keyCode;
+                UpdateUI();
+                SaveManager.Instance.SaveKeybindingSettings();
+                break;
+            }
+        }
+    }
 }
