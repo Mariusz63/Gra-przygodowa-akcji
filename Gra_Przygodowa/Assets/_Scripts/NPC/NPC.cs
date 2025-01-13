@@ -39,7 +39,6 @@ public class NPC : MonoBehaviour
     public void StartConversation()
     {
         isTalkingWithPlayer = true;
-
         LookAtPlayer();
 
         // Interacting with the NPC for the first time
@@ -188,7 +187,7 @@ public class NPC : MonoBehaviour
             {
                 secondItemCounter++;
             }
-        }   
+        }
 
         SetQuestHasCheckPoints(currentActiveQuest);
 
