@@ -266,7 +266,10 @@ public class NPC : MonoBehaviour
     }
     private void AcceptedQuest()
     {
-        QuestManager.Instance.AddActiveQuest(currentActiveQuest);
+        if (!QuestManager.Instance.IsQuestAlreadyActive(currentActiveQuest))
+        {
+            QuestManager.Instance.AddActiveQuest(currentActiveQuest);
+        }
 
         currentActiveQuest.accepted = true;
         currentActiveQuest.declined = false;
@@ -312,19 +315,25 @@ public class NPC : MonoBehaviour
         var coinsRecieved = currentActiveQuest.info.coinReward;
         print("You recieved " + coinsRecieved + " gold coins");
 
-        if (currentActiveQuest.info.rewardItem1 != "")
+        if (!string.IsNullOrEmpty(currentActiveQuest.info.rewardItem1))
         {
             InventorySystem.Instance.AddToInventory(currentActiveQuest.info.rewardItem1, true);
         }
 
-        if (currentActiveQuest.info.rewardItem2 != "")
+        if (!string.IsNullOrEmpty(currentActiveQuest.info.rewardItem2))
         {
             InventorySystem.Instance.AddToInventory(currentActiveQuest.info.rewardItem2, true);
         }
 
+        if (currentActiveQuest.info.coinReward > 0)
+        {
+            InventorySystem.Instance.currentCoins += currentActiveQuest.info.coinReward;
+        }
+
+        QuestManager.Instance.MarkQuestCompleted(currentActiveQuest); // Dodano oznaczenie ukoñczenia
         activeQuestIndex++;
 
-        // Start Next Quest 
+        // Rozpocznij nowe zadanie, jeœli istnieje
         if (activeQuestIndex < quests.Count)
         {
             currentActiveQuest = quests[activeQuestIndex];
@@ -338,8 +347,8 @@ public class NPC : MonoBehaviour
             isTalkingWithPlayer = false;
             print("No more quests");
         }
-
     }
+
 
     private void DeclinedQuest()
     {

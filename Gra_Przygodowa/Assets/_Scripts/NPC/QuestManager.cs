@@ -138,9 +138,12 @@ public class QuestManager : MonoBehaviour
     //Kiedy zaakceptujemy zadanie dodajemy je listy zadañ oraz do œledzenia
     public void AddActiveQuest(Quest quest)
     {
-        activeQuests.Add(quest);
-        TrackQuest(quest);
-        RefreshQuestList();
+        if (!activeQuests.Contains(quest))
+        {
+            activeQuests.Add(quest);
+            TrackQuest(quest);
+            RefreshQuestList();
+        }
     }
 
     public void MarkQuestCompleted(Quest quest)
@@ -205,10 +208,10 @@ public class QuestManager : MonoBehaviour
             }
 
             // Jesli quest ma checkpointy chcemy je dodac do opisu
-            if(trackedQuest.info.hasCheckpoints)
+            if (trackedQuest.info.hasCheckpoints)
             {
                 var existingText = tRow.requirements.text;
-                tRow.requirements.text = PrintCheckpoint(trackedQuest,existingText);
+                tRow.requirements.text = PrintCheckpoint(trackedQuest, existingText);
             }
         }
     }
@@ -240,5 +243,10 @@ public class QuestManager : MonoBehaviour
             finalText += $"\n{cp.name}{(cp.isCompleted ? " [Completed]" : " [In progress]")}";
         }
         return finalText;
+    }
+
+    public bool IsQuestAlreadyActive(Quest quest)
+    {
+        return activeQuests.Contains(quest);
     }
 }
