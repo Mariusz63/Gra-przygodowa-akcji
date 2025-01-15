@@ -30,6 +30,7 @@ public class SettingsManager : MonoBehaviour
     [SerializeField] private Button interaction;
     [SerializeField] private Button hit;
     [SerializeField] private Button getItem;
+    [SerializeField] private Button option;
 
     private string currentKey;
 
@@ -45,6 +46,7 @@ public class SettingsManager : MonoBehaviour
         {
             Instance = this;
         }
+        DontDestroyOnLoad(gameObject);
     }
 
     private void Start()
@@ -57,6 +59,7 @@ public class SettingsManager : MonoBehaviour
         interaction.onClick.AddListener(() => StartRebinding("Interaction"));
         hit.onClick.AddListener(() => StartRebinding("Hit"));
         getItem.onClick.AddListener(() => StartRebinding("GetItem"));
+        option.onClick.AddListener(() => StartRebinding("Option"));
 
         saveButton.onClick.AddListener(() =>
         {
@@ -121,7 +124,8 @@ public class SettingsManager : MonoBehaviour
         { "Interaction", KeyCode.F },
         { "Hit", KeyCode.Mouse0 },
         { "GetItem", KeyCode.E },
-        { "Inventory", KeyCode.I }
+        { "Inventory", KeyCode.I },
+        { "Option", KeyCode.Escape }
     };
     }
 
@@ -147,6 +151,7 @@ public class SettingsManager : MonoBehaviour
         interaction.GetComponentInChildren<TextMeshProUGUI>().text = keybinds["Interaction"].ToString();
         hit.GetComponentInChildren<TextMeshProUGUI>().text = keybinds["Hit"].ToString();
         getItem.GetComponentInChildren<TextMeshProUGUI>().text = keybinds["GetItem"].ToString();
+        option.GetComponentInChildren<TextMeshProUGUI>().text = keybinds["Option"].ToString();
     }
 
     private void StartRebinding(string key)

@@ -20,6 +20,8 @@ public class MenuManager : MonoBehaviour
     public bool isMenuOpen;
     public int currentFrontLevel = 0;
 
+    private KeyCode optionKey = SettingsManager.Instance.GetKeyCode("Option");
+
     // Powoduje ze layout Menu bedzie pokazywany pierwszy (przed innymi UI)
     public int SetAsFront()
     {
@@ -47,7 +49,7 @@ public class MenuManager : MonoBehaviour
     private void Update()
     {
         // TO DO: zmienic na escape aby dzia³a³o po buildzie
-        if (Input.GetKeyDown(KeyCode.M) && !isMenuOpen)
+        if (Input.GetKeyDown(optionKey) && !isMenuOpen)
         {
             MovementManager.Instance.EnableLook(false);
             MovementManager.Instance.EnableMovement(false);
@@ -65,7 +67,7 @@ public class MenuManager : MonoBehaviour
 
             //SelectionManager jesli bedzie trzeba dodac
         }
-        else if (Input.GetKeyDown(KeyCode.M) && isMenuOpen )
+        else if (Input.GetKeyDown(optionKey) && isMenuOpen )
         {
             CloseMenu();
         }

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.Playables;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -92,8 +93,11 @@ public class SellSystem : MonoBehaviour
         sellSlots.Clear();
         foreach (Transform child in sellPanel.transform)
         {
-            if(child.CompareTag("Slot") || child.CompareTag("QuickSlot"))
-                sellSlots.Add(child.GetComponent<InventorySlot>());
+            if(child.CompareTag("Slot"))
+            {
+                sellSlots.Add(child.GetComponent<InventorySlot>());             
+            }
+                
         }
         Debug.Log("Sellpanel slots: "+ sellSlots.Count);
     }
@@ -104,6 +108,7 @@ public class SellSystem : MonoBehaviour
     public void ScanItemsInSlots()
     {
         itemsToBeSold.Clear();
+
         foreach (InventorySlot slot in sellSlots)
         {
             if (slot.itemInSlot != null)

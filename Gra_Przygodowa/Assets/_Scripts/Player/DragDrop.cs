@@ -38,6 +38,7 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
 
     public void OnEndDrag(PointerEventData eventData)
     {
+        Debug.Log("OnEndDrag start");
         var tempItemReference = itemBeingDragged;
         itemBeingDragged = null;
 
@@ -74,9 +75,18 @@ public class DragDrop : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDrag
             }
         }
 
-        Debug.Log("OnEndDrag");
+        if (eventData.pointerCurrentRaycast.gameObject != null)
+        {
+            // Loguj nazwê obiektu, na który zosta³ upuszczony przedmiot
+            Debug.Log("Dropped on: " + eventData.pointerCurrentRaycast.gameObject.name);
+            Debug.Log("Dropped on tag: " + eventData.pointerCurrentRaycast.gameObject.tag);
+        }
         canvasGroup.alpha = 1f;
         canvasGroup.blocksRaycasts = true;
+
+        Debug.Log($"Dropped in parent: {tempItemReference.transform.parent.name}");
+        Debug.Log($"Parent tag: {tempItemReference.transform.parent.tag}");
+        Debug.Log("OnEndDrag end");
     }
 
     private void DivideStack(GameObject tempItemReference)

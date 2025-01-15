@@ -19,7 +19,7 @@ public class ItemSlot : MonoBehaviour, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
-        Debug.Log("OnDrop");
+        Debug.Log("OnDrop start");
 
         //if the slot is empty
         if (transform.childCount <= 1)
@@ -29,31 +29,24 @@ public class ItemSlot : MonoBehaviour, IDropHandler
             DragDrop.itemBeingDragged.transform.SetParent(transform);
             DragDrop.itemBeingDragged.transform.localPosition = new Vector2(0, 0);
 
-            if (!transform.CompareTag("QuickSlot") && !transform.CompareTag("Slot"))
+            if (!transform.CompareTag("QuickSlot"))
             {
                 DragDrop.itemBeingDragged.GetComponent<InventoryItem>().isInsideQuickSlot = false;
                 InventorySystem.Instance.ReCalculateList();
             }
 
-            if (transform.CompareTag("QuickSlot") || transform.CompareTag("Slot"))
+            if (transform.CompareTag("QuickSlot"))
             {
+                Debug.Log("Tag " + transform.tag);
                 DragDrop.itemBeingDragged.GetComponent<InventoryItem>().isInsideQuickSlot = true;
                 // we need to recalculate list because its no longer inside the system
                 InventorySystem.Instance.ReCalculateList();
-            }
-
-            if (transform.CompareTag("Slot"))
-            {
-                Debug.Log("Item added to Slot");
-            }
-            else if (transform.CompareTag("QuickSlot"))
-            {
-                Debug.Log("Item added to QuickSlot");
             }
         }
         else // The slot is not empty
         {
             InventoryItem draggedItem = DragDrop.itemBeingDragged.GetComponent<InventoryItem>();
+
             // Check if both items are the same and limit is not reached
             if (draggedItem.thisName == GetStoredItem().thisName && IsLimitExceded(draggedItem) == false)
             {
@@ -67,17 +60,18 @@ public class ItemSlot : MonoBehaviour, IDropHandler
             }
             Debug.Log($"Slot {gameObject.name} is already occupied.");
         }
+
         StartCoroutine(DelayedSacn());
+
+        Debug.Log("OnDrop start end");
     }
 
     IEnumerator DelayedSacn()
     {
         yield return new WaitForSeconds(0.1f);
-        Debug.Log("DelayedScan Started");
         SellSystem.Instance.ScanItemsInSlots();
         SellSystem.Instance.UpdateSellAmountUI();
         Debug.Log("SellSystem Updated");
-
     }
 
     /// <summary>

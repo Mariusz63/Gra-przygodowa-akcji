@@ -118,7 +118,7 @@ public class InventorySystem : MonoBehaviour
             if (child.CompareTag("QuickSlot") || child.CompareTag("Slot"))
             {
                 InventorySlot slot = child.GetComponent<InventorySlot>();
-                slotList.Add(slot);
+                slotList.Add(slot);            
             }
         }
     }

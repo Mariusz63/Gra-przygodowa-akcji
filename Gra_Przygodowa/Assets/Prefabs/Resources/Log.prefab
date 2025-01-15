@@ -102,6 +102,7 @@ MonoBehaviour:
   isSelected: 0
   isUsable: 0
   amountInInventory: 1
+  sellingPrice: 40
 --- !u!225 &1372353956352325016
 CanvasGroup:
   m_ObjectHideFlags: 0
