@@ -35,11 +35,6 @@ public class SettingsManager : MonoBehaviour
 
     private Dictionary<string, KeyCode> keybinds;
 
-    public Dictionary<string, KeyCode> GetKeybinds()
-    {
-        return keybinds;
-    }
-
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -123,9 +118,10 @@ public class SettingsManager : MonoBehaviour
         { "WalkLeft", KeyCode.A },
         { "WalkRight", KeyCode.D },
         { "WalkBack", KeyCode.S },
-        { "Interaction", KeyCode.E },
+        { "Interaction", KeyCode.F },
         { "Hit", KeyCode.Mouse0 },
-        { "GetItem", KeyCode.F }
+        { "GetItem", KeyCode.E },
+        { "Inventory", KeyCode.I }
     };
     }
 
@@ -177,4 +173,28 @@ public class SettingsManager : MonoBehaviour
             }
         }
     }
+
+    public Dictionary<string, KeyCode> GetKeybinds()
+    {
+        return keybinds;
+    }
+
+    /// <summary>
+    /// Zwraca KeyCode przypisany do okreœlonej akcji.
+    /// </summary>
+    /// <param name="action">Nazwa akcji (np. "Jump", "WalkFront").</param>
+    /// <returns>KeyCode przypisany do danej akcji lub KeyCode.None, jeœli akcja nie istnieje.</returns>
+    public KeyCode GetKeyCode(string action)
+    {
+        if (keybinds.TryGetValue(action, out KeyCode keyCode))
+        {
+            return keyCode;
+        }
+        else
+        {
+            Debug.LogWarning($"Keybind for action '{action}' not found.");
+            return KeyCode.None;
+        }
+    }
 }
+

@@ -95,6 +95,7 @@ public class SellSystem : MonoBehaviour
             if(child.CompareTag("Slot") || child.CompareTag("QuickSlot"))
                 sellSlots.Add(child.GetComponent<InventorySlot>());
         }
+        Debug.Log("Sellpanel slots: "+ sellSlots.Count);
     }
 
     /// <summary>

@@ -19,6 +19,8 @@ public class PlacementSystem : MonoBehaviour
 
     [SerializeField] GameObject placementModeUI;
 
+    private KeyCode interactionKey = SettingsManager.Instance.GetKeyCode("Hit");
+
     private void Awake()
     {
         if (Instance != null && Instance != this)
@@ -79,7 +81,7 @@ public class PlacementSystem : MonoBehaviour
         }
 
         // Left Mouse Click to Place item
-        if (Input.GetMouseButtonDown(0) && inPlacementMode && isValidPlacement)
+        if (Input.GetKeyDown(interactionKey) && inPlacementMode && isValidPlacement)
         {
             PlaceItemFreeStyle();
             DestroyItem(inventoryItemToDestory);

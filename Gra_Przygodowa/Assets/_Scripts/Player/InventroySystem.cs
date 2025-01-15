@@ -52,24 +52,28 @@ public class InventorySystem : MonoBehaviour
     public int currentCoins = 0;
     public TextMeshProUGUI currencyUI;
 
+    private KeyCode inventoryKey;
+
     void Start()
-    {
+    {  
         isOpen = false;
         //MovementManager.Instance.canLookAround = false;
 
         PopulateSlotList();
         //Cursor.visible = false;
+        inventoryKey = SettingsManager.Instance.GetKeyCode("Inventory");
+        Debug.Log("Inveointory key = " + inventoryKey);
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I) && !isOpen)
+        if (Input.GetKeyDown(inventoryKey) && !isOpen)
         {
             MovementManager.Instance.EnableLook(false);
             MovementManager.Instance.EnableMovement(false);     
             OpenUI();
         }
-        else if (Input.GetKeyDown(KeyCode.I) && isOpen)
+        else if (Input.GetKeyDown(inventoryKey) && isOpen)
         {
             MovementManager.Instance.EnableLook(true);
             MovementManager.Instance.EnableMovement(true);            
@@ -130,7 +134,7 @@ public class InventorySystem : MonoBehaviour
             stack.UpdateItemInSlot();
         }
         else
-        {
+        {      
             whatSlotToEquip = FindNextEmptySlot();
 
             itemToAdd = (GameObject)Instantiate(Resources.Load<GameObject>(itemName),

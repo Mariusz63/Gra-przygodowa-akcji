@@ -6,6 +6,8 @@ public class InteractableObject : MonoBehaviour
     public string itemName;
     public float detectionRange = 6;
 
+    private KeyCode interactionKey = SettingsManager.Instance.GetKeyCode("GetItem");
+
     public string GetItemName()
     {
         return itemName;
@@ -23,7 +25,7 @@ public class InteractableObject : MonoBehaviour
             playerInRange = false;
         }
 
-        if (Input.GetKeyDown(KeyCode.E) && 
+        if (Input.GetKeyDown(interactionKey) && 
             playerInRange && 
             SelectionManager.Instance.onTarget && 
             SelectionManager.Instance.selectedObject == gameObject)

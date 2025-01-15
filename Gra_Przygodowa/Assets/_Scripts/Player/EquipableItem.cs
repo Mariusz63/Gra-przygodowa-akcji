@@ -7,6 +7,7 @@ public class EquipableItem : MonoBehaviour
 {
     public Animator animator;
     public bool swingWait = false;
+    private KeyCode interactionKey = SettingsManager.Instance.GetKeyCode("Hit");
 
     // Start is called before the first frame update
     void Start()
@@ -17,7 +18,7 @@ public class EquipableItem : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(0) && // Left Mouse Button        
+        if(Input.GetKeyDown(interactionKey) && // Left Mouse Button        
             QuestManager.Instance.isQuestMenuOpen == false &&
             SelectionManager.Instance.handIsVisible == false &&
             swingWait == false) 

@@ -13,8 +13,8 @@ public class PlayerMovement : MonoBehaviour
     public float groundDistance = 0.4f;
     public LayerMask groundMask;
 
-    public KeyCode Jump = KeyCode.Space;
-    public KeyCode Sprint = KeyCode.LeftShift;
+    public KeyCode Jump = SettingsManager.Instance.GetKeyCode("Jump");
+    public KeyCode Sprint = SettingsManager.Instance.GetKeyCode("Sprint");
 
     Vector3 velocity;
     bool isGrounded;
@@ -66,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
 
         //jesli ostatnia pozycja rozni sie od terazniejszej ozacza to ze sie poruszamy
-        if (lastPosition != gameObject.transform.position && isGrounded == true && MovementManager.Instance.canMove)
+        if ((lastPosition != gameObject.transform.position && isGrounded == true) && MovementManager.Instance.canMove)
         {
             isMoving = true;
             SoundManager.Instance.PlaySound(SoundManager.Instance.grassWalkSound);
