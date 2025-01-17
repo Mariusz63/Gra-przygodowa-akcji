@@ -12,8 +12,16 @@ public class SpiderAI : BehaviorTree
     {
         blackboard.enemyTransform = transform.Find("Body");
         blackboard.enemyBody = GetComponentInChildren<Rigidbody>();
-        
-        Node root = new TaskWander(blackboard);
+
+        Node root = new Selector(new List<Node>
+        {
+            new Sequence(new List<Node>
+            {
+                new CheckEnemyFOV(blackboard),
+                new TaskGoToTarget(blackboard)
+            }),
+            new TaskWander(blackboard)
+        });
 
         return root;
     }

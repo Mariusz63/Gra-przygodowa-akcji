@@ -16,6 +16,8 @@ namespace BTree
 
         // Prêdkoœæ poruszania
         public float speed = 2f;
+        public float FOVradius = 6f;
+        public float RadiusToForgetEnemy = 12f;
 
         // Mo¿esz dodaæ wiele innych rzeczy, np.:
         // public float visionRange;
