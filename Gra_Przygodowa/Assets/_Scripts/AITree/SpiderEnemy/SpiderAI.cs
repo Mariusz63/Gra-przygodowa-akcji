@@ -10,8 +10,8 @@ public class SpiderAI : BehaviorTree
 
     protected override Node SetupTree()
     {
-        blackboard.enemyTransform = GetComponent<Transform>();
-        blackboard.enemyBody = GetComponent<Rigidbody>();
+        blackboard.enemyTransform = transform.Find("Body");
+        blackboard.enemyBody = GetComponentInChildren<Rigidbody>();
         
         Node root = new TaskWander(blackboard);
 
