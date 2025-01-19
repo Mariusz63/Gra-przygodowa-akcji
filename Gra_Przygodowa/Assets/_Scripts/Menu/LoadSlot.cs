@@ -35,7 +35,7 @@ public class LoadSlot : MonoBehaviour
         {
             if (SaveManager.Instance.IsSlotEmpty(slotNumber)== false)
             {
-                SaveManager.Instance.LoadGame(slotNumber);
+                SaveManager.Instance.LoadSavedGame(slotNumber);
                 SaveManager.Instance.DeselectButton();
             }
             else

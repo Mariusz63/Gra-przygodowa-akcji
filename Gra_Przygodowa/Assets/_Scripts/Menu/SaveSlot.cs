@@ -69,13 +69,12 @@ public class SaveSlot : MonoBehaviour
 
     private void SaveGameConfirmed()
     {
-
         SaveManager.Instance.SaveGame(slotNumber);
 
         DateTime dateTime = DateTime.Now;
         string time = dateTime.ToString("yyyy-MM-dd HH:mm:ss");
 
-        string description = "Saved game" + slotNumber + " | " + time;
+        string description = "Saved game " + slotNumber + " | " + time;
 
         buttonText.text = description;
 

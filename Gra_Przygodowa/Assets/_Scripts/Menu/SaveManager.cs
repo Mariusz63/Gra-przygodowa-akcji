@@ -68,6 +68,16 @@ public class SaveManager : MonoBehaviour
 
     public void LoadGame(int slotNumber)
     {
+        Debug.Log("LoadGame method called...");
+
+        // Continue loading game data after the scene is fully loaded
+        AllGameData data = SelectLoadingType(slotNumber);
+        if (data == null)
+        {
+            Debug.LogError("Failed to load game data. File may not exist or is corrupted.");
+            return;
+        }
+
         //Player data
         SetPlayerData(SelectLoadingType(slotNumber).playerData);
 
@@ -78,6 +88,9 @@ public class SaveManager : MonoBehaviour
 
         // After loading all data disable loading screen
         DisableLoadingScreen();
+
+        // Final confirmation that loading is complete
+        Debug.Log("Game data loaded successfully.");
     }
 
     /// <summary>
@@ -175,32 +188,43 @@ public class SaveManager : MonoBehaviour
         // Setting the quick slots content
         foreach (string item in playerData.quickSlotContent)
         {
-            // Find next free quick slot
-            GameObject availableSlot = EquipSystem.Instance.FindNextEmptySlot();
-
-            var itemToAdd = Instantiate(Resources.Load<GameObject>(item));
-
-            itemToAdd.transform.SetParent(availableSlot.transform, false);
+            Debug.Log("Item to instantiate: " + item);
+            GameObject itemToInstantiate = Resources.Load<GameObject>(item);
+            if (itemToInstantiate != null)
+            {
+                GameObject availableSlot = EquipSystem.Instance.FindNextEmptySlot();
+                GameObject instantiatedItem = Instantiate(itemToInstantiate);
+                instantiatedItem.transform.SetParent(availableSlot.transform, false);
+            }
+            else
+            {
+                Debug.LogError("Prefab for item " + item + " not found in Resources.");
+            }
         }
+
     }
 
     // StartLoadedGame
     public void LoadSavedGame(int slotNumber)
     {
         ActivateLoadingScreen();
-
         isLoading = true;
 
-        SceneManager.LoadScene("MainBase");
-
-        StartCoroutine(DelayedLoading(slotNumber));
+        // Load the scene asynchronously
+        SceneManager.LoadSceneAsync("MainBase").completed += (asyncOperation) =>
+        {
+            // After the scene is completely loaded, call LoadGame
+            Debug.Log("Scene loaded, now loading game data...");
+            LoadGame(slotNumber);
+        };
     }
+
 
     private IEnumerator DelayedLoading(int slotNumber)
     {
-        // after 1s all scripts will be loaded
-        yield return new WaitForSeconds(1f);
         LoadGame(slotNumber);
+        // after 1s all scripts will be loaded
+        yield return new WaitForSeconds(1f);   
     }
 
     #endregion

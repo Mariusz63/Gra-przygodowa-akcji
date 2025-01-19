@@ -181,10 +181,18 @@ public class EquipSystem : MonoBehaviour
     {
         // Find next free slot
         GameObject availableSlot = FindNextEmptySlot();
+        if (availableSlot == null)
+        {
+            Debug.LogWarning("No empty slots available!");
+            return; // Exit if no slots are found
+        }
+
         // Set transform of our object
         itemToEquip.transform.SetParent(availableSlot.transform, false);        
+
         // Getting clean name
         string cleanName = itemToEquip.name.Replace("(Clone)", "");
+
         // Adding item to list
         itemList.Add(cleanName);
         

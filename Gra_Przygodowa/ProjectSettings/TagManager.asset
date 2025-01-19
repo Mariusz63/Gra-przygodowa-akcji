@@ -10,6 +10,7 @@ TagManager:
   - Slot
   - Waypoints
   - Tree
+  - Ground
   layers:
   - Default
   - TransparentFX

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,7 +10,6 @@ public class PlacementSystem : MonoBehaviour
 
     public GameObject placementHoldingSpot; // Drag our construcionHoldingSpot or a new placementHoldingSpot
     public GameObject enviromentPlaceables;
-
 
     public bool inPlacementMode;
     [SerializeField] bool isValidPlacement;
@@ -35,6 +35,7 @@ public class PlacementSystem : MonoBehaviour
 
     public void ActivatePlacementMode(string itemToPlace)
     {
+        Debug.Log(" ActivatePlacementMode ");
         GameObject item = Instantiate(Resources.Load<GameObject>(itemToPlace));
 
         // Changing the name of the gameobject so it will not be (clone)

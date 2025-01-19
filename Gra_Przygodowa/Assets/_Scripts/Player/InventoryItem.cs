@@ -130,6 +130,10 @@ public class InventoryItem : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
                 PlacementSystem.Instance.inventoryItemToDestory = gameObject;
                 PlacementSystem.Instance.ActivatePlacementMode("StorageBox_Model");
                 break;
+            case "StorageBox":
+                PlacementSystem.Instance.inventoryItemToDestory = gameObject;
+                PlacementSystem.Instance.ActivatePlacementMode("StorageBox_Model");
+                break;
             default: break; // do nothing;
         }
     }
