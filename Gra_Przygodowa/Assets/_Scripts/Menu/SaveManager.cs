@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -123,11 +124,19 @@ public class SaveManager : MonoBehaviour
         // Add trees and stumps 
         foreach (TreeData treeData in environmentData.treeData)
         {
-            var treePrefab = Instantiate(Resources.Load<GameObject>(treeData.name),
+            GameObject treePrefab = Resources.Load<GameObject>(treeData.name);
+
+            if (treePrefab == null)
+            {
+                Debug.LogError($"Nie znaleziono prefabu o nazwie: {treeData.name}. SprawdŸ folder Resources.");
+                continue;  // Pomijamy ten wpis, aby unikn¹æ b³êdu
+            }
+
+            var instantiatedTree = Instantiate(treePrefab,
                 new Vector3(treeData.position.x, treeData.position.y, treeData.position.z),
                 Quaternion.Euler(treeData.rotation.x, treeData.rotation.y, treeData.rotation.z));
 
-            treePrefab.transform.SetParent(EnvironmentManager.Instance.allTrees.transform);
+            instantiatedTree.transform.SetParent(EnvironmentManager.Instance.allTrees.transform);
         }
 
         // ---------------------- Aniamls ----------------------//
@@ -160,19 +169,8 @@ public class SaveManager : MonoBehaviour
         //Setting Player stats
         PlayerState.Instance.currentHealth = playerData.playerStats[0];
         PlayerState.Instance.currentStamina = playerData.playerStats[1];
-
-        //Setting Player Position
-        Vector3 loadedPosition;
-        loadedPosition.x = playerData.playerPositionAndRotation[0];
-        loadedPosition.y = playerData.playerPositionAndRotation[1];
-        loadedPosition.z = playerData.playerPositionAndRotation[2];
-        //PlayerState.Instance.playerBody.transform.position = loadedPosition;
-
-        //Setting Player Rotation
-        Vector3 loadedRotation;
-        loadedRotation.x = playerData.playerPositionAndRotation[3];
-        loadedRotation.y = playerData.playerPositionAndRotation[4];
-        loadedRotation.z = playerData.playerPositionAndRotation[5];
+        Vector3 loadedPosition = new Vector3(playerData.playerPositionAndRotation[0], playerData.playerPositionAndRotation[1], playerData.playerPositionAndRotation[2]);
+        Vector3 loadedRotation = new Vector3(playerData.playerPositionAndRotation[3], playerData.playerPositionAndRotation[4], playerData.playerPositionAndRotation[5]);
         // PlayerState.Instance.playerBody.transform.rotation = Quaternion.Euler(loadedRotation);
 
         if (PlayerState.Instance != null && PlayerState.Instance.playerBody != null)
@@ -186,21 +184,83 @@ public class SaveManager : MonoBehaviour
         }
 
         // Setting the quick slots content
+        //foreach (string item in playerData.quickSlotContent)
+        //{
+        //    Debug.Log("Item to instantiate: " + item);
+        //    GameObject itemToInstantiate = Resources.Load<GameObject>(item);
+        //    if (itemToInstantiate != null)
+        //    {
+        //        GameObject availableSlot = EquipSystem.Instance.FindNextEmptySlot();
+        //        GameObject instantiatedItem = Instantiate(itemToInstantiate);
+        //        instantiatedItem.transform.SetParent(availableSlot.transform, false);
+        //    }
+        //    else
+        //    {
+        //        Debug.LogError("Prefab for item " + item + " not found in Resources.");
+        //    }
+        //}
+
+        // Setting the quick slots content with quantity
         foreach (string item in playerData.quickSlotContent)
         {
             Debug.Log("Item to instantiate: " + item);
-            GameObject itemToInstantiate = Resources.Load<GameObject>(item);
+
+            // Sprawdzenie, czy item zawiera iloœæ np. "Stick (6)"
+            string itemName = item;
+            int itemCount = 1; // Domyœlna iloœæ
+
+            int startIndex = item.LastIndexOf('(');
+            int endIndex = item.LastIndexOf(')');
+
+            if (startIndex != -1 && endIndex != -1 && startIndex < endIndex)
+            {
+                string numberStr = item.Substring(startIndex + 1, endIndex - startIndex - 1);
+                if (int.TryParse(numberStr, out int parsedCount))
+                {
+                    itemCount = parsedCount;
+                    itemName = item.Substring(0, startIndex).Trim(); // Usuniêcie iloœci z nazwy przedmiotu
+                }
+            }
+
+            GameObject itemToInstantiate = Resources.Load<GameObject>(itemName);
             if (itemToInstantiate != null)
             {
                 GameObject availableSlot = EquipSystem.Instance.FindNextEmptySlot();
-                GameObject instantiatedItem = Instantiate(itemToInstantiate);
-                instantiatedItem.transform.SetParent(availableSlot.transform, false);
+                if (availableSlot != null)
+                {
+                    GameObject instantiatedItem = Instantiate(itemToInstantiate);
+                    instantiatedItem.transform.SetParent(availableSlot.transform, false);
+
+                    // Szukanie obiektu AmountTXT w instancji przedmiotu
+                    Transform amountTextTransform = availableSlot.transform.GetChild(0);
+                    if (amountTextTransform != null)
+                    {
+                        TextMeshProUGUI amountText = amountTextTransform.GetComponent<TextMeshProUGUI>();
+                        if (amountText != null)
+                        {
+                            amountText.text = itemCount.ToString();
+                        }
+                        else
+                        {
+                            Debug.LogWarning($"AmountTXT on {itemName} does not have a TextMeshProUGUI component.");
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning($"AmountTXT object not found in {itemName} prefab.");
+                    }
+                }
+                else
+                {
+                    Debug.LogError("No available quick slot found.");
+                }
             }
             else
             {
-                Debug.LogError("Prefab for item " + item + " not found in Resources.");
+                Debug.LogError("Prefab for item " + itemName + " not found in Resources.");
             }
         }
+
 
     }
 
@@ -255,7 +315,7 @@ public class SaveManager : MonoBehaviour
             if (tree.CompareTag("Tree"))
             {
                 var td = new TreeData();
-                td.name = "Tree_Parent"; // This needs to be same as prefab name
+                td.name = "TreeParent"; // This needs to be same as prefab name
                 td.position = tree.position;
                 td.rotation = new Vector3(tree.rotation.x, tree.rotation.y, tree.rotation.z);
                 treeToSave.Add(td);
@@ -316,11 +376,28 @@ public class SaveManager : MonoBehaviour
         playerPosAndRot[4] = PlayerState.Instance.playerBody.transform.rotation.y;
         playerPosAndRot[5] = PlayerState.Instance.playerBody.transform.rotation.z;
 
-        //string[] inventoryContent = InventorySystem.Instance.itemList.ToArray();
+       // string[] inventoryContent = InventorySystem.Instance.itemList.ToArray();
         string[] quickSlotContent = GetQuickSlotsContent();
 
         return new PlayerData(playerStats, playerPosAndRot, quickSlotContent);
     }
+
+    //private string[] GetQuickSlotsContent()
+    //{
+    //    List<string> temp = new List<string>();
+
+    //    foreach (GameObject slot in EquipSystem.Instance.quickSlotsList)
+    //    {
+    //        if (slot.transform.childCount != 1)
+    //        {
+    //            string name = slot.transform.GetChild(0).name;
+    //            string str2 = "(Clone)";
+    //            string cleanName = name.Replace(str2, "");
+    //            temp.Add(cleanName);
+    //        }
+    //    }
+    //    return temp.ToArray();
+    //}
 
     private string[] GetQuickSlotsContent()
     {
@@ -328,16 +405,36 @@ public class SaveManager : MonoBehaviour
 
         foreach (GameObject slot in EquipSystem.Instance.quickSlotsList)
         {
-            if (slot.transform.childCount != 0)
+            if (slot.transform.childCount != 1)
             {
                 string name = slot.transform.GetChild(0).name;
                 string str2 = "(Clone)";
                 string cleanName = name.Replace(str2, "");
-                temp.Add(cleanName);
+
+                // Pobranie iloœci przedmiotów z nazwy lub komponentu
+                int itemCount = 1; // Domyœlnie ustaw 1 sztukê, jeœli nie ma dok³adnej liczby
+
+                // SprawdŸ, czy w nazwie jest iloœæ np. "Stick (6)"
+                int startIndex = cleanName.LastIndexOf('(');
+                int endIndex = cleanName.LastIndexOf(')');
+
+                if (startIndex != -1 && endIndex != -1 && startIndex < endIndex)
+                {
+                    string numberStr = cleanName.Substring(startIndex + 1, endIndex - startIndex - 1);
+                    if (int.TryParse(numberStr, out int parsedCount))
+                    {
+                        itemCount = parsedCount;
+                        cleanName = cleanName.Substring(0, startIndex).Trim(); // Usuñ iloœæ z nazwy
+                    }
+                }
+
+                temp.Add($"{cleanName} ({itemCount})");
             }
         }
+
         return temp.ToArray();
     }
+
 
     public void SelectSavingType(AllGameData gameData, int slotNumber)
     {
