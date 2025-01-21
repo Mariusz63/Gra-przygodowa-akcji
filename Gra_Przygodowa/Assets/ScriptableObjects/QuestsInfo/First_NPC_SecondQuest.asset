@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29542888534808a4ca005c57f1c3a9c3, type: 3}
+  m_Name: First_NPC_SecondQuest
+  m_EditorClassIdentifier: 
+  initialDialog:
+  - "Hej,\nNie powiniene\u015B tutaj by\u0107.\n"
+  - Hej, zatrzymaj sie!!!!
+  - Mam bojowe zadanie.
+  initialAudioClip:
+  - {fileID: 8300000, guid: 4970966feccf6eb4eabab1e2dc4b4b67, type: 3}
+  - {fileID: 8300000, guid: 4970966feccf6eb4eabab1e2dc4b4b67, type: 3}
+  - {fileID: 8300000, guid: 4970966feccf6eb4eabab1e2dc4b4b67, type: 3}
+  acceptOption: "Oczywi\u015Bcie, pomog\u0119 Ci!\n"
+  acceptOptionAudioClip: {fileID: 8300000, guid: 3e0f4cefe706ea24eaabee6d02286172, type: 3}
+  acceptAnswer: "To \u015Bwietnie!\nWystarczy, ze dostarczysz mi 3 jab\u0142ka."
+  acceptAnswerAudioClip: {fileID: 8300000, guid: 3e0f4cefe706ea24eaabee6d02286172, type: 3}
+  declineOption: "Przykro mi, ale nie mog\u0119 tego zrobic."
+  declineOptionAudioClip: {fileID: 8300000, guid: d6a690b8fb5a94843bddf3ac749db385, type: 3}
+  declineAnswer: 'Szkoda,
+
+    jesli zmienisz zdanie to przyjdz do mnie'
+  declineAnswerrAudioClip: {fileID: 8300000, guid: d6a690b8fb5a94843bddf3ac749db385, type: 3}
+  comebackAfterDecline: "Wi\u0119c jak? Zmieni\u0142e\u015B zdanie?"
+  comebackAfterDeclineAudioClip: {fileID: 8300000, guid: 4970966feccf6eb4eabab1e2dc4b4b67, type: 3}
+  comebackInProgress: "Nadal masz niewystarczaj\u0105co przdmiot\xF3w!"
+  comebackInProgressAudioClip: {fileID: 8300000, guid: 4970966feccf6eb4eabab1e2dc4b4b67, type: 3}
+  comebackCompleted: Oto Twoja nagora! Trzymaj.
+  comebackCompletedAudioClip: {fileID: 8300000, guid: 8dd05a27aef726547a1dfc2cebf09779, type: 3}
+  finalWords: "Mam nadzi\u0119, \u017Ce jeszcze si\u0119 spotkamy"
+  finalWordsAudioClip: {fileID: 8300000, guid: 8dd05a27aef726547a1dfc2cebf09779, type: 3}
+  coinReward: 100
+  rewardItem1: Apple
+  rewardItem2: 
+  firstRequirmentItem: Apple
+  firstRequirementAmount: 1
+  secondRequirmentItem: 
+  secondRequirementAmount: 0
+  hasCheckpoints: 0
+  checkpoints: []
