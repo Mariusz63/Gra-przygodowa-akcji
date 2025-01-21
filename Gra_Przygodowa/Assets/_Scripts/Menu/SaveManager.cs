@@ -219,6 +219,8 @@ public class SaveManager : MonoBehaviour
                 {
                     itemCount = parsedCount;
                     itemName = item.Substring(0, startIndex).Trim(); // Usuniêcie iloœci z nazwy przedmiotu
+                    Debug.Log("Item to instantiate: " + itemName);
+                    Debug.Log("Item to instantiate: " + itemCount);
                 }
             }
 
@@ -232,7 +234,7 @@ public class SaveManager : MonoBehaviour
                     instantiatedItem.transform.SetParent(availableSlot.transform, false);
 
                     // Szukanie obiektu AmountTXT w instancji przedmiotu
-                    Transform amountTextTransform = availableSlot.transform.GetChild(0);
+                    Transform amountTextTransform = availableSlot.transform.Find("AmountTXT");
                     if (amountTextTransform != null)
                     {
                         TextMeshProUGUI amountText = amountTextTransform.GetComponent<TextMeshProUGUI>();
